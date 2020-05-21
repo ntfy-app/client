@@ -1,3 +1,3 @@
-import { ntfy, ntfyClient } from './core/ntfy';
+import { ntfy, Client } from './core/ntfy';
 
-export { ntfy, ntfyClient };
+export { ntfy, Client };
