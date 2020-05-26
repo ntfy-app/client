@@ -10,7 +10,7 @@ app.listen(PORT, () => {
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzY29wZSI6MSwiaWQiOjE5LCJpYXQiOjE1OTA1MDA2ODl9.jKjUlEOVWw-Vpa6j5_Hnzzv08CxWMLj9PKrowbByDoA',
     label: 'PROD',
   });
-  ntfy.log('sent from client', 'DEBdUG');
+  ntfy.log('sent from client', 'DEBUG');
   // const marketingClient = new Client('salkqwejsdfs');
   // const otherClient = new Client('qweoixcfjsiosfd');
   // marketingClient.getToken();

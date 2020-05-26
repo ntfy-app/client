@@ -46,13 +46,16 @@ export const Client = class Client {
     client
       .request(print(mutation), { message, level: logLevel })
       .then((res: any) => {
+        console.log('hit3');
         console.log('RESPONSE', response);
       })
       .catch((err: any) => {
         if (err.response.errors) {
+          console.log('hit1');
           console.log(err.response.errors);
         } else {
-          console.log(err);
+          console.log('hit2');
+          console.log(JSON.stringify(err, null, 2));
         }
       });
 
