@@ -1,4 +1,6 @@
 const { GraphQLClient } = require('graphql-request');
+const gql = require('graphql-tag');
+const { print } = require('graphql/language/printer');
 require('dotenv').config();
 
 export const Client = class Client {
@@ -13,8 +15,7 @@ export const Client = class Client {
 
   client = new GraphQLClient(process.env.GRAPHQL_ENDPOINT, {
     headers: {
-      Authorization:
-        'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzY29wZSI6MiwiaWQiOjEsInJvbGUiOiJBRE1JTiIsImlhdCI6MTU4OTk3OTM5NH0.6dS8AIMwJHRhSGlt054fxmvbQEZko_Knx-1HhHVUlEo',
+      Authorization: `Bearer ${this.token}`,
     },
   });
 
@@ -31,13 +32,15 @@ export const Client = class Client {
     console.log(message, `Used token ${this.token}`);
   }
   log(message: string, logLevel: string, metadata?: object) {
-    const mutation = `mutation($level:LogLevel!,$message:String!){
-      sendLog(input:{ level:$level,message:$message }){
-        success
+    const mutation = gql`
+      mutation($level: LogLevel!, $message: String!) {
+        sendLog(input: { level: $level, message: $message }) {
+          success
+        }
       }
-    }`;
+    `;
     this.client
-      .request(mutation, { message, level: logLevel })
+      .request(print(mutation), { message, level: logLevel })
       .then((res: any) => {
         console.log(res);
       })
