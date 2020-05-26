@@ -9,19 +9,13 @@ export const Client = class Client {
   label: string;
   constructor(token?: string, logLevel?: string, label?: string) {
     this.token = token || '';
-    this.logLevel = logLevel || 'WARNING';
+    this.logLevel = logLevel || 'DEBUG';
     this.label = label || 'DEV';
   }
 
-  client = new GraphQLClient(process.env.GRAPHQL_ENDPOINT, {
-    headers: {
-      Authorization: `Bearer ${this.token}`,
-    },
-  });
-
-  init({ token, logLevel = 'WARNING', label = 'DEV' }: { token?: string; logLevel?: string; label?: string }): void {
+  init({ token, logLevel = 'DEBUG', label = 'DEV' }: { token?: string; logLevel?: string; label?: string }): void {
     this.token = token!;
-    this.logLevel = logLevel! || 'WARNING';
+    this.logLevel = logLevel! || 'DEBUG';
     this.label = label! || 'DEV';
   }
 
@@ -32,6 +26,14 @@ export const Client = class Client {
     console.log(message, `Used token ${this.token}`);
   }
   log(message: string, logLevel: string, metadata?: object) {
+    if (!this.token) {
+      throw new Error('You need to set up client secret first');
+    }
+    const client = new GraphQLClient(process.env.GRAPHQL_ENDPOINT, {
+      headers: {
+        Authorization: `Bearer ${this.token}`,
+      },
+    });
     const mutation = gql`
       mutation($level: LogLevel!, $message: String!) {
         sendLog(input: { level: $level, message: $message }) {
@@ -39,7 +41,7 @@ export const Client = class Client {
         }
       }
     `;
-    this.client
+    client
       .request(print(mutation), { message, level: logLevel })
       .then((res: any) => {
         console.log(res);
