@@ -1,3 +1,5 @@
+import { response } from 'express';
+
 const { GraphQLClient } = require('graphql-request');
 const gql = require('graphql-tag');
 const { print } = require('graphql/language/printer');
@@ -44,7 +46,7 @@ export const Client = class Client {
     client
       .request(print(mutation), { message, level: logLevel })
       .then((res: any) => {
-        console.log(res);
+        console.log('RESPONSE', response);
       })
       .catch((err: any) => {
         if (err.response.errors) {
