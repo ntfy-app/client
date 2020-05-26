@@ -47,10 +47,14 @@ export const Client = class Client {
         console.log(res);
       })
       .catch((err: any) => {
-        console.log(err);
+        if (err.response.errors) {
+          console.log(err.response.errors);
+        } else {
+          console.log(err);
+        }
       });
 
-    console.log(message, `Used token ${this.token}`);
+    // console.log(message, `Used token ${this.token}`);
   }
 };
 
