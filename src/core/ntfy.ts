@@ -33,8 +33,8 @@ export const Client = class Client {
       },
     });
     const mutation = gql`
-      mutation($level: LogLevel!, $message: String!) {
-        sendLog(input: { level: $level, message: $message }) {
+      mutation($level: LogLevel!, $message: String!, $metadata: JSON) {
+        sendLog(input: { level: $level, message: $message, metadata: $metadata }) {
           success
         }
       }
