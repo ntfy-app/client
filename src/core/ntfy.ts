@@ -40,7 +40,7 @@ export const Client = class Client {
       }
     `;
     client
-      .request(print(mutation), { message, level: logLevel })
+      .request(print(mutation), { message, level: logLevel, metadata })
       .then((res: any) => {
         console.log('RESPONSE', res);
       })
