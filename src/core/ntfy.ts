@@ -3,6 +3,14 @@ const gql = require('graphql-tag');
 const { print } = require('graphql/language/printer');
 require('dotenv').config();
 
+const mutation = gql`
+  mutation($level: LogLevel!, $message: String!, $metadata: JSON) {
+    sendLogMessage(data: { level: $level, message: $message, metadata: $metadata }) {
+      success
+    }
+  }
+`;
+
 export const Client = class Client {
   token: string;
   logLevel: string;
@@ -32,13 +40,6 @@ export const Client = class Client {
         Authorization: `Bearer ${this.token}`,
       },
     });
-    const mutation = gql`
-      mutation($level: LogLevel!, $message: String!, $metadata: JSON) {
-        sendLog(input: { level: $level, message: $message, metadata: $metadata }) {
-          success
-        }
-      }
-    `;
     client
       .request(print(mutation), { message, level: logLevel, metadata })
       .then((res: any) => {
@@ -55,15 +56,12 @@ export const Client = class Client {
 
   info(message: string, metadata?: object) {
     this.log(message, 'INFO', metadata);
-    console.log(metadata);
   }
   error(message: string, metadata?: object) {
     this.log(message, 'ERROR', metadata);
-    console.log(metadata);
   }
   fatal(message: string, metadata?: object) {
     this.log(message, 'FATAL', metadata);
-    console.log(metadata);
   }
 };
 

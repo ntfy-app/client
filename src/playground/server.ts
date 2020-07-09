@@ -7,12 +7,15 @@ const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
   ntfy.init({
     token:
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzY29wZSI6MSwiaWQiOjE5LCJpYXQiOjE1OTA1MDA2ODl9.jKjUlEOVWw-Vpa6j5_Hnzzv08CxWMLj9PKrowbByDoA',
-    label: 'PROD',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzY29wZSI6MSwiaWQiOjEsImlhdCI6MTU5NDMwNTY1Mn0.PBjtLaFzYyLTPoLfy4dsZ3PDjSdj-Qal0s64qGe-li4',
+    label: 'main',
   });
   ntfy.log('sent from client', 'DEBUG');
-  // const marketingClient = new Client('salkqwejsdfs');
-  // const otherClient = new Client('qweoixcfjsiosfd');
-  // marketingClient.getToken();
-  // otherClient.getToken();
+  ntfy.info('Info message');
+  ntfy.error('Error message');
+
+  const marketingClient = new Client(
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzY29wZSI6MSwiaWQiOjEsImlhdCI6MTU5NDMwNTY1Mn0.PBjtLaFzYyLTPoLfy4dsZ3PDjSdj-Qal0s64qGe-li4',
+  );
+  marketingClient.log('sent from marketing client', 'DEBUG');
 });
