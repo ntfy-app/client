@@ -13,22 +13,22 @@ declare const process: {
 };
 
 const SEND_LOG_MUTATION = gql`
-  mutation($level: LogLevel!, $message: String!, $metadata: JSON) {
+  mutation($level: LogLevel!, $message: String!, $metadata: Json) {
     sendLogMessage(data: { level: $level, message: $message, metadata: $metadata }) {
       success
     }
   }
 `;
 const SEND_EVENT_MESSAGE_MUTATION = gql`
-  mutation($title: String!, $message: String!, $metadata: JSON) {
+  mutation($title: String!, $message: String!, $metadata: Json) {
     sendEventMessage(data: { title: $title, message: $message, metadata: $metadata }) {
       success
     }
   }
 `;
 const SEND_STATUS_MESSAGE_MUTATION = gql`
-  mutation($status: AppStatus!, $message: String!, $metadata: JSON) {
-    sendStatusMessage(data: { status: $status, message: $message, metadata: $metadata }) {
+  mutation($state: AppState!, $message: String!, $metadata: Json) {
+    sendStatusMessage(data: { state: $state, message: $message, metadata: $metadata }) {
       success
     }
   }
@@ -41,7 +41,7 @@ export enum LogLevel {
   FATAL = 'FATAL',
 }
 
-export enum AppStatus {
+export enum AppState {
   UP = 'UP',
   DOWN = 'DOWN',
   CRITICAL = 'CRITICAL',
@@ -65,7 +65,7 @@ export const Client = class Client {
     this.client = token
       ? new GraphQLClient(process.env.GRAPHQL_ENDPOINT, {
           headers: {
-            Authorization: `Bearer ${this.token}`,
+            Authorization: `Basic ${this.token}`,
           },
         })
       : null;
@@ -77,7 +77,7 @@ export const Client = class Client {
     this.label = label!;
     this.client = new GraphQLClient(process.env.GRAPHQL_ENDPOINT, {
       headers: {
-        Authorization: `Bearer ${this.token}`,
+        Authorization: `Basic ${this.token}`,
       },
     });
   }
@@ -125,9 +125,9 @@ export const Client = class Client {
       });
   }
 
-  status(status: AppStatus, message: string, metadata?: unknown) {
+  status(state: AppState, message: string, metadata?: unknown) {
     this.client
-      .request(print(SEND_STATUS_MESSAGE_MUTATION), { message, status, metadata })
+      .request(print(SEND_STATUS_MESSAGE_MUTATION), { message, state, metadata })
       .then((res: any) => {
         console.log('RESPONSE', res);
       })
