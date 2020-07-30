@@ -1,57 +1,21 @@
-import Axios, { AxiosInstance } from 'axios'
-import { LogLevel, LogMessageSendInput, EventMessageSendInput, StatusMessageSendInput, ClientResponse } from './types'
-
-const gql = String.raw
-
-const SEND_EVENT_MESSAGE_MUTATION = gql`
-  mutation sendEventMessage($title: String!, $message: String!, $metadata: Json) {
-    sendEventMessage(data: { title: $title, message: $message, metadata: $metadata }) {
-      success
-    }
-  }
-`
-
-const SEND_LOG_MESSAGE_MUTATION = gql`
-  mutation sendLogMessage($level: LogLevel!, $message: String!, $metadata: Json) {
-    sendLogMessage(data: { level: $level, message: $message, metadata: $metadata }) {
-      success
-    }
-  }
-`
-
-const SEND_STATUS_MESSAGE_MUTATION = gql`
-  mutation sendStatusMessage($state: AppState!, $message: String!, $metadata: Json) {
-    sendStatusMessage(data: { state: $state, message: $message, metadata: $metadata }) {
-      success
-    }
-  }
-`
+import { ApiClient, EventMessage, LogMessage, StatusMessage, LogLevel } from '../api'
 
 interface ClientInitOptions {
   api: string
   label?: string
 }
 
-type EventMessage = EventMessageSendInput
-type LogMessage = LogMessageSendInput
-type StatusMessage = StatusMessageSendInput
-
 export class Client {
   api: string
   secret: string
-  client: AxiosInstance
+  client: ApiClient
   label?: string
 
   constructor(secret: string, options?: ClientInitOptions) {
     this.api = options?.api || 'https://ntfy.live/graphql'
 
     this.secret = secret
-    this.client = Axios.create({
-      baseURL: this.api,
-      headers: {
-        authorization: `Basic ${secret}`,
-      },
-    })
+    this.client = new ApiClient(this.api, secret)
 
     this.label = options?.label
   }
@@ -72,36 +36,16 @@ export class Client {
 
   event(eventMessage: EventMessage) {
     this.client
-      .post<any>('', { query: SEND_EVENT_MESSAGE_MUTATION, variables: eventMessage })
-      .then(({ data }) => data.data.sendEventMessage)
-      .then(({ success }) => !success && console.error('Failed to deliver event message!'))
-      .catch((err: any) => {
-        if (err) {
-          console.log('ERROR', err)
-        } else {
-          console.log(JSON.stringify(err, null, 2))
-        }
-      })
+      .sendEvent(eventMessage)
+      .then(({ success }) => !success && console.error('Could not deliver event message!'))
+      .catch(error => console.error(error))
   }
 
   log(logMessage: LogMessage) {
-    if (!this.secret) {
-      throw new Error('You need to set up client secret first')
-    }
-
     this.client
-      .post<any>('', { query: SEND_LOG_MESSAGE_MUTATION, variables: logMessage })
-      // TODO do proper success handling
-      .then(({ data }) => data.data.sendLogMessage)
-      .then(({ success }) => !success && console.error('Failed to deliver log message!'))
-      // TODO do proper error handling
-      .catch((err: any) => {
-        if (err) {
-          console.log('ERROR', err)
-        } else {
-          console.log(JSON.stringify(err, null, 2))
-        }
-      })
+      .sendLog(logMessage)
+      .then(({ success }) => !success && console.error('Could not deliver log message!'))
+      .catch(error => console.error(error))
   }
 
   info(message: string, metadata?: JSON) {
@@ -116,15 +60,8 @@ export class Client {
 
   status(statusMessage: StatusMessage) {
     this.client
-      .post<any>('', { query: SEND_STATUS_MESSAGE_MUTATION, variables: statusMessage })
-      .then(({ data }) => data.data.sendStatusMessage)
-      .then(({ success }) => !success && console.error('Failed to deliver status message!'))
-      .catch((err: any) => {
-        if (err) {
-          console.log('ERROR', err)
-        } else {
-          console.log(JSON.stringify(err, null, 2))
-        }
-      })
+      .sendStatus(statusMessage)
+      .then(({ success }) => !success && console.error('Could not deliver status message!'))
+      .catch(error => console.error(error))
   }
 }
