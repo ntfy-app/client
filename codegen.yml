@@ -1,0 +1,12 @@
+overwrite: true
+schema: "http://localhost:4000/graphql"
+generates:
+  api.graphql:
+    plugins:
+      - schema-ast
+    config:
+      includeDirectives: true
+      commentDescriptions: true
+  src/core/types.ts:
+    plugins:
+      - typescript
