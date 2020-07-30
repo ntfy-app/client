@@ -12,8 +12,5 @@ module.exports = {
     sourceType: 'module',
     project: 'tsconfig.json',
   },
-  rules: {
-    '@typescript-eslint/explicit-function-return-type': 'off',
-    '@typescript-eslint/camelcase': ['warn'],
-  },
-};
+  rules: {},
+}
