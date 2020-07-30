@@ -1,5 +1,5 @@
 {
-  "name": "notify-client",
+  "name": "ntfy-client",
   "version": "4.0.0",
   "description": "client application of notify app",
   "main": "dist/index.js",
