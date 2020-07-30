@@ -1,29 +1,24 @@
 {
-  "name": "ntfy-client",
-  "version": "4.0.0",
-  "description": "client application of notify app",
+  "name": "@ntfy-app/client",
+  "description": "Javascript sdk for the Notify App",
+  "author": "Notify Team",
+  "version": "1.0.0",
+  "homepage": "https://github.com/ntfy-app/client#readme",
+  "repository": "ntfy-app/client",
+  "bugs": "https://github.com/ntfy-app/client/issues",
+  "license": "MIT",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
     "dist/**/*"
   ],
-  "engines": {
-    "node": ">=12.4"
-  },
   "scripts": {
     "codegen": "graphql-codegen",
     "build": "tsc --declaration"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+ssh://git@gitlab.com/notify-app/notify-client.git"
+  "dependencies": {
+    "axios": "^0.19.2"
   },
-  "author": "Dimitri Ivashchuk <dimitri.ivashchuk@gmail.com>",
-  "license": "UNLICENSED",
-  "bugs": {
-    "url": "https://gitlab.com/notify-app/notify-client/issues"
-  },
-  "homepage": "https://gitlab.com/notify-app/notify-client#readme",
   "devDependencies": {
     "@graphql-codegen/cli": "^1.17.0",
     "@graphql-codegen/schema-ast": "^1.17.0",
@@ -35,12 +30,7 @@
     "prettier": "^2.0.4",
     "typescript": "^3.9.3"
   },
-  "dependencies": {
-    "axios": "^0.19.2"
-  },
-  "np": {
-    "yarn": false,
-    "tests": false,
-    "contents": "dist"
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
   }
 }
