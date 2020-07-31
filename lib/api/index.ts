@@ -1,5 +1,6 @@
 import Axios, { AxiosInstance } from 'axios'
 import { LogMessageSendInput, EventMessageSendInput, StatusMessageSendInput, ClientResponse } from './types'
+import { dlog } from '../core'
 
 export * from './types'
 
@@ -43,9 +44,13 @@ export class ApiClient {
         authorization: `Basic ${secret}`,
       },
     })
+
+    dlog('initialized api client')
   }
 
   async sendEvent(eventMessage: EventMessage): Promise<ClientResponse> {
+    dlog('executing sendEventMessage mutation')
+
     return this.client
       .post('', { query: SEND_EVENT_MESSAGE_MUTATION, variables: { data: eventMessage } })
       .then(({ data }) => data.data.sendEventMessage)
@@ -53,6 +58,8 @@ export class ApiClient {
   }
 
   async sendLog(logMessage: LogMessage): Promise<ClientResponse> {
+    dlog('executing sendLogMessage mutation')
+
     return this.client
       .post('', { query: SEND_LOG_MESSAGE_MUTATION, variables: { data: logMessage } })
       .then(({ data }) => data.data.sendLogMessage)
@@ -60,6 +67,8 @@ export class ApiClient {
   }
 
   async sendStatus(statusMessage: StatusMessage): Promise<ClientResponse> {
+    dlog('executing sendStatusMessage mutation')
+
     return this.client
       .post('', { query: SEND_STATUS_MESSAGE_MUTATION, variables: { data: statusMessage } })
       .then(({ data }) => data.data.sendStatusMessage)

@@ -1,5 +1,9 @@
+import debug from 'debug'
+
 import { ApiClient, EventMessage, LogMessage, StatusMessage, LogLevel } from '../api'
 import { processMetadata, checkEventCategory } from './utils'
+
+export const dlog = debug('@ntfy-app/client')
 
 interface ClientInitOptions {
   api?: string
@@ -26,6 +30,8 @@ export class Client {
     this.client = new ApiClient(this.api, secret)
 
     this.label = options?.label
+
+    dlog('initialized new client: %O', this)
   }
 
   // init(secret: string, options?: ClientInitOptions) {
@@ -56,6 +62,8 @@ export class Client {
     eventMessage.category = eventMessage.category && checkEventCategory(eventMessage.category)
     eventMessage.metadata = processMetadata(eventMessage.metadata, this.label)
 
+    dlog('sending event message: %O', eventMessage)
+
     this.client
       .sendEvent(eventMessage)
       .then(({ success }) => !success && console.error('Could not deliver event message!'))
@@ -75,6 +83,8 @@ export class Client {
    */
   log(logMessage: LogMessage) {
     logMessage.metadata = processMetadata(logMessage.metadata, this.label)
+
+    dlog('sending event message: %O', logMessage)
 
     this.client
       .sendLog(logMessage)
@@ -134,6 +144,8 @@ export class Client {
    */
   status(statusMessage: StatusMessage) {
     statusMessage.metadata = processMetadata(statusMessage.metadata, this.label)
+
+    dlog('sending event message: %O', statusMessage)
 
     this.client
       .sendStatus(statusMessage)
