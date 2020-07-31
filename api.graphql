@@ -35,6 +35,8 @@ type App {
   clientSecrets(first: Int!, last: Int!, before: ClientSecretWhereUniqueInput, after: ClientSecretWhereUniqueInput): [ClientSecret!]!
   createdAt: DateTime!
   updatedAt: DateTime!
+  subscribeTokenCount: Int!
+  appSubscriptionCount: Int!
 }
 type UserAccount {
   id: Int!
@@ -126,9 +128,9 @@ input EnvironmentAppIdCompoundUniqueInput {
   appId: Int!
 }
 enum Environment {
-  Development
-  Test
-  Production
+  DEVELOPMENT
+  TEST
+  PRODUCTION
 }
 type ClientSecret {
   id: Int!

@@ -141,6 +141,8 @@ export type App = {
   clientSecrets: Array<ClientSecret>;
   createdAt: Scalars['DateTime'];
   updatedAt: Scalars['DateTime'];
+  subscribeTokenCount: Scalars['Int'];
+  appSubscriptionCount: Scalars['Int'];
 };
 
 
@@ -298,9 +300,9 @@ export type EnvironmentAppIdCompoundUniqueInput = {
 };
 
 export enum Environment {
-  Development = 'Development',
-  Test = 'Test',
-  Production = 'Production'
+  Development = 'DEVELOPMENT',
+  Test = 'TEST',
+  Production = 'PRODUCTION'
 }
 
 export type ClientSecret = {
