@@ -1,7 +1,7 @@
 import debug from 'debug'
 
 import { ApiClient, EventMessage, LogMessage, StatusMessage, LogLevel } from '../api'
-import { processMetadata, checkEventCategory } from './utils'
+import { processMetadata, checkEventCategory, checkLogLevel } from './utils'
 
 export const dlog = debug('@ntfy-app/client')
 
@@ -98,6 +98,7 @@ export class Client {
    * @see Read the {@link http://github.com/ntfy-app/client|docs}.
    */
   log(logMessage: LogMessage) {
+    logMessage.level = checkLogLevel(logMessage.level)
     logMessage.metadata = processMetadata(logMessage.metadata, this.label)
 
     dlog('sending event message: %O', logMessage)

@@ -1,4 +1,4 @@
-import { EventCategory } from '../api'
+import { EventCategory, LogLevel } from '../api'
 import { dlog } from '.'
 
 export const checkEventCategory = (category: EventCategory): EventCategory | undefined => {
@@ -9,6 +9,16 @@ export const checkEventCategory = (category: EventCategory): EventCategory | und
   }
 
   return category
+}
+
+export const checkLogLevel = (level: LogLevel): LogLevel => {
+  if (!Object.values(LogLevel).includes(level)) {
+    console.error(`No such log level: ${level}. Fallback is ${LogLevel.Error}`)
+
+    return LogLevel.Error
+  }
+
+  return level
 }
 
 export const processMetadata = (metadata?: any, label?: string): any | undefined => {
