@@ -18,4 +18,4 @@ jobs:
       - run: npm install
       - run: npm run build
       - run: npm config set "//registry.npmjs.org/:_authToken" ${{ secrets.NPM_PUBLISH_TOKEN }}
-      - run: npm publish --tag latest --access public
+      - run: npm publish --access public
