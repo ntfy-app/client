@@ -1,16 +1,23 @@
 import { ApiClient, EventMessage, LogMessage, StatusMessage, LogLevel } from '../api'
 
 interface ClientInitOptions {
-  api: string
+  api?: string
   label?: string
 }
 
+/**
+ * The Notify App's javascript client to be used for sending events, logs and status messages.
+ */
 export class Client {
   api: string
   secret: string
   client: ApiClient
   label?: string
 
+  /**
+   * @param secret The app's client-secret
+   * @param options Options object to configure the client instance
+   */
   constructor(secret: string, options?: ClientInitOptions) {
     this.api = options?.api || 'https://ntfy.live/graphql'
 
@@ -34,6 +41,16 @@ export class Client {
   //   this.label = options?.label
   // }
 
+  /**
+   * Sends an event message to the Notify App
+   * @param {string} eventMessage The event message object
+   * @example
+   *  client.event({
+   *    title: 'New Blogpost',
+   *    message: `Just published the new post '${post}'!`,
+   *    category: 'POST',
+   *  })
+   */
   event(eventMessage: EventMessage) {
     this.client
       .sendEvent(eventMessage)
@@ -41,6 +58,17 @@ export class Client {
       .catch(error => console.error(error))
   }
 
+  /**
+   * log
+   * Sends a log message to the Notify App
+   * @param logMessage The log message object
+   * @example
+   *  client.log({
+   *    level: 'ERROR',
+   *    message: `Could not reconnect to database!`,
+   *    metadata: { retries: 10 },
+   *  })
+   */
   log(logMessage: LogMessage) {
     this.client
       .sendLog(logMessage)
@@ -48,16 +76,56 @@ export class Client {
       .catch(error => console.error(error))
   }
 
-  info(message: string, metadata?: JSON) {
+  /**
+   * info
+   * Sends a log message to the Notify App
+   * @param message The info-log message
+   * @param metadata JSON object containing metadata
+   */
+  info(message: string, metadata?: any) {
     this.log({ message, level: LogLevel.Info, metadata })
   }
-  error(message: string, metadata?: JSON) {
+
+  /**
+   * warn
+   * Sends a log message to the Notify App
+   * @param message The warn-log message
+   * @param metadata JSON object containing metadata
+   */
+  warn(message: string, metadata?: any) {
+    this.log({ message, level: LogLevel.Warn, metadata })
+  }
+
+  /**
+   * error
+   * Sends a log message to the Notify App
+   * @param message The error-log message
+   * @param metadata JSON object containing metadata
+   */
+  error(message: string, metadata?: any) {
     this.log({ message, level: LogLevel.Error, metadata })
   }
-  fatal(message: string, metadata?: JSON) {
+
+  /**
+   * fatal
+   * Sends a log message to the Notify App
+   * @param message The fatal-log message
+   * @param metadata JSON object containing metadata
+   */
+  fatal(message: string, metadata?: any) {
     this.log({ message, level: LogLevel.Fatal, metadata })
   }
 
+  /**
+   * status
+   * Sends the present status of your application to the Notify App
+   * @param statusMessage The status message object
+   * @example
+   *  client.status({
+   *    state: 'UP',
+   *    message: `App is up and running!`,
+   *  })
+   */
   status(statusMessage: StatusMessage) {
     this.client
       .sendStatus(statusMessage)
