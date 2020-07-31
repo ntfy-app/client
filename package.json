@@ -2,7 +2,7 @@
   "name": "@ntfy-app/client",
   "description": "Javascript sdk for the Notify App",
   "author": "Notify Team",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "homepage": "https://github.com/ntfy-app/client#readme",
   "repository": "ntfy-app/client",
   "bugs": "https://github.com/ntfy-app/client/issues",
