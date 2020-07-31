@@ -1,7 +1,7 @@
 module.exports = {
   client: {
     service: {
-      name: 'Slack Bot',
+      name: 'Client SDK',
       localSchemaFile: './api.graphql',
     },
   },
