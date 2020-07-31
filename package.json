@@ -1,6 +1,11 @@
 {
   "name": "@ntfy-app/client",
-  "description": "Javascript sdk for the Notify App",
+  "description": "JS Client SDK for the Notify App",
+  "keywords": [
+    "logging",
+    "messaging",
+    "monitoring"
+  ],
   "author": "Notify Team",
   "version": "1.0.2",
   "homepage": "https://github.com/ntfy-app/client#readme",
