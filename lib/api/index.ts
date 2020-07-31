@@ -10,24 +10,24 @@ export type StatusMessage = StatusMessageSendInput
 const gql = String.raw
 
 const SEND_EVENT_MESSAGE_MUTATION = gql`
-  mutation sendEventMessage($title: String!, $message: String!, $metadata: Json) {
-    sendEventMessage(data: { title: $title, message: $message, metadata: $metadata }) {
+  mutation sendEventMessage($data: EventMessageSendInput!) {
+    sendEventMessage(data: $data) {
       success
     }
   }
 `
 
 const SEND_LOG_MESSAGE_MUTATION = gql`
-  mutation sendLogMessage($level: LogLevel!, $message: String!, $metadata: Json) {
-    sendLogMessage(data: { level: $level, message: $message, metadata: $metadata }) {
+  mutation sendLogMessage($data: LogMessageSendInput!) {
+    sendLogMessage(data: $data) {
       success
     }
   }
 `
 
 const SEND_STATUS_MESSAGE_MUTATION = gql`
-  mutation sendStatusMessage($state: AppState!, $message: String!, $metadata: Json) {
-    sendStatusMessage(data: { state: $state, message: $message, metadata: $metadata }) {
+  mutation sendStatusMessage($data: StatusMessageSendInput!) {
+    sendStatusMessage(data: $data) {
       success
     }
   }
@@ -47,21 +47,21 @@ export class ApiClient {
 
   async sendEvent(eventMessage: EventMessage): Promise<ClientResponse> {
     return this.client
-      .post('', { query: SEND_EVENT_MESSAGE_MUTATION, variables: eventMessage })
+      .post('', { query: SEND_EVENT_MESSAGE_MUTATION, variables: { data: eventMessage } })
       .then(({ data }) => data.data.sendEventMessage)
       .catch(error => error)
   }
 
   async sendLog(logMessage: LogMessage): Promise<ClientResponse> {
     return this.client
-      .post('', { query: SEND_LOG_MESSAGE_MUTATION, variables: logMessage })
+      .post('', { query: SEND_LOG_MESSAGE_MUTATION, variables: { data: logMessage } })
       .then(({ data }) => data.data.sendLogMessage)
       .catch(error => error)
   }
 
   async sendStatus(statusMessage: StatusMessage): Promise<ClientResponse> {
     return this.client
-      .post('', { query: SEND_STATUS_MESSAGE_MUTATION, variables: statusMessage })
+      .post('', { query: SEND_STATUS_MESSAGE_MUTATION, variables: { data: statusMessage } })
       .then(({ data }) => data.data.sendStatusMessage)
       .catch(error => error)
   }
