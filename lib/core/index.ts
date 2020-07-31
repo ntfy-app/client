@@ -1,4 +1,5 @@
 import { ApiClient, EventMessage, LogMessage, StatusMessage, LogLevel } from '../api'
+import { processMetadata, checkEventCategory } from './utils'
 
 interface ClientInitOptions {
   api?: string
@@ -52,6 +53,9 @@ export class Client {
    *  })
    */
   event(eventMessage: EventMessage) {
+    eventMessage.category = eventMessage.category && checkEventCategory(eventMessage.category)
+    eventMessage.metadata = processMetadata(eventMessage.metadata, this.label)
+
     this.client
       .sendEvent(eventMessage)
       .then(({ success }) => !success && console.error('Could not deliver event message!'))
@@ -70,6 +74,8 @@ export class Client {
    *  })
    */
   log(logMessage: LogMessage) {
+    logMessage.metadata = processMetadata(logMessage.metadata, this.label)
+
     this.client
       .sendLog(logMessage)
       .then(({ success }) => !success && console.error('Could not deliver log message!'))
@@ -127,6 +133,8 @@ export class Client {
    *  })
    */
   status(statusMessage: StatusMessage) {
+    statusMessage.metadata = processMetadata(statusMessage.metadata, this.label)
+
     this.client
       .sendStatus(statusMessage)
       .then(({ success }) => !success && console.error('Could not deliver status message!'))
