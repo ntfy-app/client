@@ -1,1 +1,1 @@
-export * from './core'
+export { Client } from './core'
