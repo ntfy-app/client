@@ -2,14 +2,14 @@
   "compilerOptions": {
     "target": "ES5",
     "module": "CommonJS",
-    "lib": ["ESNext"],
     "sourceMap": true,
     "outDir": "dist",
     "rootDir": "lib",
     "noEmitOnError": true,
     "strict": true,
-    "moduleResolution": "Node",
-    "esModuleInterop": true
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true
   },
   "include": ["lib"]
 }
