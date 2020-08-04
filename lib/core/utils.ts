@@ -23,31 +23,31 @@ export const checkLogLevel = (level: LogLevel): LogLevel => {
 
 export const processMetadata = (metadata?: any, label?: string): any | undefined => {
   if (!metadata) {
-    return undefined
+    return label ? { ['NTFY_LABEL']: label } : undefined
   }
 
   if (typeof metadata !== 'object' || Array.isArray(metadata)) {
-    dlog(`Expected object instead of '${Array.isArray(metadata) ? 'array' : typeof metadata}'`)
+    dlog(`expected object instead of '${Array.isArray(metadata) ? 'array' : typeof metadata}'`)
 
     try {
-      const md = {
-        NTFY_STRINGIFIED: JSON.stringify(metadata),
-      }
+      dlog('stringifying metadata to send to api')
 
-      return md
+      return {
+        ['NTFY_STRINGIFIED']: JSON.stringify(metadata),
+        ['NTFY_LABEL']: label,
+      }
     } catch (_error) {
-      return { NTFY_CLIENT_ERROR: 'METADATA COULD NOT BE STRINGIFIED' }
+      dlog('could not stringify metadata')
+
+      return {
+        ['NTFY_CLIENT_ERROR']: 'METADATA COULD NOT BE STRINGIFIED',
+        ['NTFY_LABEL']: label,
+      }
     }
   }
 
-  if (metadata.label && label) {
-    dlog('metadata has label property set > client label goes to NTFY_LABEL')
-
+  if (label) {
     metadata['NTFY_LABEL'] = label
-  } else if (label) {
-    dlog('attaching label to metadata obj')
-
-    metadata.label = label
   }
 
   return metadata
