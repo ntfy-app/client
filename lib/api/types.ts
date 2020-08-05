@@ -10,7 +10,7 @@ export type Scalars = {
   /** A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar. */
   DateTime: any;
   /** The `JSON` scalar type represents JSON objects as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
-  Json: any;
+  Json: { [key: string]: any };
 };
 
 export type Query = {
@@ -175,13 +175,13 @@ export type UserAccount = {
   nickname?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
   email?: Maybe<Scalars['String']>;
-  password?: Maybe<Scalars['String']>;
   role: Role;
   botUsers: Array<BotUser>;
   apps: Array<App>;
   appSubscriptions: Array<AppSubscription>;
   createdAt: Scalars['DateTime'];
   updatedAt: Scalars['DateTime'];
+  requiresSetup: Scalars['Boolean'];
 };
 
 
@@ -215,40 +215,72 @@ export enum Role {
 
 export type BotUserWhereUniqueInput = {
   id?: Maybe<Scalars['Int']>;
-  botUser_bot?: Maybe<BotUserBotCompoundUniqueInput>;
+  botUser_botId?: Maybe<BotUserBotIdCompoundUniqueInput>;
 };
 
-export type BotUserBotCompoundUniqueInput = {
+export type BotUserBotIdCompoundUniqueInput = {
   botUser: Scalars['String'];
-  bot: Bot;
+  botId: Scalars['Int'];
 };
-
-export enum Bot {
-  Slack = 'SLACK',
-  Telegram = 'TELEGRAM'
-}
 
 export type BotUser = {
   __typename?: 'BotUser';
   id: Scalars['Int'];
+  name?: Maybe<Scalars['String']>;
   botUser: Scalars['String'];
+  botId: Scalars['Int'];
   bot: Bot;
   userAccountId: Scalars['Int'];
   userAccount: UserAccount;
   createdAt: Scalars['DateTime'];
   updatedAt: Scalars['DateTime'];
+  requiresSetup: Scalars['Boolean'];
 };
 
+export type Bot = {
+  __typename?: 'Bot';
+  id: Scalars['Int'];
+  type: BotType;
+  botUsers: Array<BotUser>;
+  appSubscriptions: Array<AppSubscription>;
+};
+
+
+export type BotBotUsersArgs = {
+  first: Scalars['Int'];
+  last: Scalars['Int'];
+  before?: Maybe<BotUserWhereUniqueInput>;
+  after?: Maybe<BotUserWhereUniqueInput>;
+};
+
+
+export type BotAppSubscriptionsArgs = {
+  first: Scalars['Int'];
+  last: Scalars['Int'];
+  before?: Maybe<AppSubscriptionWhereUniqueInput>;
+  after?: Maybe<AppSubscriptionWhereUniqueInput>;
+};
+
+export enum BotType {
+  Slack = 'SLACK',
+  Telegram = 'TELEGRAM'
+}
 
 export type AppSubscriptionWhereUniqueInput = {
   id?: Maybe<Scalars['Int']>;
-  name_description_appId?: Maybe<NameDescriptionAppIdCompoundUniqueInput>;
+  name_appId?: Maybe<NameAppIdCompoundUniqueInput>;
+  appId_botId_channel?: Maybe<AppIdBotIdChannelCompoundUniqueInput>;
 };
 
-export type NameDescriptionAppIdCompoundUniqueInput = {
+export type NameAppIdCompoundUniqueInput = {
   name: Scalars['String'];
-  description: Scalars['String'];
   appId: Scalars['Int'];
+};
+
+export type AppIdBotIdChannelCompoundUniqueInput = {
+  appId: Scalars['Int'];
+  botId: Scalars['Int'];
+  channel: Scalars['String'];
 };
 
 export type AppSubscription = {
@@ -260,27 +292,29 @@ export type AppSubscription = {
   app: App;
   subscriberId: Scalars['Int'];
   subscriber: UserAccount;
+  botId: Scalars['Int'];
   bot: Bot;
   channel: Scalars['String'];
   createdAt: Scalars['DateTime'];
   updatedAt: Scalars['DateTime'];
 };
 
+
 export type SubscribeTokenWhereUniqueInput = {
   id?: Maybe<Scalars['Int']>;
   token?: Maybe<Scalars['String']>;
-  name_appId?: Maybe<NameAppIdCompoundUniqueInput>;
+  description_appId?: Maybe<DescriptionAppIdCompoundUniqueInput>;
 };
 
-export type NameAppIdCompoundUniqueInput = {
-  name: Scalars['String'];
+export type DescriptionAppIdCompoundUniqueInput = {
+  description: Scalars['String'];
   appId: Scalars['Int'];
 };
 
 export type SubscribeToken = {
   __typename?: 'SubscribeToken';
   id: Scalars['Int'];
-  name: Scalars['String'];
+  description: Scalars['String'];
   token: Scalars['String'];
   appId: Scalars['Int'];
   app: App;
@@ -367,7 +401,7 @@ export type SubscribeTokenFilter = {
 
 export type SubscribeTokenWhereInput = {
   id?: Maybe<IntFilter>;
-  name?: Maybe<StringFilter>;
+  description?: Maybe<StringFilter>;
   appId?: Maybe<IntFilter>;
   token?: Maybe<StringFilter>;
   createdAt?: Maybe<DateTimeFilter>;
@@ -398,10 +432,11 @@ export type AppSubscriptionFilter = {
 export type AppSubscriptionWhereInput = {
   id?: Maybe<IntFilter>;
   name?: Maybe<StringFilter>;
+  customName?: Maybe<NullableStringFilter>;
   description?: Maybe<StringFilter>;
   appId?: Maybe<IntFilter>;
   subscriberId?: Maybe<IntFilter>;
-  bot?: Maybe<Bot>;
+  botId?: Maybe<IntFilter>;
   channel?: Maybe<StringFilter>;
   createdAt?: Maybe<DateTimeFilter>;
   updatedAt?: Maybe<DateTimeFilter>;
@@ -410,6 +445,21 @@ export type AppSubscriptionWhereInput = {
   NOT?: Maybe<Array<AppSubscriptionWhereInput>>;
   app?: Maybe<AppWhereInput>;
   subscriber?: Maybe<UserAccountWhereInput>;
+  bot?: Maybe<BotWhereInput>;
+};
+
+export type NullableStringFilter = {
+  equals?: Maybe<Scalars['String']>;
+  not?: Maybe<Scalars['String']>;
+  in?: Maybe<Array<Scalars['String']>>;
+  notIn?: Maybe<Array<Scalars['String']>>;
+  lt?: Maybe<Scalars['String']>;
+  lte?: Maybe<Scalars['String']>;
+  gt?: Maybe<Scalars['String']>;
+  gte?: Maybe<Scalars['String']>;
+  contains?: Maybe<Scalars['String']>;
+  startsWith?: Maybe<Scalars['String']>;
+  endsWith?: Maybe<Scalars['String']>;
 };
 
 export type UserAccountWhereInput = {
@@ -429,20 +479,6 @@ export type UserAccountWhereInput = {
   NOT?: Maybe<Array<UserAccountWhereInput>>;
 };
 
-export type NullableStringFilter = {
-  equals?: Maybe<Scalars['String']>;
-  not?: Maybe<Scalars['String']>;
-  in?: Maybe<Array<Scalars['String']>>;
-  notIn?: Maybe<Array<Scalars['String']>>;
-  lt?: Maybe<Scalars['String']>;
-  lte?: Maybe<Scalars['String']>;
-  gt?: Maybe<Scalars['String']>;
-  gte?: Maybe<Scalars['String']>;
-  contains?: Maybe<Scalars['String']>;
-  startsWith?: Maybe<Scalars['String']>;
-  endsWith?: Maybe<Scalars['String']>;
-};
-
 export type BotUserFilter = {
   every?: Maybe<BotUserWhereInput>;
   some?: Maybe<BotUserWhereInput>;
@@ -451,15 +487,27 @@ export type BotUserFilter = {
 
 export type BotUserWhereInput = {
   id?: Maybe<IntFilter>;
+  name?: Maybe<NullableStringFilter>;
   botUser?: Maybe<StringFilter>;
-  bot?: Maybe<Bot>;
+  botId?: Maybe<IntFilter>;
   userAccountId?: Maybe<IntFilter>;
   createdAt?: Maybe<DateTimeFilter>;
   updatedAt?: Maybe<DateTimeFilter>;
   AND?: Maybe<Array<BotUserWhereInput>>;
   OR?: Maybe<Array<BotUserWhereInput>>;
   NOT?: Maybe<Array<BotUserWhereInput>>;
+  bot?: Maybe<BotWhereInput>;
   userAccount?: Maybe<UserAccountWhereInput>;
+};
+
+export type BotWhereInput = {
+  id?: Maybe<IntFilter>;
+  type?: Maybe<BotType>;
+  botUsers?: Maybe<BotUserFilter>;
+  appSubscriptions?: Maybe<AppSubscriptionFilter>;
+  AND?: Maybe<Array<BotWhereInput>>;
+  OR?: Maybe<Array<BotWhereInput>>;
+  NOT?: Maybe<Array<BotWhereInput>>;
 };
 
 export type AppFilter = {
@@ -577,55 +625,57 @@ export enum AppState {
 }
 
 export type AppOrderByInput = {
-  id?: Maybe<OrderByArg>;
-  name?: Maybe<OrderByArg>;
-  ownerId?: Maybe<OrderByArg>;
-  createdAt?: Maybe<OrderByArg>;
-  updatedAt?: Maybe<OrderByArg>;
+  id?: Maybe<SortOrder>;
+  name?: Maybe<SortOrder>;
+  ownerId?: Maybe<SortOrder>;
+  createdAt?: Maybe<SortOrder>;
+  updatedAt?: Maybe<SortOrder>;
 };
 
-export enum OrderByArg {
+export enum SortOrder {
   Asc = 'asc',
   Desc = 'desc'
 }
 
 export type AppSubscriptionOrderByInput = {
-  id?: Maybe<OrderByArg>;
-  name?: Maybe<OrderByArg>;
-  description?: Maybe<OrderByArg>;
-  appId?: Maybe<OrderByArg>;
-  subscriberId?: Maybe<OrderByArg>;
-  bot?: Maybe<OrderByArg>;
-  channel?: Maybe<OrderByArg>;
-  createdAt?: Maybe<OrderByArg>;
-  updatedAt?: Maybe<OrderByArg>;
+  id?: Maybe<SortOrder>;
+  name?: Maybe<SortOrder>;
+  customName?: Maybe<SortOrder>;
+  description?: Maybe<SortOrder>;
+  appId?: Maybe<SortOrder>;
+  subscriberId?: Maybe<SortOrder>;
+  botId?: Maybe<SortOrder>;
+  channel?: Maybe<SortOrder>;
+  createdAt?: Maybe<SortOrder>;
+  updatedAt?: Maybe<SortOrder>;
 };
 
 export type BotUserOrderByInput = {
-  id?: Maybe<OrderByArg>;
-  botUser?: Maybe<OrderByArg>;
-  bot?: Maybe<OrderByArg>;
-  userAccountId?: Maybe<OrderByArg>;
-  createdAt?: Maybe<OrderByArg>;
-  updatedAt?: Maybe<OrderByArg>;
+  id?: Maybe<SortOrder>;
+  name?: Maybe<SortOrder>;
+  botUser?: Maybe<SortOrder>;
+  botId?: Maybe<SortOrder>;
+  userAccountId?: Maybe<SortOrder>;
+  createdAt?: Maybe<SortOrder>;
+  updatedAt?: Maybe<SortOrder>;
 };
 
 export type ClientSecretOrderByInput = {
-  id?: Maybe<OrderByArg>;
-  environment?: Maybe<OrderByArg>;
-  secret?: Maybe<OrderByArg>;
-  appId?: Maybe<OrderByArg>;
-  createdAt?: Maybe<OrderByArg>;
-  updatedAt?: Maybe<OrderByArg>;
+  id?: Maybe<SortOrder>;
+  environment?: Maybe<SortOrder>;
+  secret?: Maybe<SortOrder>;
+  appId?: Maybe<SortOrder>;
+  createdAt?: Maybe<SortOrder>;
+  updatedAt?: Maybe<SortOrder>;
 };
 
 export type SubscribeTokenOrderByInput = {
-  id?: Maybe<OrderByArg>;
-  name?: Maybe<OrderByArg>;
-  appId?: Maybe<OrderByArg>;
-  token?: Maybe<OrderByArg>;
-  createdAt?: Maybe<OrderByArg>;
-  updatedAt?: Maybe<OrderByArg>;
+  id?: Maybe<SortOrder>;
+  description?: Maybe<SortOrder>;
+  appId?: Maybe<SortOrder>;
+  token?: Maybe<SortOrder>;
+  createdAt?: Maybe<SortOrder>;
+  updatedAt?: Maybe<SortOrder>;
 };
 
 export type UserAccountWhereUniqueInput = {
@@ -634,14 +684,14 @@ export type UserAccountWhereUniqueInput = {
 };
 
 export type UserAccountOrderByInput = {
-  id?: Maybe<OrderByArg>;
-  nickname?: Maybe<OrderByArg>;
-  name?: Maybe<OrderByArg>;
-  email?: Maybe<OrderByArg>;
-  password?: Maybe<OrderByArg>;
-  role?: Maybe<OrderByArg>;
-  createdAt?: Maybe<OrderByArg>;
-  updatedAt?: Maybe<OrderByArg>;
+  id?: Maybe<SortOrder>;
+  nickname?: Maybe<SortOrder>;
+  name?: Maybe<SortOrder>;
+  email?: Maybe<SortOrder>;
+  password?: Maybe<SortOrder>;
+  role?: Maybe<SortOrder>;
+  createdAt?: Maybe<SortOrder>;
+  updatedAt?: Maybe<SortOrder>;
 };
 
 export type Mutation = {
@@ -654,6 +704,7 @@ export type Mutation = {
   signIn: UserAccountAndToken;
   signInViaBot: UserAccountAndToken;
   generateBotToken: GenerateBotTokenPayload;
+  updateBotUser?: Maybe<BotUser>;
   sendLogMessage: ClientResponse;
   sendEventMessage: ClientResponse;
   sendStatusMessage: ClientResponse;
@@ -704,6 +755,12 @@ export type MutationGenerateBotTokenArgs = {
 };
 
 
+export type MutationUpdateBotUserArgs = {
+  data: BotUserUpdateInput;
+  where: BotUserWhereUniqueInput;
+};
+
+
 export type MutationSendLogMessageArgs = {
   data: LogMessageSendInput;
 };
@@ -747,9 +804,10 @@ export type DeleteInput = {
 };
 
 export type AppSubscriptionCreateInput = {
+  name: Scalars['String'];
   channel: Scalars['String'];
-  bot: Bot;
   subscribeToken: Scalars['String'];
+  userToken: Scalars['String'];
 };
 
 export type SignUpInput = {
@@ -771,17 +829,20 @@ export type SignInInput = {
 };
 
 export type SignInViaBotInput = {
-  bot: Bot;
   botUser: Scalars['String'];
 };
 
 export type GenerateBotTokenInput = {
-  bot: Bot;
+  bot: BotType;
 };
 
 export type GenerateBotTokenPayload = {
   __typename?: 'GenerateBotTokenPayload';
   token: Scalars['String'];
+};
+
+export type BotUserUpdateInput = {
+  name?: Maybe<Scalars['String']>;
 };
 
 export type LogMessageSendInput = {
@@ -830,7 +891,7 @@ export type ClientSecretRegenerateInput = {
 };
 
 export type SubscribeTokenCreateInput = {
-  name: Scalars['String'];
+  description: Scalars['String'];
   appId: Scalars['Int'];
 };
 
@@ -846,14 +907,14 @@ export enum BotJobType {
 
 export type BotJob = {
   type: BotJobType;
-  bot: Bot;
+  bot: BotType;
   channel: Scalars['String'];
 };
 
 export type EventMessageJob = BotJob & {
   __typename?: 'EventMessageJob';
   type: BotJobType;
-  bot: Bot;
+  bot: BotType;
   channel: Scalars['String'];
   appId: Scalars['Int'];
   appName: Scalars['String'];
@@ -868,7 +929,7 @@ export type EventMessageJob = BotJob & {
 export type LogMessageJob = BotJob & {
   __typename?: 'LogMessageJob';
   type: BotJobType;
-  bot: Bot;
+  bot: BotType;
   channel: Scalars['String'];
   appId: Scalars['Int'];
   appName: Scalars['String'];
@@ -882,7 +943,7 @@ export type LogMessageJob = BotJob & {
 export type StatusMessageJob = BotJob & {
   __typename?: 'StatusMessageJob';
   type: BotJobType;
-  bot: Bot;
+  bot: BotType;
   channel: Scalars['String'];
   appId: Scalars['Int'];
   appName: Scalars['String'];

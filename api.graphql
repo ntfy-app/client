@@ -43,13 +43,13 @@ type UserAccount {
   nickname: String
   name: String
   email: String
-  password: String
   role: Role!
   botUsers(first: Int!, last: Int!, before: BotUserWhereUniqueInput, after: BotUserWhereUniqueInput): [BotUser!]!
   apps(first: Int!, last: Int!, before: AppWhereUniqueInput, after: AppWhereUniqueInput): [App!]!
   appSubscriptions(first: Int!, last: Int!, before: AppSubscriptionWhereUniqueInput, after: AppSubscriptionWhereUniqueInput): [AppSubscription!]!
   createdAt: DateTime!
   updatedAt: DateTime!
+  requiresSetup: Boolean!
 }
 enum Role {
   ADMIN
@@ -57,35 +57,47 @@ enum Role {
 }
 input BotUserWhereUniqueInput {
   id: Int
-  botUser_bot: BotUserBotCompoundUniqueInput
+  botUser_botId: BotUserBotIdCompoundUniqueInput
 }
-input BotUserBotCompoundUniqueInput {
+input BotUserBotIdCompoundUniqueInput {
   botUser: String!
-  bot: Bot!
-}
-enum Bot {
-  SLACK
-  TELEGRAM
+  botId: Int!
 }
 type BotUser {
   id: Int!
+  name: String
   botUser: String!
+  botId: Int!
   bot: Bot!
   userAccountId: Int!
   userAccount: UserAccount!
   createdAt: DateTime!
   updatedAt: DateTime!
+  requiresSetup: Boolean!
 }
-"""A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar."""
-scalar DateTime
+type Bot {
+  id: Int!
+  type: BotType!
+  botUsers(first: Int!, last: Int!, before: BotUserWhereUniqueInput, after: BotUserWhereUniqueInput): [BotUser!]!
+  appSubscriptions(first: Int!, last: Int!, before: AppSubscriptionWhereUniqueInput, after: AppSubscriptionWhereUniqueInput): [AppSubscription!]!
+}
+enum BotType {
+  SLACK
+  TELEGRAM
+}
 input AppSubscriptionWhereUniqueInput {
   id: Int
-  name_description_appId: NameDescriptionAppIdCompoundUniqueInput
+  name_appId: NameAppIdCompoundUniqueInput
+  appId_botId_channel: AppIdBotIdChannelCompoundUniqueInput
 }
-input NameDescriptionAppIdCompoundUniqueInput {
+input NameAppIdCompoundUniqueInput {
   name: String!
-  description: String!
   appId: Int!
+}
+input AppIdBotIdChannelCompoundUniqueInput {
+  appId: Int!
+  botId: Int!
+  channel: String!
 }
 type AppSubscription {
   id: Int!
@@ -95,23 +107,26 @@ type AppSubscription {
   app: App!
   subscriberId: Int!
   subscriber: UserAccount!
+  botId: Int!
   bot: Bot!
   channel: String!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
+"""A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar."""
+scalar DateTime
 input SubscribeTokenWhereUniqueInput {
   id: Int
   token: String
-  name_appId: NameAppIdCompoundUniqueInput
+  description_appId: DescriptionAppIdCompoundUniqueInput
 }
-input NameAppIdCompoundUniqueInput {
-  name: String!
+input DescriptionAppIdCompoundUniqueInput {
+  description: String!
   appId: Int!
 }
 type SubscribeToken {
   id: Int!
-  name: String!
+  description: String!
   token: String!
   appId: Int!
   app: App!
@@ -188,7 +203,7 @@ input SubscribeTokenFilter {
 }
 input SubscribeTokenWhereInput {
   id: IntFilter
-  name: StringFilter
+  description: StringFilter
   appId: IntFilter
   token: StringFilter
   createdAt: DateTimeFilter
@@ -216,10 +231,11 @@ input AppSubscriptionFilter {
 input AppSubscriptionWhereInput {
   id: IntFilter
   name: StringFilter
+  customName: NullableStringFilter
   description: StringFilter
   appId: IntFilter
   subscriberId: IntFilter
-  bot: Bot
+  botId: IntFilter
   channel: StringFilter
   createdAt: DateTimeFilter
   updatedAt: DateTimeFilter
@@ -228,6 +244,20 @@ input AppSubscriptionWhereInput {
   NOT: [AppSubscriptionWhereInput!]
   app: AppWhereInput
   subscriber: UserAccountWhereInput
+  bot: BotWhereInput
+}
+input NullableStringFilter {
+  equals: String
+  not: String
+  in: [String!]
+  notIn: [String!]
+  lt: String
+  lte: String
+  gt: String
+  gte: String
+  contains: String
+  startsWith: String
+  endsWith: String
 }
 input UserAccountWhereInput {
   id: IntFilter
@@ -245,19 +275,6 @@ input UserAccountWhereInput {
   OR: [UserAccountWhereInput!]
   NOT: [UserAccountWhereInput!]
 }
-input NullableStringFilter {
-  equals: String
-  not: String
-  in: [String!]
-  notIn: [String!]
-  lt: String
-  lte: String
-  gt: String
-  gte: String
-  contains: String
-  startsWith: String
-  endsWith: String
-}
 input BotUserFilter {
   every: BotUserWhereInput
   some: BotUserWhereInput
@@ -265,15 +282,26 @@ input BotUserFilter {
 }
 input BotUserWhereInput {
   id: IntFilter
+  name: NullableStringFilter
   botUser: StringFilter
-  bot: Bot
+  botId: IntFilter
   userAccountId: IntFilter
   createdAt: DateTimeFilter
   updatedAt: DateTimeFilter
   AND: [BotUserWhereInput!]
   OR: [BotUserWhereInput!]
   NOT: [BotUserWhereInput!]
+  bot: BotWhereInput
   userAccount: UserAccountWhereInput
+}
+input BotWhereInput {
+  id: IntFilter
+  type: BotType
+  botUsers: BotUserFilter
+  appSubscriptions: AppSubscriptionFilter
+  AND: [BotWhereInput!]
+  OR: [BotWhereInput!]
+  NOT: [BotWhereInput!]
 }
 input AppFilter {
   every: AppWhereInput
@@ -378,64 +406,66 @@ enum AppState {
   DOWN
 }
 input AppOrderByInput {
-  id: OrderByArg
-  name: OrderByArg
-  ownerId: OrderByArg
-  createdAt: OrderByArg
-  updatedAt: OrderByArg
+  id: SortOrder
+  name: SortOrder
+  ownerId: SortOrder
+  createdAt: SortOrder
+  updatedAt: SortOrder
 }
-enum OrderByArg {
+enum SortOrder {
   asc
   desc
 }
 input AppSubscriptionOrderByInput {
-  id: OrderByArg
-  name: OrderByArg
-  description: OrderByArg
-  appId: OrderByArg
-  subscriberId: OrderByArg
-  bot: OrderByArg
-  channel: OrderByArg
-  createdAt: OrderByArg
-  updatedAt: OrderByArg
+  id: SortOrder
+  name: SortOrder
+  customName: SortOrder
+  description: SortOrder
+  appId: SortOrder
+  subscriberId: SortOrder
+  botId: SortOrder
+  channel: SortOrder
+  createdAt: SortOrder
+  updatedAt: SortOrder
 }
 input BotUserOrderByInput {
-  id: OrderByArg
-  botUser: OrderByArg
-  bot: OrderByArg
-  userAccountId: OrderByArg
-  createdAt: OrderByArg
-  updatedAt: OrderByArg
+  id: SortOrder
+  name: SortOrder
+  botUser: SortOrder
+  botId: SortOrder
+  userAccountId: SortOrder
+  createdAt: SortOrder
+  updatedAt: SortOrder
 }
 input ClientSecretOrderByInput {
-  id: OrderByArg
-  environment: OrderByArg
-  secret: OrderByArg
-  appId: OrderByArg
-  createdAt: OrderByArg
-  updatedAt: OrderByArg
+  id: SortOrder
+  environment: SortOrder
+  secret: SortOrder
+  appId: SortOrder
+  createdAt: SortOrder
+  updatedAt: SortOrder
 }
 input SubscribeTokenOrderByInput {
-  id: OrderByArg
-  name: OrderByArg
-  appId: OrderByArg
-  token: OrderByArg
-  createdAt: OrderByArg
-  updatedAt: OrderByArg
+  id: SortOrder
+  description: SortOrder
+  appId: SortOrder
+  token: SortOrder
+  createdAt: SortOrder
+  updatedAt: SortOrder
 }
 input UserAccountWhereUniqueInput {
   id: Int
   nickname: String
 }
 input UserAccountOrderByInput {
-  id: OrderByArg
-  nickname: OrderByArg
-  name: OrderByArg
-  email: OrderByArg
-  password: OrderByArg
-  role: OrderByArg
-  createdAt: OrderByArg
-  updatedAt: OrderByArg
+  id: SortOrder
+  nickname: SortOrder
+  name: SortOrder
+  email: SortOrder
+  password: SortOrder
+  role: SortOrder
+  createdAt: SortOrder
+  updatedAt: SortOrder
 }
 type Mutation {
   createApp(data: AppCreateInput!): App!
@@ -446,6 +476,7 @@ type Mutation {
   signIn(data: SignInInput!): UserAccountAndToken!
   signInViaBot(data: SignInViaBotInput!): UserAccountAndToken!
   generateBotToken(data: GenerateBotTokenInput!): GenerateBotTokenPayload!
+  updateBotUser(data: BotUserUpdateInput!, where: BotUserWhereUniqueInput!): BotUser
   sendLogMessage(data: LogMessageSendInput!): ClientResponse!
   sendEventMessage(data: EventMessageSendInput!): ClientResponse!
   sendStatusMessage(data: StatusMessageSendInput!): ClientResponse!
@@ -461,9 +492,10 @@ input DeleteInput {
   id: Int!
 }
 input AppSubscriptionCreateInput {
+  name: String!
   channel: String!
-  bot: Bot!
   subscribeToken: String!
+  userToken: String!
 }
 input SignUpInput {
   nickname: String!
@@ -480,14 +512,16 @@ input SignInInput {
   password: String!
 }
 input SignInViaBotInput {
-  bot: Bot!
   botUser: String!
 }
 input GenerateBotTokenInput {
-  bot: Bot!
+  bot: BotType!
 }
 type GenerateBotTokenPayload {
   token: String!
+}
+input BotUserUpdateInput {
+  name: String
 }
 input LogMessageSendInput {
   level: LogLevel!
@@ -528,7 +562,7 @@ input ClientSecretRegenerateInput {
   id: Int!
 }
 input SubscribeTokenCreateInput {
-  name: String!
+  description: String!
   appId: Int!
 }
 input UserAccountMergeInput {
@@ -541,12 +575,12 @@ enum BotJobType {
 }
 interface BotJob {
   type: BotJobType!
-  bot: Bot!
+  bot: BotType!
   channel: String!
 }
 type EventMessageJob implements BotJob {
   type: BotJobType!
-  bot: Bot!
+  bot: BotType!
   channel: String!
   appId: Int!
   appName: String!
@@ -559,7 +593,7 @@ type EventMessageJob implements BotJob {
 }
 type LogMessageJob implements BotJob {
   type: BotJobType!
-  bot: Bot!
+  bot: BotType!
   channel: String!
   appId: Int!
   appName: String!
@@ -571,7 +605,7 @@ type LogMessageJob implements BotJob {
 }
 type StatusMessageJob implements BotJob {
   type: BotJobType!
-  bot: Bot!
+  bot: BotType!
   channel: String!
   appId: Int!
   appName: String!
