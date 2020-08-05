@@ -24,7 +24,7 @@ export class Client {
    * @param {string} secret The app's client-secret
    * @param {ClientInitOptions} [options] Options object to configure the client instance
    * @param {string} [options.api] Change the default API
-   * @param {string} [options.label] Label the client instance (label will be sent via the metadata object)
+   * @param {string} [options.label] Label the client instance (e.g. process-id)
    * @example
    *  new Client('clientse_dev_abcdefghijkl...xyz', {
    *    label: 'instance-2',
