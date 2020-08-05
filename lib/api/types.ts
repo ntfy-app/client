@@ -9,136 +9,144 @@ export type Scalars = {
   Float: number;
   /** A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar. */
   DateTime: any;
+  /**
+   * 
+   *     This scalar should never make it into production. It is used as a placeholder for situations
+   *     where GraphQL Nexus encounters a missing type. We don't want to error immedately, otherwise
+   *     the TypeScript definitions will not be updated.
+   *   
+   */
+  NEXUS__UNKNOWN__TYPE: any;
   /** The `JSON` scalar type represents JSON objects as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
   Json: { [key: string]: any };
 };
 
-export type Query = {
+export type IQuery = {
   __typename?: 'Query';
-  app?: Maybe<App>;
-  apps: Array<App>;
-  appSubscription?: Maybe<AppSubscription>;
-  appSubscriptions: Array<AppSubscription>;
-  botUser?: Maybe<BotUser>;
-  botUsers: Array<BotUser>;
-  clientSecret?: Maybe<ClientSecret>;
-  clientSecrets: Array<ClientSecret>;
-  subscribeToken?: Maybe<SubscribeToken>;
-  subscribeTokens: Array<SubscribeToken>;
-  whoAmI: UserAccount;
-  userAccount?: Maybe<UserAccount>;
-  userAccounts: Array<UserAccount>;
+  app?: Maybe<IApp>;
+  apps: Array<IApp>;
+  appSubscription?: Maybe<IAppSubscription>;
+  appSubscriptions: Array<IAppSubscription>;
+  botUser?: Maybe<IBotUser>;
+  botUsers: Array<IBotUser>;
+  clientSecret?: Maybe<IClientSecret>;
+  clientSecrets: Array<IClientSecret>;
+  subscribeToken?: Maybe<ISubscribeToken>;
+  subscribeTokens: Array<ISubscribeToken>;
+  whoAmI: IUserAccount;
+  userAccount?: Maybe<IUserAccount>;
+  userAccounts: Array<IUserAccount>;
 };
 
 
-export type QueryAppArgs = {
-  where: AppWhereUniqueInput;
+export type IQueryAppArgs = {
+  where: IAppWhereUniqueInput;
 };
 
 
-export type QueryAppsArgs = {
-  where?: Maybe<AppWhereInput>;
-  orderBy?: Maybe<AppOrderByInput>;
+export type IQueryAppsArgs = {
+  where?: Maybe<IAppWhereInput>;
+  orderBy?: Maybe<IAppOrderByInput>;
   first: Scalars['Int'];
   last: Scalars['Int'];
-  before?: Maybe<AppWhereUniqueInput>;
-  after?: Maybe<AppWhereUniqueInput>;
+  before?: Maybe<IAppWhereUniqueInput>;
+  after?: Maybe<IAppWhereUniqueInput>;
 };
 
 
-export type QueryAppSubscriptionArgs = {
-  where: AppSubscriptionWhereUniqueInput;
+export type IQueryAppSubscriptionArgs = {
+  where: IAppSubscriptionWhereUniqueInput;
 };
 
 
-export type QueryAppSubscriptionsArgs = {
-  where?: Maybe<AppSubscriptionWhereInput>;
-  orderBy?: Maybe<AppSubscriptionOrderByInput>;
+export type IQueryAppSubscriptionsArgs = {
+  where?: Maybe<IAppSubscriptionWhereInput>;
+  orderBy?: Maybe<IAppSubscriptionOrderByInput>;
   first: Scalars['Int'];
   last: Scalars['Int'];
-  before?: Maybe<AppSubscriptionWhereUniqueInput>;
-  after?: Maybe<AppSubscriptionWhereUniqueInput>;
+  before?: Maybe<IAppSubscriptionWhereUniqueInput>;
+  after?: Maybe<IAppSubscriptionWhereUniqueInput>;
 };
 
 
-export type QueryBotUserArgs = {
-  where: BotUserWhereUniqueInput;
+export type IQueryBotUserArgs = {
+  where: IBotUserWhereUniqueInput;
 };
 
 
-export type QueryBotUsersArgs = {
-  where?: Maybe<BotUserWhereInput>;
-  orderBy?: Maybe<BotUserOrderByInput>;
+export type IQueryBotUsersArgs = {
+  where?: Maybe<IBotUserWhereInput>;
+  orderBy?: Maybe<IBotUserOrderByInput>;
   first: Scalars['Int'];
   last: Scalars['Int'];
-  before?: Maybe<BotUserWhereUniqueInput>;
-  after?: Maybe<BotUserWhereUniqueInput>;
+  before?: Maybe<IBotUserWhereUniqueInput>;
+  after?: Maybe<IBotUserWhereUniqueInput>;
 };
 
 
-export type QueryClientSecretArgs = {
-  where: ClientSecretWhereUniqueInput;
+export type IQueryClientSecretArgs = {
+  where: IClientSecretWhereUniqueInput;
 };
 
 
-export type QueryClientSecretsArgs = {
-  where?: Maybe<ClientSecretWhereInput>;
-  orderBy?: Maybe<ClientSecretOrderByInput>;
+export type IQueryClientSecretsArgs = {
+  where?: Maybe<IClientSecretWhereInput>;
+  orderBy?: Maybe<IClientSecretOrderByInput>;
   first: Scalars['Int'];
   last: Scalars['Int'];
-  before?: Maybe<ClientSecretWhereUniqueInput>;
-  after?: Maybe<ClientSecretWhereUniqueInput>;
+  before?: Maybe<IClientSecretWhereUniqueInput>;
+  after?: Maybe<IClientSecretWhereUniqueInput>;
 };
 
 
-export type QuerySubscribeTokenArgs = {
-  where: SubscribeTokenWhereUniqueInput;
+export type IQuerySubscribeTokenArgs = {
+  where: ISubscribeTokenWhereUniqueInput;
 };
 
 
-export type QuerySubscribeTokensArgs = {
-  where?: Maybe<SubscribeTokenWhereInput>;
-  orderBy?: Maybe<SubscribeTokenOrderByInput>;
+export type IQuerySubscribeTokensArgs = {
+  where?: Maybe<ISubscribeTokenWhereInput>;
+  orderBy?: Maybe<ISubscribeTokenOrderByInput>;
   first: Scalars['Int'];
   last: Scalars['Int'];
-  before?: Maybe<SubscribeTokenWhereUniqueInput>;
-  after?: Maybe<SubscribeTokenWhereUniqueInput>;
+  before?: Maybe<ISubscribeTokenWhereUniqueInput>;
+  after?: Maybe<ISubscribeTokenWhereUniqueInput>;
 };
 
 
-export type QueryUserAccountArgs = {
-  where: UserAccountWhereUniqueInput;
+export type IQueryUserAccountArgs = {
+  where: IUserAccountWhereUniqueInput;
 };
 
 
-export type QueryUserAccountsArgs = {
-  where?: Maybe<UserAccountWhereInput>;
-  orderBy?: Maybe<UserAccountOrderByInput>;
+export type IQueryUserAccountsArgs = {
+  where?: Maybe<IUserAccountWhereInput>;
+  orderBy?: Maybe<IUserAccountOrderByInput>;
   first: Scalars['Int'];
   last: Scalars['Int'];
-  before?: Maybe<UserAccountWhereUniqueInput>;
-  after?: Maybe<UserAccountWhereUniqueInput>;
+  before?: Maybe<IUserAccountWhereUniqueInput>;
+  after?: Maybe<IUserAccountWhereUniqueInput>;
 };
 
-export type AppWhereUniqueInput = {
+export type IAppWhereUniqueInput = {
   id?: Maybe<Scalars['Int']>;
-  name_ownerId?: Maybe<NameOwnerIdCompoundUniqueInput>;
+  name_ownerId?: Maybe<INameOwnerIdCompoundUniqueInput>;
 };
 
-export type NameOwnerIdCompoundUniqueInput = {
+export type INameOwnerIdCompoundUniqueInput = {
   name: Scalars['String'];
   ownerId: Scalars['Int'];
 };
 
-export type App = {
+export type IApp = {
   __typename?: 'App';
   id: Scalars['Int'];
   name: Scalars['String'];
   ownerId: Scalars['Int'];
-  owner: UserAccount;
-  subscribeTokens: Array<SubscribeToken>;
-  appSubscriptions: Array<AppSubscription>;
-  clientSecrets: Array<ClientSecret>;
+  owner: IUserAccount;
+  subscribeTokens: Array<ISubscribeToken>;
+  appSubscriptions: Array<IAppSubscription>;
+  clientSecrets: Array<IClientSecret>;
   createdAt: Scalars['DateTime'];
   updatedAt: Scalars['DateTime'];
   subscribeTokenCount: Scalars['Int'];
@@ -146,229 +154,229 @@ export type App = {
 };
 
 
-export type AppSubscribeTokensArgs = {
+export type IAppSubscribeTokensArgs = {
   first: Scalars['Int'];
   last: Scalars['Int'];
-  before?: Maybe<SubscribeTokenWhereUniqueInput>;
-  after?: Maybe<SubscribeTokenWhereUniqueInput>;
+  before?: Maybe<ISubscribeTokenWhereUniqueInput>;
+  after?: Maybe<ISubscribeTokenWhereUniqueInput>;
 };
 
 
-export type AppAppSubscriptionsArgs = {
+export type IAppAppSubscriptionsArgs = {
   first: Scalars['Int'];
   last: Scalars['Int'];
-  before?: Maybe<AppSubscriptionWhereUniqueInput>;
-  after?: Maybe<AppSubscriptionWhereUniqueInput>;
+  before?: Maybe<IAppSubscriptionWhereUniqueInput>;
+  after?: Maybe<IAppSubscriptionWhereUniqueInput>;
 };
 
 
-export type AppClientSecretsArgs = {
+export type IAppClientSecretsArgs = {
   first: Scalars['Int'];
   last: Scalars['Int'];
-  before?: Maybe<ClientSecretWhereUniqueInput>;
-  after?: Maybe<ClientSecretWhereUniqueInput>;
+  before?: Maybe<IClientSecretWhereUniqueInput>;
+  after?: Maybe<IClientSecretWhereUniqueInput>;
 };
 
-export type UserAccount = {
+export type IUserAccount = {
   __typename?: 'UserAccount';
   id: Scalars['Int'];
   nickname?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
   email?: Maybe<Scalars['String']>;
-  role: Role;
-  botUsers: Array<BotUser>;
-  apps: Array<App>;
-  appSubscriptions: Array<AppSubscription>;
+  role: IRole;
+  botUsers: Array<IBotUser>;
+  apps: Array<IApp>;
+  appSubscriptions: Array<IAppSubscription>;
   createdAt: Scalars['DateTime'];
   updatedAt: Scalars['DateTime'];
   requiresSetup: Scalars['Boolean'];
 };
 
 
-export type UserAccountBotUsersArgs = {
+export type IUserAccountBotUsersArgs = {
   first: Scalars['Int'];
   last: Scalars['Int'];
-  before?: Maybe<BotUserWhereUniqueInput>;
-  after?: Maybe<BotUserWhereUniqueInput>;
+  before?: Maybe<IBotUserWhereUniqueInput>;
+  after?: Maybe<IBotUserWhereUniqueInput>;
 };
 
 
-export type UserAccountAppsArgs = {
+export type IUserAccountAppsArgs = {
   first: Scalars['Int'];
   last: Scalars['Int'];
-  before?: Maybe<AppWhereUniqueInput>;
-  after?: Maybe<AppWhereUniqueInput>;
+  before?: Maybe<IAppWhereUniqueInput>;
+  after?: Maybe<IAppWhereUniqueInput>;
 };
 
 
-export type UserAccountAppSubscriptionsArgs = {
+export type IUserAccountAppSubscriptionsArgs = {
   first: Scalars['Int'];
   last: Scalars['Int'];
-  before?: Maybe<AppSubscriptionWhereUniqueInput>;
-  after?: Maybe<AppSubscriptionWhereUniqueInput>;
+  before?: Maybe<IAppSubscriptionWhereUniqueInput>;
+  after?: Maybe<IAppSubscriptionWhereUniqueInput>;
 };
 
-export enum Role {
+export enum IRole {
   ADMIN = 'ADMIN',
   USER = 'USER'
 }
 
-export type BotUserWhereUniqueInput = {
+export type IBotUserWhereUniqueInput = {
   id?: Maybe<Scalars['Int']>;
-  botUser_botId?: Maybe<BotUserBotIdCompoundUniqueInput>;
+  botUser_botId?: Maybe<IBotUserBotIdCompoundUniqueInput>;
 };
 
-export type BotUserBotIdCompoundUniqueInput = {
+export type IBotUserBotIdCompoundUniqueInput = {
   botUser: Scalars['String'];
   botId: Scalars['Int'];
 };
 
-export type BotUser = {
+export type IBotUser = {
   __typename?: 'BotUser';
   id: Scalars['Int'];
   name?: Maybe<Scalars['String']>;
   botUser: Scalars['String'];
   botId: Scalars['Int'];
-  bot: Bot;
+  bot: IBot;
   userAccountId: Scalars['Int'];
-  userAccount: UserAccount;
+  userAccount: IUserAccount;
   createdAt: Scalars['DateTime'];
   updatedAt: Scalars['DateTime'];
   requiresSetup: Scalars['Boolean'];
 };
 
-export type Bot = {
+export type IBot = {
   __typename?: 'Bot';
   id: Scalars['Int'];
-  type: BotType;
-  botUsers: Array<BotUser>;
-  appSubscriptions: Array<AppSubscription>;
+  type: IBotType;
+  botUsers: Array<IBotUser>;
+  appSubscriptions: Array<IAppSubscription>;
 };
 
 
-export type BotBotUsersArgs = {
+export type IBotBotUsersArgs = {
   first: Scalars['Int'];
   last: Scalars['Int'];
-  before?: Maybe<BotUserWhereUniqueInput>;
-  after?: Maybe<BotUserWhereUniqueInput>;
+  before?: Maybe<IBotUserWhereUniqueInput>;
+  after?: Maybe<IBotUserWhereUniqueInput>;
 };
 
 
-export type BotAppSubscriptionsArgs = {
+export type IBotAppSubscriptionsArgs = {
   first: Scalars['Int'];
   last: Scalars['Int'];
-  before?: Maybe<AppSubscriptionWhereUniqueInput>;
-  after?: Maybe<AppSubscriptionWhereUniqueInput>;
+  before?: Maybe<IAppSubscriptionWhereUniqueInput>;
+  after?: Maybe<IAppSubscriptionWhereUniqueInput>;
 };
 
-export enum BotType {
+export enum IBotType {
   SLACK = 'SLACK',
   TELEGRAM = 'TELEGRAM'
 }
 
-export type AppSubscriptionWhereUniqueInput = {
+export type IAppSubscriptionWhereUniqueInput = {
   id?: Maybe<Scalars['Int']>;
-  name_appId?: Maybe<NameAppIdCompoundUniqueInput>;
-  appId_botId_channel?: Maybe<AppIdBotIdChannelCompoundUniqueInput>;
+  name_appId?: Maybe<INameAppIdCompoundUniqueInput>;
+  appId_botId_channel?: Maybe<IAppIdBotIdChannelCompoundUniqueInput>;
 };
 
-export type NameAppIdCompoundUniqueInput = {
+export type INameAppIdCompoundUniqueInput = {
   name: Scalars['String'];
   appId: Scalars['Int'];
 };
 
-export type AppIdBotIdChannelCompoundUniqueInput = {
+export type IAppIdBotIdChannelCompoundUniqueInput = {
   appId: Scalars['Int'];
   botId: Scalars['Int'];
   channel: Scalars['String'];
 };
 
-export type AppSubscription = {
+export type IAppSubscription = {
   __typename?: 'AppSubscription';
   id: Scalars['Int'];
   name: Scalars['String'];
   description: Scalars['String'];
   appId: Scalars['Int'];
-  app: App;
+  app: IApp;
   subscriberId: Scalars['Int'];
-  subscriber: UserAccount;
+  subscriber: IUserAccount;
   botId: Scalars['Int'];
-  bot: Bot;
+  bot: IBot;
   channel: Scalars['String'];
   createdAt: Scalars['DateTime'];
   updatedAt: Scalars['DateTime'];
 };
 
 
-export type SubscribeTokenWhereUniqueInput = {
+export type ISubscribeTokenWhereUniqueInput = {
   id?: Maybe<Scalars['Int']>;
   token?: Maybe<Scalars['String']>;
-  description_appId?: Maybe<DescriptionAppIdCompoundUniqueInput>;
+  description_appId?: Maybe<IDescriptionAppIdCompoundUniqueInput>;
 };
 
-export type DescriptionAppIdCompoundUniqueInput = {
+export type IDescriptionAppIdCompoundUniqueInput = {
   description: Scalars['String'];
   appId: Scalars['Int'];
 };
 
-export type SubscribeToken = {
+export type ISubscribeToken = {
   __typename?: 'SubscribeToken';
   id: Scalars['Int'];
   description: Scalars['String'];
   token: Scalars['String'];
   appId: Scalars['Int'];
-  app: App;
+  app: IApp;
   createdAt: Scalars['DateTime'];
   updatedAt: Scalars['DateTime'];
 };
 
-export type ClientSecretWhereUniqueInput = {
+export type IClientSecretWhereUniqueInput = {
   id?: Maybe<Scalars['Int']>;
   secret?: Maybe<Scalars['String']>;
-  environment_appId?: Maybe<EnvironmentAppIdCompoundUniqueInput>;
+  environment_appId?: Maybe<IEnvironmentAppIdCompoundUniqueInput>;
 };
 
-export type EnvironmentAppIdCompoundUniqueInput = {
-  environment: Environment;
+export type IEnvironmentAppIdCompoundUniqueInput = {
+  environment: IEnvironment;
   appId: Scalars['Int'];
 };
 
-export enum Environment {
+export enum IEnvironment {
   DEVELOPMENT = 'DEVELOPMENT',
   TEST = 'TEST',
   PRODUCTION = 'PRODUCTION'
 }
 
-export type ClientSecret = {
+export type IClientSecret = {
   __typename?: 'ClientSecret';
   id: Scalars['Int'];
-  environment: Environment;
+  environment: IEnvironment;
   secret: Scalars['String'];
   appId: Scalars['Int'];
-  app: App;
+  app: IApp;
   createdAt: Scalars['DateTime'];
   updatedAt: Scalars['DateTime'];
 };
 
-export type AppWhereInput = {
-  id?: Maybe<IntFilter>;
-  name?: Maybe<StringFilter>;
-  ownerId?: Maybe<IntFilter>;
-  subscribeTokens?: Maybe<SubscribeTokenFilter>;
-  appSubscriptions?: Maybe<AppSubscriptionFilter>;
-  clientSecrets?: Maybe<ClientSecretFilter>;
-  AppLog?: Maybe<AppLogFilter>;
-  AppEvent?: Maybe<AppEventFilter>;
-  appStatus?: Maybe<AppStatusFilter>;
-  createdAt?: Maybe<DateTimeFilter>;
-  updatedAt?: Maybe<DateTimeFilter>;
-  AND?: Maybe<Array<AppWhereInput>>;
-  OR?: Maybe<Array<AppWhereInput>>;
-  NOT?: Maybe<Array<AppWhereInput>>;
-  owner?: Maybe<UserAccountWhereInput>;
+export type IAppWhereInput = {
+  id?: Maybe<IIntFilter>;
+  name?: Maybe<IStringFilter>;
+  ownerId?: Maybe<IIntFilter>;
+  subscribeTokens?: Maybe<ISubscribeTokenFilter>;
+  appSubscriptions?: Maybe<IAppSubscriptionFilter>;
+  clientSecrets?: Maybe<IClientSecretFilter>;
+  AppLog?: Maybe<IAppLogFilter>;
+  AppEvent?: Maybe<IAppEventFilter>;
+  appStatus?: Maybe<IAppStatusFilter>;
+  createdAt?: Maybe<IDateTimeFilter>;
+  updatedAt?: Maybe<IDateTimeFilter>;
+  AND?: Maybe<Array<IAppWhereInput>>;
+  OR?: Maybe<Array<IAppWhereInput>>;
+  NOT?: Maybe<Array<IAppWhereInput>>;
+  owner?: Maybe<IUserAccountWhereInput>;
 };
 
-export type IntFilter = {
+export type IIntFilter = {
   equals?: Maybe<Scalars['Int']>;
   not?: Maybe<Scalars['Int']>;
   in?: Maybe<Array<Scalars['Int']>>;
@@ -379,7 +387,7 @@ export type IntFilter = {
   gte?: Maybe<Scalars['Int']>;
 };
 
-export type StringFilter = {
+export type IStringFilter = {
   equals?: Maybe<Scalars['String']>;
   not?: Maybe<Scalars['String']>;
   in?: Maybe<Array<Scalars['String']>>;
@@ -393,26 +401,26 @@ export type StringFilter = {
   endsWith?: Maybe<Scalars['String']>;
 };
 
-export type SubscribeTokenFilter = {
-  every?: Maybe<SubscribeTokenWhereInput>;
-  some?: Maybe<SubscribeTokenWhereInput>;
-  none?: Maybe<SubscribeTokenWhereInput>;
+export type ISubscribeTokenFilter = {
+  every?: Maybe<ISubscribeTokenWhereInput>;
+  some?: Maybe<ISubscribeTokenWhereInput>;
+  none?: Maybe<ISubscribeTokenWhereInput>;
 };
 
-export type SubscribeTokenWhereInput = {
-  id?: Maybe<IntFilter>;
-  description?: Maybe<StringFilter>;
-  appId?: Maybe<IntFilter>;
-  token?: Maybe<StringFilter>;
-  createdAt?: Maybe<DateTimeFilter>;
-  updatedAt?: Maybe<DateTimeFilter>;
-  AND?: Maybe<Array<SubscribeTokenWhereInput>>;
-  OR?: Maybe<Array<SubscribeTokenWhereInput>>;
-  NOT?: Maybe<Array<SubscribeTokenWhereInput>>;
-  app?: Maybe<AppWhereInput>;
+export type ISubscribeTokenWhereInput = {
+  id?: Maybe<IIntFilter>;
+  description?: Maybe<IStringFilter>;
+  appId?: Maybe<IIntFilter>;
+  token?: Maybe<IStringFilter>;
+  createdAt?: Maybe<IDateTimeFilter>;
+  updatedAt?: Maybe<IDateTimeFilter>;
+  AND?: Maybe<Array<ISubscribeTokenWhereInput>>;
+  OR?: Maybe<Array<ISubscribeTokenWhereInput>>;
+  NOT?: Maybe<Array<ISubscribeTokenWhereInput>>;
+  app?: Maybe<IAppWhereInput>;
 };
 
-export type DateTimeFilter = {
+export type IDateTimeFilter = {
   equals?: Maybe<Scalars['DateTime']>;
   not?: Maybe<Scalars['DateTime']>;
   in?: Maybe<Array<Scalars['DateTime']>>;
@@ -423,32 +431,32 @@ export type DateTimeFilter = {
   gte?: Maybe<Scalars['DateTime']>;
 };
 
-export type AppSubscriptionFilter = {
-  every?: Maybe<AppSubscriptionWhereInput>;
-  some?: Maybe<AppSubscriptionWhereInput>;
-  none?: Maybe<AppSubscriptionWhereInput>;
+export type IAppSubscriptionFilter = {
+  every?: Maybe<IAppSubscriptionWhereInput>;
+  some?: Maybe<IAppSubscriptionWhereInput>;
+  none?: Maybe<IAppSubscriptionWhereInput>;
 };
 
-export type AppSubscriptionWhereInput = {
-  id?: Maybe<IntFilter>;
-  name?: Maybe<StringFilter>;
-  customName?: Maybe<NullableStringFilter>;
-  description?: Maybe<StringFilter>;
-  appId?: Maybe<IntFilter>;
-  subscriberId?: Maybe<IntFilter>;
-  botId?: Maybe<IntFilter>;
-  channel?: Maybe<StringFilter>;
-  createdAt?: Maybe<DateTimeFilter>;
-  updatedAt?: Maybe<DateTimeFilter>;
-  AND?: Maybe<Array<AppSubscriptionWhereInput>>;
-  OR?: Maybe<Array<AppSubscriptionWhereInput>>;
-  NOT?: Maybe<Array<AppSubscriptionWhereInput>>;
-  app?: Maybe<AppWhereInput>;
-  subscriber?: Maybe<UserAccountWhereInput>;
-  bot?: Maybe<BotWhereInput>;
+export type IAppSubscriptionWhereInput = {
+  id?: Maybe<IIntFilter>;
+  name?: Maybe<IStringFilter>;
+  customName?: Maybe<INullableStringFilter>;
+  description?: Maybe<IStringFilter>;
+  appId?: Maybe<IIntFilter>;
+  subscriberId?: Maybe<IIntFilter>;
+  botId?: Maybe<IIntFilter>;
+  channel?: Maybe<IStringFilter>;
+  createdAt?: Maybe<IDateTimeFilter>;
+  updatedAt?: Maybe<IDateTimeFilter>;
+  AND?: Maybe<Array<IAppSubscriptionWhereInput>>;
+  OR?: Maybe<Array<IAppSubscriptionWhereInput>>;
+  NOT?: Maybe<Array<IAppSubscriptionWhereInput>>;
+  app?: Maybe<IAppWhereInput>;
+  subscriber?: Maybe<IUserAccountWhereInput>;
+  bot?: Maybe<IBotWhereInput>;
 };
 
-export type NullableStringFilter = {
+export type INullableStringFilter = {
   equals?: Maybe<Scalars['String']>;
   not?: Maybe<Scalars['String']>;
   in?: Maybe<Array<Scalars['String']>>;
@@ -462,126 +470,126 @@ export type NullableStringFilter = {
   endsWith?: Maybe<Scalars['String']>;
 };
 
-export type UserAccountWhereInput = {
-  id?: Maybe<IntFilter>;
-  nickname?: Maybe<NullableStringFilter>;
-  name?: Maybe<NullableStringFilter>;
-  email?: Maybe<NullableStringFilter>;
-  password?: Maybe<NullableStringFilter>;
-  role?: Maybe<Role>;
-  botUsers?: Maybe<BotUserFilter>;
-  apps?: Maybe<AppFilter>;
-  appSubscriptions?: Maybe<AppSubscriptionFilter>;
-  createdAt?: Maybe<DateTimeFilter>;
-  updatedAt?: Maybe<DateTimeFilter>;
-  AND?: Maybe<Array<UserAccountWhereInput>>;
-  OR?: Maybe<Array<UserAccountWhereInput>>;
-  NOT?: Maybe<Array<UserAccountWhereInput>>;
+export type IUserAccountWhereInput = {
+  id?: Maybe<IIntFilter>;
+  nickname?: Maybe<INullableStringFilter>;
+  name?: Maybe<INullableStringFilter>;
+  email?: Maybe<INullableStringFilter>;
+  password?: Maybe<INullableStringFilter>;
+  role?: Maybe<IRole>;
+  botUsers?: Maybe<IBotUserFilter>;
+  apps?: Maybe<IAppFilter>;
+  appSubscriptions?: Maybe<IAppSubscriptionFilter>;
+  createdAt?: Maybe<IDateTimeFilter>;
+  updatedAt?: Maybe<IDateTimeFilter>;
+  AND?: Maybe<Array<IUserAccountWhereInput>>;
+  OR?: Maybe<Array<IUserAccountWhereInput>>;
+  NOT?: Maybe<Array<IUserAccountWhereInput>>;
 };
 
-export type BotUserFilter = {
-  every?: Maybe<BotUserWhereInput>;
-  some?: Maybe<BotUserWhereInput>;
-  none?: Maybe<BotUserWhereInput>;
+export type IBotUserFilter = {
+  every?: Maybe<IBotUserWhereInput>;
+  some?: Maybe<IBotUserWhereInput>;
+  none?: Maybe<IBotUserWhereInput>;
 };
 
-export type BotUserWhereInput = {
-  id?: Maybe<IntFilter>;
-  name?: Maybe<NullableStringFilter>;
-  botUser?: Maybe<StringFilter>;
-  botId?: Maybe<IntFilter>;
-  userAccountId?: Maybe<IntFilter>;
-  createdAt?: Maybe<DateTimeFilter>;
-  updatedAt?: Maybe<DateTimeFilter>;
-  AND?: Maybe<Array<BotUserWhereInput>>;
-  OR?: Maybe<Array<BotUserWhereInput>>;
-  NOT?: Maybe<Array<BotUserWhereInput>>;
-  bot?: Maybe<BotWhereInput>;
-  userAccount?: Maybe<UserAccountWhereInput>;
+export type IBotUserWhereInput = {
+  id?: Maybe<IIntFilter>;
+  name?: Maybe<INullableStringFilter>;
+  botUser?: Maybe<IStringFilter>;
+  botId?: Maybe<IIntFilter>;
+  userAccountId?: Maybe<IIntFilter>;
+  createdAt?: Maybe<IDateTimeFilter>;
+  updatedAt?: Maybe<IDateTimeFilter>;
+  AND?: Maybe<Array<IBotUserWhereInput>>;
+  OR?: Maybe<Array<IBotUserWhereInput>>;
+  NOT?: Maybe<Array<IBotUserWhereInput>>;
+  bot?: Maybe<IBotWhereInput>;
+  userAccount?: Maybe<IUserAccountWhereInput>;
 };
 
-export type BotWhereInput = {
-  id?: Maybe<IntFilter>;
-  type?: Maybe<BotType>;
-  botUsers?: Maybe<BotUserFilter>;
-  appSubscriptions?: Maybe<AppSubscriptionFilter>;
-  AND?: Maybe<Array<BotWhereInput>>;
-  OR?: Maybe<Array<BotWhereInput>>;
-  NOT?: Maybe<Array<BotWhereInput>>;
+export type IBotWhereInput = {
+  id?: Maybe<IIntFilter>;
+  type?: Maybe<IBotType>;
+  botUsers?: Maybe<IBotUserFilter>;
+  appSubscriptions?: Maybe<IAppSubscriptionFilter>;
+  AND?: Maybe<Array<IBotWhereInput>>;
+  OR?: Maybe<Array<IBotWhereInput>>;
+  NOT?: Maybe<Array<IBotWhereInput>>;
 };
 
-export type AppFilter = {
-  every?: Maybe<AppWhereInput>;
-  some?: Maybe<AppWhereInput>;
-  none?: Maybe<AppWhereInput>;
+export type IAppFilter = {
+  every?: Maybe<IAppWhereInput>;
+  some?: Maybe<IAppWhereInput>;
+  none?: Maybe<IAppWhereInput>;
 };
 
-export type ClientSecretFilter = {
-  every?: Maybe<ClientSecretWhereInput>;
-  some?: Maybe<ClientSecretWhereInput>;
-  none?: Maybe<ClientSecretWhereInput>;
+export type IClientSecretFilter = {
+  every?: Maybe<IClientSecretWhereInput>;
+  some?: Maybe<IClientSecretWhereInput>;
+  none?: Maybe<IClientSecretWhereInput>;
 };
 
-export type ClientSecretWhereInput = {
-  id?: Maybe<IntFilter>;
-  environment?: Maybe<Environment>;
-  secret?: Maybe<StringFilter>;
-  appId?: Maybe<IntFilter>;
-  createdAt?: Maybe<DateTimeFilter>;
-  updatedAt?: Maybe<DateTimeFilter>;
-  AND?: Maybe<Array<ClientSecretWhereInput>>;
-  OR?: Maybe<Array<ClientSecretWhereInput>>;
-  NOT?: Maybe<Array<ClientSecretWhereInput>>;
-  app?: Maybe<AppWhereInput>;
+export type IClientSecretWhereInput = {
+  id?: Maybe<IIntFilter>;
+  environment?: Maybe<IEnvironment>;
+  secret?: Maybe<IStringFilter>;
+  appId?: Maybe<IIntFilter>;
+  createdAt?: Maybe<IDateTimeFilter>;
+  updatedAt?: Maybe<IDateTimeFilter>;
+  AND?: Maybe<Array<IClientSecretWhereInput>>;
+  OR?: Maybe<Array<IClientSecretWhereInput>>;
+  NOT?: Maybe<Array<IClientSecretWhereInput>>;
+  app?: Maybe<IAppWhereInput>;
 };
 
-export type AppLogFilter = {
-  every?: Maybe<AppLogWhereInput>;
-  some?: Maybe<AppLogWhereInput>;
-  none?: Maybe<AppLogWhereInput>;
+export type IAppLogFilter = {
+  every?: Maybe<IAppLogWhereInput>;
+  some?: Maybe<IAppLogWhereInput>;
+  none?: Maybe<IAppLogWhereInput>;
 };
 
-export type AppLogWhereInput = {
-  id?: Maybe<IntFilter>;
-  appId?: Maybe<IntFilter>;
-  level?: Maybe<AppLogLevel>;
-  message?: Maybe<StringFilter>;
-  createdAt?: Maybe<DateTimeFilter>;
-  updatedAt?: Maybe<DateTimeFilter>;
-  AND?: Maybe<Array<AppLogWhereInput>>;
-  OR?: Maybe<Array<AppLogWhereInput>>;
-  NOT?: Maybe<Array<AppLogWhereInput>>;
-  app?: Maybe<AppWhereInput>;
+export type IAppLogWhereInput = {
+  id?: Maybe<IIntFilter>;
+  appId?: Maybe<IIntFilter>;
+  level?: Maybe<IAppLogLevel>;
+  message?: Maybe<IStringFilter>;
+  createdAt?: Maybe<IDateTimeFilter>;
+  updatedAt?: Maybe<IDateTimeFilter>;
+  AND?: Maybe<Array<IAppLogWhereInput>>;
+  OR?: Maybe<Array<IAppLogWhereInput>>;
+  NOT?: Maybe<Array<IAppLogWhereInput>>;
+  app?: Maybe<IAppWhereInput>;
 };
 
-export enum AppLogLevel {
+export enum IAppLogLevel {
   INFO = 'INFO',
   WARN = 'WARN',
   ERROR = 'ERROR',
   FATAL = 'FATAL'
 }
 
-export type AppEventFilter = {
-  every?: Maybe<AppEventWhereInput>;
-  some?: Maybe<AppEventWhereInput>;
-  none?: Maybe<AppEventWhereInput>;
+export type IAppEventFilter = {
+  every?: Maybe<IAppEventWhereInput>;
+  some?: Maybe<IAppEventWhereInput>;
+  none?: Maybe<IAppEventWhereInput>;
 };
 
-export type AppEventWhereInput = {
-  id?: Maybe<IntFilter>;
-  appId?: Maybe<IntFilter>;
-  category?: Maybe<AppEventCategory>;
-  title?: Maybe<StringFilter>;
-  message?: Maybe<StringFilter>;
-  createdAt?: Maybe<DateTimeFilter>;
-  updatedAt?: Maybe<DateTimeFilter>;
-  AND?: Maybe<Array<AppEventWhereInput>>;
-  OR?: Maybe<Array<AppEventWhereInput>>;
-  NOT?: Maybe<Array<AppEventWhereInput>>;
-  app?: Maybe<AppWhereInput>;
+export type IAppEventWhereInput = {
+  id?: Maybe<IIntFilter>;
+  appId?: Maybe<IIntFilter>;
+  category?: Maybe<IAppEventCategory>;
+  title?: Maybe<IStringFilter>;
+  message?: Maybe<IStringFilter>;
+  createdAt?: Maybe<IDateTimeFilter>;
+  updatedAt?: Maybe<IDateTimeFilter>;
+  AND?: Maybe<Array<IAppEventWhereInput>>;
+  OR?: Maybe<Array<IAppEventWhereInput>>;
+  NOT?: Maybe<Array<IAppEventWhereInput>>;
+  app?: Maybe<IAppWhereInput>;
 };
 
-export enum AppEventCategory {
+export enum IAppEventCategory {
   GENERAL = 'GENERAL',
   POST = 'POST',
   NEWS = 'NEWS',
@@ -596,27 +604,27 @@ export enum AppEventCategory {
   MOVIE = 'MOVIE'
 }
 
-export type AppStatusFilter = {
-  every?: Maybe<AppStatusWhereInput>;
-  some?: Maybe<AppStatusWhereInput>;
-  none?: Maybe<AppStatusWhereInput>;
+export type IAppStatusFilter = {
+  every?: Maybe<IAppStatusWhereInput>;
+  some?: Maybe<IAppStatusWhereInput>;
+  none?: Maybe<IAppStatusWhereInput>;
 };
 
-export type AppStatusWhereInput = {
-  id?: Maybe<IntFilter>;
-  appId?: Maybe<IntFilter>;
-  state?: Maybe<AppState>;
-  message?: Maybe<StringFilter>;
-  environment?: Maybe<Environment>;
-  createdAt?: Maybe<DateTimeFilter>;
-  updatedAt?: Maybe<DateTimeFilter>;
-  AND?: Maybe<Array<AppStatusWhereInput>>;
-  OR?: Maybe<Array<AppStatusWhereInput>>;
-  NOT?: Maybe<Array<AppStatusWhereInput>>;
-  app?: Maybe<AppWhereInput>;
+export type IAppStatusWhereInput = {
+  id?: Maybe<IIntFilter>;
+  appId?: Maybe<IIntFilter>;
+  state?: Maybe<IAppState>;
+  message?: Maybe<IStringFilter>;
+  environment?: Maybe<IEnvironment>;
+  createdAt?: Maybe<IDateTimeFilter>;
+  updatedAt?: Maybe<IDateTimeFilter>;
+  AND?: Maybe<Array<IAppStatusWhereInput>>;
+  OR?: Maybe<Array<IAppStatusWhereInput>>;
+  NOT?: Maybe<Array<IAppStatusWhereInput>>;
+  app?: Maybe<IAppWhereInput>;
 };
 
-export enum AppState {
+export enum IAppState {
   UP = 'UP',
   SHUTDOWN = 'SHUTDOWN',
   UNKNOWN = 'UNKNOWN',
@@ -624,332 +632,317 @@ export enum AppState {
   DOWN = 'DOWN'
 }
 
-export type AppOrderByInput = {
-  id?: Maybe<SortOrder>;
-  name?: Maybe<SortOrder>;
-  ownerId?: Maybe<SortOrder>;
-  createdAt?: Maybe<SortOrder>;
-  updatedAt?: Maybe<SortOrder>;
+export type IAppOrderByInput = {
+  id?: Maybe<ISortOrder>;
+  name?: Maybe<ISortOrder>;
+  ownerId?: Maybe<ISortOrder>;
+  createdAt?: Maybe<ISortOrder>;
+  updatedAt?: Maybe<ISortOrder>;
 };
 
-export enum SortOrder {
+export enum ISortOrder {
   ASC = 'asc',
   DESC = 'desc'
 }
 
-export type AppSubscriptionOrderByInput = {
-  id?: Maybe<SortOrder>;
-  name?: Maybe<SortOrder>;
-  customName?: Maybe<SortOrder>;
-  description?: Maybe<SortOrder>;
-  appId?: Maybe<SortOrder>;
-  subscriberId?: Maybe<SortOrder>;
-  botId?: Maybe<SortOrder>;
-  channel?: Maybe<SortOrder>;
-  createdAt?: Maybe<SortOrder>;
-  updatedAt?: Maybe<SortOrder>;
+export type IAppSubscriptionOrderByInput = {
+  id?: Maybe<ISortOrder>;
+  name?: Maybe<ISortOrder>;
+  customName?: Maybe<ISortOrder>;
+  description?: Maybe<ISortOrder>;
+  appId?: Maybe<ISortOrder>;
+  subscriberId?: Maybe<ISortOrder>;
+  botId?: Maybe<ISortOrder>;
+  channel?: Maybe<ISortOrder>;
+  createdAt?: Maybe<ISortOrder>;
+  updatedAt?: Maybe<ISortOrder>;
 };
 
-export type BotUserOrderByInput = {
-  id?: Maybe<SortOrder>;
-  name?: Maybe<SortOrder>;
-  botUser?: Maybe<SortOrder>;
-  botId?: Maybe<SortOrder>;
-  userAccountId?: Maybe<SortOrder>;
-  createdAt?: Maybe<SortOrder>;
-  updatedAt?: Maybe<SortOrder>;
+export type IBotUserOrderByInput = {
+  id?: Maybe<ISortOrder>;
+  name?: Maybe<ISortOrder>;
+  botUser?: Maybe<ISortOrder>;
+  botId?: Maybe<ISortOrder>;
+  userAccountId?: Maybe<ISortOrder>;
+  createdAt?: Maybe<ISortOrder>;
+  updatedAt?: Maybe<ISortOrder>;
 };
 
-export type ClientSecretOrderByInput = {
-  id?: Maybe<SortOrder>;
-  environment?: Maybe<SortOrder>;
-  secret?: Maybe<SortOrder>;
-  appId?: Maybe<SortOrder>;
-  createdAt?: Maybe<SortOrder>;
-  updatedAt?: Maybe<SortOrder>;
+export type IClientSecretOrderByInput = {
+  id?: Maybe<ISortOrder>;
+  environment?: Maybe<ISortOrder>;
+  secret?: Maybe<ISortOrder>;
+  appId?: Maybe<ISortOrder>;
+  createdAt?: Maybe<ISortOrder>;
+  updatedAt?: Maybe<ISortOrder>;
 };
 
-export type SubscribeTokenOrderByInput = {
-  id?: Maybe<SortOrder>;
-  description?: Maybe<SortOrder>;
-  appId?: Maybe<SortOrder>;
-  token?: Maybe<SortOrder>;
-  createdAt?: Maybe<SortOrder>;
-  updatedAt?: Maybe<SortOrder>;
+export type ISubscribeTokenOrderByInput = {
+  id?: Maybe<ISortOrder>;
+  description?: Maybe<ISortOrder>;
+  appId?: Maybe<ISortOrder>;
+  token?: Maybe<ISortOrder>;
+  createdAt?: Maybe<ISortOrder>;
+  updatedAt?: Maybe<ISortOrder>;
 };
 
-export type UserAccountWhereUniqueInput = {
+export type IUserAccountWhereUniqueInput = {
   id?: Maybe<Scalars['Int']>;
   nickname?: Maybe<Scalars['String']>;
 };
 
-export type UserAccountOrderByInput = {
-  id?: Maybe<SortOrder>;
-  nickname?: Maybe<SortOrder>;
-  name?: Maybe<SortOrder>;
-  email?: Maybe<SortOrder>;
-  password?: Maybe<SortOrder>;
-  role?: Maybe<SortOrder>;
-  createdAt?: Maybe<SortOrder>;
-  updatedAt?: Maybe<SortOrder>;
+export type IUserAccountOrderByInput = {
+  id?: Maybe<ISortOrder>;
+  nickname?: Maybe<ISortOrder>;
+  name?: Maybe<ISortOrder>;
+  email?: Maybe<ISortOrder>;
+  password?: Maybe<ISortOrder>;
+  role?: Maybe<ISortOrder>;
+  createdAt?: Maybe<ISortOrder>;
+  updatedAt?: Maybe<ISortOrder>;
 };
 
-export type Mutation = {
+export type IMutation = {
   __typename?: 'Mutation';
-  createApp: App;
-  deleteApp: App;
-  createAppSubscription: AppSubscription;
-  deleteAppSubscription: AppSubscription;
-  signUp: UserAccountAndToken;
-  signIn: UserAccountAndToken;
-  signInViaBot: UserAccountAndToken;
-  generateBotToken: GenerateBotTokenPayload;
-  updateBotUser?: Maybe<BotUser>;
-  sendLogMessage: ClientResponse;
-  sendEventMessage: ClientResponse;
-  sendStatusMessage: ClientResponse;
-  regenerateClientSecret: ClientSecret;
-  createSubscribeToken: SubscribeToken;
-  deleteSubscribeToken: SubscribeToken;
-  mergeUserAccount: UserAccount;
+  createApp: IApp;
+  deleteApp: IApp;
+  createAppSubscription: IAppSubscription;
+  deleteAppSubscription: IAppSubscription;
+  signUp: IUserAccountAndToken;
+  signIn: IUserAccountAndToken;
+  signInViaBot: IUserAccountAndToken;
+  generateBotToken: IGenerateBotTokenPayload;
+  updateBotUser?: Maybe<IBotUser>;
+  sendLogMessage: IClientResponse;
+  sendEventMessage: IClientResponse;
+  sendStatusMessage: IClientResponse;
+  regenerateClientSecret: IClientSecret;
+  createSubscribeToken: ISubscribeToken;
+  deleteSubscribeToken: ISubscribeToken;
+  mergeUserAccount: IUserAccount;
 };
 
 
-export type MutationCreateAppArgs = {
-  data: AppCreateInput;
+export type IMutationCreateAppArgs = {
+  data: IAppCreateInput;
 };
 
 
-export type MutationDeleteAppArgs = {
-  where: DeleteInput;
+export type IMutationDeleteAppArgs = {
+  where: IDeleteInput;
 };
 
 
-export type MutationCreateAppSubscriptionArgs = {
-  data: AppSubscriptionCreateInput;
+export type IMutationCreateAppSubscriptionArgs = {
+  data: IAppSubscriptionCreateInput;
 };
 
 
-export type MutationDeleteAppSubscriptionArgs = {
-  where: DeleteInput;
+export type IMutationDeleteAppSubscriptionArgs = {
+  where: IDeleteInput;
 };
 
 
-export type MutationSignUpArgs = {
-  data: SignUpInput;
+export type IMutationSignUpArgs = {
+  data: ISignUpInput;
 };
 
 
-export type MutationSignInArgs = {
-  data: SignInInput;
+export type IMutationSignInArgs = {
+  data: ISignInInput;
 };
 
 
-export type MutationSignInViaBotArgs = {
-  data: SignInViaBotInput;
+export type IMutationSignInViaBotArgs = {
+  data: ISignInViaBotInput;
 };
 
 
-export type MutationGenerateBotTokenArgs = {
-  data: GenerateBotTokenInput;
+export type IMutationGenerateBotTokenArgs = {
+  data: IGenerateBotTokenInput;
 };
 
 
-export type MutationUpdateBotUserArgs = {
-  data: BotUserUpdateInput;
-  where: BotUserWhereUniqueInput;
+export type IMutationUpdateBotUserArgs = {
+  data: IBotUserUpdateInput;
+  where: IBotUserWhereUniqueInput;
 };
 
 
-export type MutationSendLogMessageArgs = {
-  data: LogMessageSendInput;
+export type IMutationSendLogMessageArgs = {
+  data: ILogMessageSendInput;
 };
 
 
-export type MutationSendEventMessageArgs = {
-  data: EventMessageSendInput;
+export type IMutationSendEventMessageArgs = {
+  data: IEventMessageSendInput;
 };
 
 
-export type MutationSendStatusMessageArgs = {
-  data: StatusMessageSendInput;
+export type IMutationSendStatusMessageArgs = {
+  data: IStatusMessageSendInput;
 };
 
 
-export type MutationRegenerateClientSecretArgs = {
-  where: ClientSecretRegenerateInput;
+export type IMutationRegenerateClientSecretArgs = {
+  where: IClientSecretRegenerateInput;
 };
 
 
-export type MutationCreateSubscribeTokenArgs = {
-  data: SubscribeTokenCreateInput;
+export type IMutationCreateSubscribeTokenArgs = {
+  data: ISubscribeTokenCreateInput;
 };
 
 
-export type MutationDeleteSubscribeTokenArgs = {
-  where: DeleteInput;
+export type IMutationDeleteSubscribeTokenArgs = {
+  where: IDeleteInput;
 };
 
 
-export type MutationMergeUserAccountArgs = {
-  data: UserAccountMergeInput;
+export type IMutationMergeUserAccountArgs = {
+  data: IUserAccountMergeInput;
 };
 
-export type AppCreateInput = {
+export type IAppCreateInput = {
   name: Scalars['String'];
 };
 
-export type DeleteInput = {
+export type IDeleteInput = {
   id: Scalars['Int'];
 };
 
-export type AppSubscriptionCreateInput = {
+export type IAppSubscriptionCreateInput = {
   name: Scalars['String'];
   channel: Scalars['String'];
   subscribeToken: Scalars['String'];
   userToken: Scalars['String'];
 };
 
-export type SignUpInput = {
+export type ISignUpInput = {
   nickname: Scalars['String'];
   name: Scalars['String'];
   email: Scalars['String'];
   password: Scalars['String'];
 };
 
-export type UserAccountAndToken = {
+export type IUserAccountAndToken = {
   __typename?: 'UserAccountAndToken';
-  userAccount: UserAccount;
+  userAccount: IUserAccount;
   token: Scalars['String'];
 };
 
-export type SignInInput = {
+export type ISignInInput = {
   nickname: Scalars['String'];
   password: Scalars['String'];
 };
 
-export type SignInViaBotInput = {
+export type ISignInViaBotInput = {
   botUser: Scalars['String'];
 };
 
-export type GenerateBotTokenInput = {
-  bot: BotType;
+export type IGenerateBotTokenInput = {
+  bot: IBotType;
 };
 
-export type GenerateBotTokenPayload = {
+export type IGenerateBotTokenPayload = {
   __typename?: 'GenerateBotTokenPayload';
   token: Scalars['String'];
 };
 
-export type BotUserUpdateInput = {
+export type IBotUserUpdateInput = {
   name?: Maybe<Scalars['String']>;
 };
 
-export type LogMessageSendInput = {
-  level: LogLevel;
+export type ILogMessageSendInput = {
+  level: Scalars['NEXUS__UNKNOWN__TYPE'];
   message: Scalars['String'];
   metadata?: Maybe<Scalars['Json']>;
 };
 
-export enum LogLevel {
-  INFO = 'INFO',
-  WARN = 'WARN',
-  ERROR = 'ERROR',
-  FATAL = 'FATAL'
-}
 
 
-export type ClientResponse = {
+export type IClientResponse = {
   __typename?: 'ClientResponse';
   success: Scalars['Boolean'];
 };
 
-export type EventMessageSendInput = {
+export type IEventMessageSendInput = {
   title: Scalars['String'];
-  category?: Maybe<EventCategory>;
+  category?: Maybe<Scalars['NEXUS__UNKNOWN__TYPE']>;
   message: Scalars['String'];
   metadata?: Maybe<Scalars['Json']>;
 };
 
-export enum EventCategory {
-  GENERAL = 'GENERAL',
-  POST = 'POST',
-  NEWS = 'NEWS',
-  PAYMENT = 'PAYMENT',
-  MAIL = 'MAIL',
-  DOCS = 'DOCS'
-}
-
-export type StatusMessageSendInput = {
-  state: AppState;
+export type IStatusMessageSendInput = {
+  state: IAppState;
   message: Scalars['String'];
   metadata?: Maybe<Scalars['Json']>;
 };
 
-export type ClientSecretRegenerateInput = {
+export type IClientSecretRegenerateInput = {
   id: Scalars['Int'];
 };
 
-export type SubscribeTokenCreateInput = {
+export type ISubscribeTokenCreateInput = {
   description: Scalars['String'];
   appId: Scalars['Int'];
 };
 
-export type UserAccountMergeInput = {
+export type IUserAccountMergeInput = {
   token: Scalars['String'];
 };
 
-export enum BotJobType {
+export enum IBotJobType {
   EVENT = 'EVENT',
   LOG = 'LOG',
   STATUS = 'STATUS'
 }
 
-export type BotJob = {
-  type: BotJobType;
-  bot: BotType;
+export type IBotJob = {
+  type: IBotJobType;
+  bot: IBotType;
   channel: Scalars['String'];
 };
 
-export type EventMessageJob = BotJob & {
+export type IEventMessageJob = IBotJob & {
   __typename?: 'EventMessageJob';
-  type: BotJobType;
-  bot: BotType;
+  type: IBotJobType;
+  bot: IBotType;
   channel: Scalars['String'];
   appId: Scalars['Int'];
   appName: Scalars['String'];
-  environment: Environment;
+  environment: IEnvironment;
   title: Scalars['String'];
-  category?: Maybe<EventCategory>;
+  category?: Maybe<Scalars['NEXUS__UNKNOWN__TYPE']>;
   message: Scalars['String'];
   metadata?: Maybe<Scalars['Json']>;
-  status: AppState;
+  status: IAppState;
 };
 
-export type LogMessageJob = BotJob & {
+export type ILogMessageJob = IBotJob & {
   __typename?: 'LogMessageJob';
-  type: BotJobType;
-  bot: BotType;
+  type: IBotJobType;
+  bot: IBotType;
   channel: Scalars['String'];
   appId: Scalars['Int'];
   appName: Scalars['String'];
-  environment: Environment;
-  level: LogLevel;
+  environment: IEnvironment;
+  level: Scalars['NEXUS__UNKNOWN__TYPE'];
   message: Scalars['String'];
   metadata?: Maybe<Scalars['Json']>;
-  status: AppState;
+  status: IAppState;
 };
 
-export type StatusMessageJob = BotJob & {
+export type IStatusMessageJob = IBotJob & {
   __typename?: 'StatusMessageJob';
-  type: BotJobType;
-  bot: BotType;
+  type: IBotJobType;
+  bot: IBotType;
   channel: Scalars['String'];
   appId: Scalars['Int'];
   appName: Scalars['String'];
-  environment: Environment;
-  newState: AppState;
-  oldState: AppState;
+  environment: IEnvironment;
+  newState: IAppState;
+  oldState: IAppState;
   message: Scalars['String'];
   metadata?: Maybe<Scalars['Json']>;
 };

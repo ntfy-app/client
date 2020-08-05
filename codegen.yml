@@ -1,6 +1,7 @@
 overwrite: true
 schema: "http://localhost:4000/graphql"
 generates:
+  # generated for apollo extension
   api.graphql:
     plugins:
       - schema-ast
@@ -11,9 +12,14 @@ generates:
     plugins:
       - typescript
     config:
-      # TODO would this be better for libs ?
+      # prefix api types
+      typesPrefix: I
+      enumPrefix: true
+      # types dont exist at runtime, enums do
       # enumsAsTypes: true
       scalars:
+        # how Json scalar is reflected as ts type
         Json: "{ [key: string]: any }"
+      # have fields and values of enums all upper-case
       namingConvention:
         enumValues: upper-case#upperCase

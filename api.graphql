@@ -524,16 +524,16 @@ input BotUserUpdateInput {
   name: String
 }
 input LogMessageSendInput {
-  level: LogLevel!
+  level: NEXUS__UNKNOWN__TYPE!
   message: String!
   metadata: Json
 }
-enum LogLevel {
-  INFO
-  WARN
-  ERROR
-  FATAL
-}
+"""
+This scalar should never make it into production. It is used as a placeholder for situations
+where GraphQL Nexus encounters a missing type. We don't want to error immedately, otherwise
+the TypeScript definitions will not be updated.
+"""
+scalar NEXUS__UNKNOWN__TYPE
 """The `JSON` scalar type represents JSON objects as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf)."""
 scalar Json
 type ClientResponse {
@@ -541,17 +541,9 @@ type ClientResponse {
 }
 input EventMessageSendInput {
   title: String!
-  category: EventCategory
+  category: NEXUS__UNKNOWN__TYPE
   message: String!
   metadata: Json
-}
-enum EventCategory {
-  GENERAL
-  POST
-  NEWS
-  PAYMENT
-  MAIL
-  DOCS
 }
 input StatusMessageSendInput {
   state: AppState!
@@ -586,7 +578,7 @@ type EventMessageJob implements BotJob {
   appName: String!
   environment: Environment!
   title: String!
-  category: EventCategory
+  category: NEXUS__UNKNOWN__TYPE
   message: String!
   metadata: Json
   status: AppState!
@@ -598,7 +590,7 @@ type LogMessageJob implements BotJob {
   appId: Int!
   appName: String!
   environment: Environment!
-  level: LogLevel!
+  level: NEXUS__UNKNOWN__TYPE!
   message: String!
   metadata: Json
   status: AppState!
