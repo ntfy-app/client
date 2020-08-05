@@ -10,3 +10,8 @@ generates:
   lib/api/types.ts:
     plugins:
       - typescript
+    config:
+      # TODO would this be better for libs ?
+      # enumsAsTypes: true
+      scalars:
+        Json: "{ [key: string]: any }"
