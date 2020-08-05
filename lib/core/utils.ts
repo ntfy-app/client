@@ -1,6 +1,9 @@
 import { EventCategory, LogLevel } from '../api'
 import { dlog } from '.'
 
+// also enforced via graphql-codegen for Json type
+type Metadata = { [key: string]: any } | null | undefined
+
 export const checkEventCategory = (category: EventCategory): EventCategory | undefined => {
   if (!Object.values(EventCategory).includes(category)) {
     console.error(`No such event category: ${category}`)
@@ -21,7 +24,7 @@ export const checkLogLevel = (level: LogLevel): LogLevel => {
   return level
 }
 
-export const processMetadata = (metadata?: any, label?: string): any | undefined => {
+export const processMetadata = (metadata?: Metadata, label?: string): Metadata | undefined => {
   if (!metadata) {
     return label ? { ['NTFY_LABEL']: label } : undefined
   }
