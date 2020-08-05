@@ -1,11 +1,13 @@
 import debug from 'debug'
 
-import { ApiClient, EventMessage, LogMessage, StatusMessage, LogLevel } from '../api'
-import { processMetadata, checkEventCategory, checkLogLevel } from './utils'
+import { ApiClient } from '../api'
+import { transformEventMessage, transformLogMessage, transformStatusMessage } from './utils'
+import { EventMessage, LogMessage, StatusMessage } from './types'
 
-export const dlog = debug('@ntfy-app/client')
+const dlog = debug('@ntfy-app/client')
 
-interface ClientInitOptions {
+export * from './types'
+export interface ClientInitOptions {
   api?: string
   label?: string
 }
@@ -58,11 +60,11 @@ export class Client {
 
   /**
    * Sends an event message to the Notify App
-   * @param eventMessage The event message object
-   * @param {string} eventMessage.title Title of the event
-   * @param {string} [eventMessage.category] Optional event category (GENERAL, MAIL, PAYMENT, BLOG, etc.)
-   * @param {string} eventMessage.message Message
-   * @param {Object} [eventMessage.metadata] Optional metadata object
+   * @param message The event message object
+   * @param {string} message.title Title of the event
+   * @param {string} [message.category] Optional event category (GENERAL, MAIL, PAYMENT, BLOG, etc.)
+   * @param {string} message.message Message
+   * @param {Object} [message.metadata] Optional metadata object
    * @example
    *  client.event({
    *    title: 'New Blogpost',
@@ -71,24 +73,21 @@ export class Client {
    *  })
    * @see Read the {@link http://github.com/ntfy-app/client|docs}.
    */
-  event(eventMessage: EventMessage) {
-    eventMessage.category = eventMessage.category && checkEventCategory(eventMessage.category)
-    eventMessage.metadata = processMetadata(eventMessage.metadata, this.label)
-
-    dlog('sending event message: %O', eventMessage)
+  event(message: EventMessage) {
+    dlog('sending event message: %O', message)
 
     this.client
-      .sendEvent(eventMessage)
+      .sendEvent(transformEventMessage(message))
       .then(({ success }) => !success && console.error('Could not deliver event message!'))
       .catch(error => console.error(error))
   }
 
   /**
    * Sends a log message to the Notify App
-   * @param logMessage The log message object
-   * @param logMessage.level Log-level (INFO, WARN, ERROR, FATAL)
-   * @param {string} logMessage.message Message
-   * @param {Object} [logMessage.metadata] Optional metadata object
+   * @param message The log message object
+   * @param message.level Log-level (INFO, WARN, ERROR, FATAL)
+   * @param {string} message.message Message
+   * @param {Object} [message.metadata] Optional metadata object
    * @example
    *  client.log({
    *    level: 'ERROR',
@@ -97,14 +96,11 @@ export class Client {
    *  })
    * @see Read the {@link http://github.com/ntfy-app/client|docs}.
    */
-  log(logMessage: LogMessage) {
-    logMessage.level = checkLogLevel(logMessage.level)
-    logMessage.metadata = processMetadata(logMessage.metadata, this.label)
-
-    dlog('sending event message: %O', logMessage)
+  log(message: LogMessage) {
+    dlog('sending event message: %O', message)
 
     this.client
-      .sendLog(logMessage)
+      .sendLog(transformLogMessage(message))
       .then(({ success }) => !success && console.error('Could not deliver log message!'))
       .catch(error => console.error(error))
   }
@@ -116,7 +112,7 @@ export class Client {
    * @see Read the {@link http://github.com/ntfy-app/client|docs}.
    */
   info(message: string, metadata?: any) {
-    this.log({ message, level: LogLevel.INFO, metadata })
+    this.log({ message, level: 'INFO', metadata })
   }
 
   /**
@@ -126,7 +122,7 @@ export class Client {
    * @see Read the {@link http://github.com/ntfy-app/client|docs}.
    */
   warn(message: string, metadata?: any) {
-    this.log({ message, level: LogLevel.WARN, metadata })
+    this.log({ message, level: 'WARN', metadata })
   }
 
   /**
@@ -136,7 +132,7 @@ export class Client {
    * @see Read the {@link http://github.com/ntfy-app/client|docs}.
    */
   error(message: string, metadata?: any) {
-    this.log({ message, level: LogLevel.ERROR, metadata })
+    this.log({ message, level: 'ERROR', metadata })
   }
 
   /**
@@ -146,15 +142,15 @@ export class Client {
    * @see Read the {@link http://github.com/ntfy-app/client|docs}.
    */
   fatal(message: string, metadata?: any) {
-    this.log({ message, level: LogLevel.FATAL, metadata })
+    this.log({ message, level: 'FATAL', metadata })
   }
 
   /**
    * Sends the present status of your application to the Notify App
-   * @param statusMessage The status message object
-   * @param {string} statusMessage.state Actual state (UP, DOWN, CRITICAL, SHUTDOWN, UNKNOWN)
-   * @param {string} statusMessage.message Message
-   * @param {Object} [statusMessage.metadata] Optional metadata object
+   * @param message The status message object
+   * @param {string} message.state Actual state (UP, DOWN, CRITICAL, SHUTDOWN, UNKNOWN)
+   * @param {string} message.message Message
+   * @param {Object} [message.metadata] Optional metadata object
    * @example
    *  client.status({
    *    state: 'UP',
@@ -162,13 +158,11 @@ export class Client {
    *  })
    * @see Read the {@link http://github.com/ntfy-app/client|docs}.
    */
-  status(statusMessage: StatusMessage) {
-    statusMessage.metadata = processMetadata(statusMessage.metadata, this.label)
-
-    dlog('sending event message: %O', statusMessage)
+  status(message: StatusMessage) {
+    dlog('sending event message: %O', message)
 
     this.client
-      .sendStatus(statusMessage)
+      .sendStatus(transformStatusMessage(message))
       .then(({ success }) => !success && console.error('Could not deliver status message!'))
       .catch(error => console.error(error))
   }
