@@ -209,8 +209,8 @@ export type UserAccountAppSubscriptionsArgs = {
 };
 
 export enum Role {
-  Admin = 'ADMIN',
-  User = 'USER'
+  ADMIN = 'ADMIN',
+  USER = 'USER'
 }
 
 export type BotUserWhereUniqueInput = {
@@ -262,8 +262,8 @@ export type BotAppSubscriptionsArgs = {
 };
 
 export enum BotType {
-  Slack = 'SLACK',
-  Telegram = 'TELEGRAM'
+  SLACK = 'SLACK',
+  TELEGRAM = 'TELEGRAM'
 }
 
 export type AppSubscriptionWhereUniqueInput = {
@@ -334,9 +334,9 @@ export type EnvironmentAppIdCompoundUniqueInput = {
 };
 
 export enum Environment {
-  Development = 'DEVELOPMENT',
-  Test = 'TEST',
-  Production = 'PRODUCTION'
+  DEVELOPMENT = 'DEVELOPMENT',
+  TEST = 'TEST',
+  PRODUCTION = 'PRODUCTION'
 }
 
 export type ClientSecret = {
@@ -555,10 +555,10 @@ export type AppLogWhereInput = {
 };
 
 export enum AppLogLevel {
-  Info = 'INFO',
-  Warn = 'WARN',
-  Error = 'ERROR',
-  Fatal = 'FATAL'
+  INFO = 'INFO',
+  WARN = 'WARN',
+  ERROR = 'ERROR',
+  FATAL = 'FATAL'
 }
 
 export type AppEventFilter = {
@@ -582,18 +582,18 @@ export type AppEventWhereInput = {
 };
 
 export enum AppEventCategory {
-  General = 'GENERAL',
-  Post = 'POST',
-  News = 'NEWS',
-  Payment = 'PAYMENT',
-  Mail = 'MAIL',
-  Train = 'TRAIN',
-  Travelling = 'TRAVELLING',
-  Car = 'CAR',
-  Industry = 'INDUSTRY',
-  Music = 'MUSIC',
-  Video = 'VIDEO',
-  Movie = 'MOVIE'
+  GENERAL = 'GENERAL',
+  POST = 'POST',
+  NEWS = 'NEWS',
+  PAYMENT = 'PAYMENT',
+  MAIL = 'MAIL',
+  TRAIN = 'TRAIN',
+  TRAVELLING = 'TRAVELLING',
+  CAR = 'CAR',
+  INDUSTRY = 'INDUSTRY',
+  MUSIC = 'MUSIC',
+  VIDEO = 'VIDEO',
+  MOVIE = 'MOVIE'
 }
 
 export type AppStatusFilter = {
@@ -617,11 +617,11 @@ export type AppStatusWhereInput = {
 };
 
 export enum AppState {
-  Up = 'UP',
-  Shutdown = 'SHUTDOWN',
-  Unknown = 'UNKNOWN',
-  Critical = 'CRITICAL',
-  Down = 'DOWN'
+  UP = 'UP',
+  SHUTDOWN = 'SHUTDOWN',
+  UNKNOWN = 'UNKNOWN',
+  CRITICAL = 'CRITICAL',
+  DOWN = 'DOWN'
 }
 
 export type AppOrderByInput = {
@@ -633,8 +633,8 @@ export type AppOrderByInput = {
 };
 
 export enum SortOrder {
-  Asc = 'asc',
-  Desc = 'desc'
+  ASC = 'asc',
+  DESC = 'desc'
 }
 
 export type AppSubscriptionOrderByInput = {
@@ -852,10 +852,10 @@ export type LogMessageSendInput = {
 };
 
 export enum LogLevel {
-  Info = 'INFO',
-  Warn = 'WARN',
-  Error = 'ERROR',
-  Fatal = 'FATAL'
+  INFO = 'INFO',
+  WARN = 'WARN',
+  ERROR = 'ERROR',
+  FATAL = 'FATAL'
 }
 
 
@@ -872,12 +872,12 @@ export type EventMessageSendInput = {
 };
 
 export enum EventCategory {
-  General = 'GENERAL',
-  Post = 'POST',
-  News = 'NEWS',
-  Payment = 'PAYMENT',
-  Mail = 'MAIL',
-  Docs = 'DOCS'
+  GENERAL = 'GENERAL',
+  POST = 'POST',
+  NEWS = 'NEWS',
+  PAYMENT = 'PAYMENT',
+  MAIL = 'MAIL',
+  DOCS = 'DOCS'
 }
 
 export type StatusMessageSendInput = {
@@ -900,9 +900,9 @@ export type UserAccountMergeInput = {
 };
 
 export enum BotJobType {
-  Event = 'EVENT',
-  Log = 'LOG',
-  Status = 'STATUS'
+  EVENT = 'EVENT',
+  LOG = 'LOG',
+  STATUS = 'STATUS'
 }
 
 export type BotJob = {

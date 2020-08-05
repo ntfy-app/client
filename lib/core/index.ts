@@ -116,7 +116,7 @@ export class Client {
    * @see Read the {@link http://github.com/ntfy-app/client|docs}.
    */
   info(message: string, metadata?: any) {
-    this.log({ message, level: LogLevel.Info, metadata })
+    this.log({ message, level: LogLevel.INFO, metadata })
   }
 
   /**
@@ -126,7 +126,7 @@ export class Client {
    * @see Read the {@link http://github.com/ntfy-app/client|docs}.
    */
   warn(message: string, metadata?: any) {
-    this.log({ message, level: LogLevel.Warn, metadata })
+    this.log({ message, level: LogLevel.WARN, metadata })
   }
 
   /**
@@ -136,7 +136,7 @@ export class Client {
    * @see Read the {@link http://github.com/ntfy-app/client|docs}.
    */
   error(message: string, metadata?: any) {
-    this.log({ message, level: LogLevel.Error, metadata })
+    this.log({ message, level: LogLevel.ERROR, metadata })
   }
 
   /**
@@ -146,7 +146,7 @@ export class Client {
    * @see Read the {@link http://github.com/ntfy-app/client|docs}.
    */
   fatal(message: string, metadata?: any) {
-    this.log({ message, level: LogLevel.Fatal, metadata })
+    this.log({ message, level: LogLevel.FATAL, metadata })
   }
 
   /**

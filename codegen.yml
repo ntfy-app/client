@@ -15,3 +15,5 @@ generates:
       # enumsAsTypes: true
       scalars:
         Json: "{ [key: string]: any }"
+      namingConvention:
+        enumValues: upper-case#upperCase

@@ -16,9 +16,9 @@ export const checkEventCategory = (category: EventCategory): EventCategory | und
 
 export const checkLogLevel = (level: LogLevel): LogLevel => {
   if (!Object.values(LogLevel).includes(level)) {
-    console.error(`No such log level: ${level}. Fallback is ${LogLevel.Error}`)
+    console.error(`No such log level: ${level}. Fallback is ${LogLevel.ERROR}`)
 
-    return LogLevel.Error
+    return LogLevel.ERROR
   }
 
   return level
