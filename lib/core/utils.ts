@@ -42,9 +42,9 @@ const checkEventCategory = (category?: EventCategory): IAppEventCategory | undef
     return undefined
   }
   if (!Object.keys(IAppEventCategory).includes(category)) {
-    console.error(`No such Event Category: ${category}. Fallback is ${IAppEventCategory.GENERAL}`)
+    console.error(`No such Event Category: ${category}. Fallback is ${IAppEventCategory.NONE}`)
 
-    return IAppEventCategory.GENERAL
+    return IAppEventCategory.NONE
   }
 
   return IAppEventCategory[category]
