@@ -43,8 +43,9 @@ export class ApiClient {
   constructor(api: string, secret: string) {
     this.client = Axios.create({
       baseURL: api,
-      headers: {
-        authorization: `Basic ${secret}`,
+      auth: {
+        username: 'client',
+        password: secret,
       },
     })
 
