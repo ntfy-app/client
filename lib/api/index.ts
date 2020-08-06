@@ -1,37 +1,42 @@
 import debug from 'debug'
 import Axios, { AxiosInstance } from 'axios'
-import { ILogMessageSendInput, IEventMessageSendInput, IStatusMessageSendInput, IClientResponse } from './types'
+import {
+  IAppLogMessageSendInput,
+  IAppEventMessageSendInput,
+  IAppStatusMessageSendInput,
+  IClientResponse,
+} from './types'
 
 const dlog = debug('@ntfy-app/client')
 
 export * from './types'
 
 export type IMetadata = { [keyof: string]: any }
-export type IEventMessage = IEventMessageSendInput
-export type ILogMessage = ILogMessageSendInput
-export type IStatusMessage = IStatusMessageSendInput
+export type IEventMessage = IAppEventMessageSendInput
+export type ILogMessage = IAppLogMessageSendInput
+export type IStatusMessage = IAppStatusMessageSendInput
 
 const gql = String.raw
 
-const SEND_EVENT_MESSAGE_MUTATION = gql`
-  mutation sendEventMessage($data: EventMessageSendInput!) {
-    sendEventMessage(data: $data) {
+const SEND_APP_EVENT_MESSAGE_MUTATION = gql`
+  mutation sendAppEventMessage($data: AppEventMessageSendInput!) {
+    sendAppEventMessage(data: $data) {
       success
     }
   }
 `
 
-const SEND_LOG_MESSAGE_MUTATION = gql`
-  mutation sendLogMessage($data: LogMessageSendInput!) {
-    sendLogMessage(data: $data) {
+const SEND_APP_LOG_MESSAGE_MUTATION = gql`
+  mutation sendAppLogMessage($data: AppLogMessageSendInput!) {
+    sendAppLogMessage(data: $data) {
       success
     }
   }
 `
 
-const SEND_STATUS_MESSAGE_MUTATION = gql`
-  mutation sendStatusMessage($data: StatusMessageSendInput!) {
-    sendStatusMessage(data: $data) {
+const SEND_APP_STATUS_MESSAGE_MUTATION = gql`
+  mutation sendAppStatusMessage($data: AppStatusMessageSendInput!) {
+    sendAppStatusMessage(data: $data) {
       success
     }
   }
@@ -56,8 +61,8 @@ export class ApiClient {
     dlog('executing sendEventMessage mutation')
 
     return this.client
-      .post('', { query: SEND_EVENT_MESSAGE_MUTATION, variables: { data: eventMessage } })
-      .then(({ data }) => data.data.sendEventMessage)
+      .post('', { query: SEND_APP_EVENT_MESSAGE_MUTATION, variables: { data: eventMessage } })
+      .then(({ data }) => data.data.sendAppEventMessage)
       .catch(error => error)
   }
 
@@ -65,8 +70,8 @@ export class ApiClient {
     dlog('executing sendLogMessage mutation')
 
     return this.client
-      .post('', { query: SEND_LOG_MESSAGE_MUTATION, variables: { data: logMessage } })
-      .then(({ data }) => data.data.sendLogMessage)
+      .post('', { query: SEND_APP_LOG_MESSAGE_MUTATION, variables: { data: logMessage } })
+      .then(({ data }) => data.data.sendAppLogMessage)
       .catch(error => error)
   }
 
@@ -74,8 +79,8 @@ export class ApiClient {
     dlog('executing sendStatusMessage mutation')
 
     return this.client
-      .post('', { query: SEND_STATUS_MESSAGE_MUTATION, variables: { data: statusMessage } })
-      .then(({ data }) => data.data.sendStatusMessage)
+      .post('', { query: SEND_APP_STATUS_MESSAGE_MUTATION, variables: { data: statusMessage } })
+      .then(({ data }) => data.data.sendAppStatusMessage)
       .catch(error => error)
   }
 }
