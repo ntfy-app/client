@@ -18,6 +18,7 @@ export const transformEventMessage = ({ title, message, category, metadata }: Ev
     message,
     category: checkEventCategory(category),
     metadata: checkMetadata(metadata),
+    timestamp: new Date(),
   }
 }
 
@@ -26,6 +27,7 @@ export const transformLogMessage = ({ level, message, metadata }: LogMessage): I
     level: checkLogLevel(level),
     message,
     metadata: checkMetadata(metadata),
+    timestamp: new Date(),
   }
 }
 
@@ -34,6 +36,7 @@ export const transformStatusMessage = ({ state, message, metadata }: StatusMessa
     state: checkIAppState(state),
     message,
     metadata: checkMetadata(metadata),
+    timestamp: new Date(),
   }
 }
 

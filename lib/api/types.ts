@@ -139,34 +139,40 @@ export type IApp = {
   subscribeTokens: Array<ISubscribeToken>;
   appSubscriptions: Array<IAppSubscription>;
   clientSecrets: Array<IClientSecret>;
-  createdAt: Scalars['DateTime'];
-  updatedAt: Scalars['DateTime'];
+  messages: Array<IAppMessage>;
   subscribeTokenCount: Scalars['Int'];
   appSubscriptionCount: Scalars['Int'];
+  metrics: IAppMetrics;
+  createdAt: Scalars['DateTime'];
+  updatedAt: Scalars['DateTime'];
 };
 
 
 export type IAppSubscribeTokensArgs = {
-  first: Scalars['Int'];
-  last: Scalars['Int'];
-  before?: Maybe<ISubscribeTokenWhereUniqueInput>;
-  after?: Maybe<ISubscribeTokenWhereUniqueInput>;
+  where?: Maybe<ISubscribeTokenWhereInput>;
+  orderBy?: Maybe<ISubscribeTokenOrderByInput>;
 };
 
 
 export type IAppAppSubscriptionsArgs = {
-  first: Scalars['Int'];
-  last: Scalars['Int'];
-  before?: Maybe<IAppSubscriptionWhereUniqueInput>;
-  after?: Maybe<IAppSubscriptionWhereUniqueInput>;
+  where?: Maybe<IAppSubscriptionWhereInput>;
+  orderBy?: Maybe<IAppSubscriptionOrderByInput>;
 };
 
 
 export type IAppClientSecretsArgs = {
-  first: Scalars['Int'];
-  last: Scalars['Int'];
-  before?: Maybe<IClientSecretWhereUniqueInput>;
-  after?: Maybe<IClientSecretWhereUniqueInput>;
+  where?: Maybe<IClientSecretWhereInput>;
+  orderBy?: Maybe<IClientSecretOrderByInput>;
+};
+
+
+export type IAppMessagesArgs = {
+  where?: Maybe<IAppMessageWhereInput>;
+};
+
+
+export type IAppMetricsArgs = {
+  period?: IAppMetricsPeriod;
 };
 
 export type IUserAccount = {
@@ -187,26 +193,20 @@ export type IUserAccount = {
 
 
 export type IUserAccountBotUsersArgs = {
-  first: Scalars['Int'];
-  last: Scalars['Int'];
-  before?: Maybe<IBotUserWhereUniqueInput>;
-  after?: Maybe<IBotUserWhereUniqueInput>;
+  where?: Maybe<IBotUserWhereInput>;
+  orderBy?: Maybe<IBotUserOrderByInput>;
 };
 
 
 export type IUserAccountAppsArgs = {
-  first: Scalars['Int'];
-  last: Scalars['Int'];
-  before?: Maybe<IAppWhereUniqueInput>;
-  after?: Maybe<IAppWhereUniqueInput>;
+  where?: Maybe<IAppWhereInput>;
+  orderBy?: Maybe<IAppOrderByInput>;
 };
 
 
 export type IUserAccountAppSubscriptionsArgs = {
-  first: Scalars['Int'];
-  last: Scalars['Int'];
-  before?: Maybe<IAppSubscriptionWhereUniqueInput>;
-  after?: Maybe<IAppSubscriptionWhereUniqueInput>;
+  where?: Maybe<IAppSubscriptionWhereInput>;
+  orderBy?: Maybe<IAppSubscriptionOrderByInput>;
 };
 
 export enum IRole {
@@ -214,15 +214,243 @@ export enum IRole {
   USER = 'USER'
 }
 
-export type IBotUserWhereUniqueInput = {
-  id?: Maybe<Scalars['Int']>;
-  botUser_botId?: Maybe<IBotUserBotIdCompoundUniqueInput>;
+export type IBotUserWhereInput = {
+  id?: Maybe<IIntFilter>;
+  name?: Maybe<INullableStringFilter>;
+  botUser?: Maybe<IStringFilter>;
+  botId?: Maybe<IIntFilter>;
+  userAccountId?: Maybe<IIntFilter>;
+  createdAt?: Maybe<IDateTimeFilter>;
+  updatedAt?: Maybe<IDateTimeFilter>;
+  AND?: Maybe<Array<IBotUserWhereInput>>;
+  OR?: Maybe<Array<IBotUserWhereInput>>;
+  NOT?: Maybe<Array<IBotUserWhereInput>>;
+  bot?: Maybe<IBotWhereInput>;
+  userAccount?: Maybe<IUserAccountWhereInput>;
 };
 
-export type IBotUserBotIdCompoundUniqueInput = {
-  botUser: Scalars['String'];
-  botId: Scalars['Int'];
+export type IIntFilter = {
+  equals?: Maybe<Scalars['Int']>;
+  not?: Maybe<Scalars['Int']>;
+  in?: Maybe<Array<Scalars['Int']>>;
+  notIn?: Maybe<Array<Scalars['Int']>>;
+  lt?: Maybe<Scalars['Int']>;
+  lte?: Maybe<Scalars['Int']>;
+  gt?: Maybe<Scalars['Int']>;
+  gte?: Maybe<Scalars['Int']>;
 };
+
+export type INullableStringFilter = {
+  equals?: Maybe<Scalars['String']>;
+  not?: Maybe<Scalars['String']>;
+  in?: Maybe<Array<Scalars['String']>>;
+  notIn?: Maybe<Array<Scalars['String']>>;
+  lt?: Maybe<Scalars['String']>;
+  lte?: Maybe<Scalars['String']>;
+  gt?: Maybe<Scalars['String']>;
+  gte?: Maybe<Scalars['String']>;
+  contains?: Maybe<Scalars['String']>;
+  startsWith?: Maybe<Scalars['String']>;
+  endsWith?: Maybe<Scalars['String']>;
+};
+
+export type IStringFilter = {
+  equals?: Maybe<Scalars['String']>;
+  not?: Maybe<Scalars['String']>;
+  in?: Maybe<Array<Scalars['String']>>;
+  notIn?: Maybe<Array<Scalars['String']>>;
+  lt?: Maybe<Scalars['String']>;
+  lte?: Maybe<Scalars['String']>;
+  gt?: Maybe<Scalars['String']>;
+  gte?: Maybe<Scalars['String']>;
+  contains?: Maybe<Scalars['String']>;
+  startsWith?: Maybe<Scalars['String']>;
+  endsWith?: Maybe<Scalars['String']>;
+};
+
+export type IDateTimeFilter = {
+  equals?: Maybe<Scalars['DateTime']>;
+  not?: Maybe<Scalars['DateTime']>;
+  in?: Maybe<Array<Scalars['DateTime']>>;
+  notIn?: Maybe<Array<Scalars['DateTime']>>;
+  lt?: Maybe<Scalars['DateTime']>;
+  lte?: Maybe<Scalars['DateTime']>;
+  gt?: Maybe<Scalars['DateTime']>;
+  gte?: Maybe<Scalars['DateTime']>;
+};
+
+
+export type IBotWhereInput = {
+  id?: Maybe<IIntFilter>;
+  type?: Maybe<IBotType>;
+  botUsers?: Maybe<IBotUserFilter>;
+  appSubscriptions?: Maybe<IAppSubscriptionFilter>;
+  AND?: Maybe<Array<IBotWhereInput>>;
+  OR?: Maybe<Array<IBotWhereInput>>;
+  NOT?: Maybe<Array<IBotWhereInput>>;
+};
+
+export enum IBotType {
+  SLACK = 'SLACK',
+  TELEGRAM = 'TELEGRAM'
+}
+
+export type IBotUserFilter = {
+  every?: Maybe<IBotUserWhereInput>;
+  some?: Maybe<IBotUserWhereInput>;
+  none?: Maybe<IBotUserWhereInput>;
+};
+
+export type IAppSubscriptionFilter = {
+  every?: Maybe<IAppSubscriptionWhereInput>;
+  some?: Maybe<IAppSubscriptionWhereInput>;
+  none?: Maybe<IAppSubscriptionWhereInput>;
+};
+
+export type IAppSubscriptionWhereInput = {
+  id?: Maybe<IIntFilter>;
+  name?: Maybe<IStringFilter>;
+  customName?: Maybe<INullableStringFilter>;
+  description?: Maybe<IStringFilter>;
+  muted?: Maybe<IBooleanFilter>;
+  mutedUntil?: Maybe<INullableDateTimeFilter>;
+  appId?: Maybe<IIntFilter>;
+  subscriberId?: Maybe<IIntFilter>;
+  botId?: Maybe<IIntFilter>;
+  channel?: Maybe<IStringFilter>;
+  createdAt?: Maybe<IDateTimeFilter>;
+  updatedAt?: Maybe<IDateTimeFilter>;
+  AND?: Maybe<Array<IAppSubscriptionWhereInput>>;
+  OR?: Maybe<Array<IAppSubscriptionWhereInput>>;
+  NOT?: Maybe<Array<IAppSubscriptionWhereInput>>;
+  app?: Maybe<IAppWhereInput>;
+  subscriber?: Maybe<IUserAccountWhereInput>;
+  bot?: Maybe<IBotWhereInput>;
+};
+
+export type IBooleanFilter = {
+  equals?: Maybe<Scalars['Boolean']>;
+  not?: Maybe<Scalars['Boolean']>;
+};
+
+export type INullableDateTimeFilter = {
+  equals?: Maybe<Scalars['DateTime']>;
+  not?: Maybe<Scalars['DateTime']>;
+  in?: Maybe<Array<Scalars['DateTime']>>;
+  notIn?: Maybe<Array<Scalars['DateTime']>>;
+  lt?: Maybe<Scalars['DateTime']>;
+  lte?: Maybe<Scalars['DateTime']>;
+  gt?: Maybe<Scalars['DateTime']>;
+  gte?: Maybe<Scalars['DateTime']>;
+};
+
+export type IAppWhereInput = {
+  id?: Maybe<IIntFilter>;
+  name?: Maybe<IStringFilter>;
+  ownerId?: Maybe<IIntFilter>;
+  subscribeTokens?: Maybe<ISubscribeTokenFilter>;
+  appSubscriptions?: Maybe<IAppSubscriptionFilter>;
+  clientSecrets?: Maybe<IClientSecretFilter>;
+  messages?: Maybe<IAppMessageFilter>;
+  createdAt?: Maybe<IDateTimeFilter>;
+  updatedAt?: Maybe<IDateTimeFilter>;
+  AND?: Maybe<Array<IAppWhereInput>>;
+  OR?: Maybe<Array<IAppWhereInput>>;
+  NOT?: Maybe<Array<IAppWhereInput>>;
+  owner?: Maybe<IUserAccountWhereInput>;
+};
+
+export type ISubscribeTokenFilter = {
+  every?: Maybe<ISubscribeTokenWhereInput>;
+  some?: Maybe<ISubscribeTokenWhereInput>;
+  none?: Maybe<ISubscribeTokenWhereInput>;
+};
+
+export type ISubscribeTokenWhereInput = {
+  id?: Maybe<IIntFilter>;
+  description?: Maybe<IStringFilter>;
+  token?: Maybe<IStringFilter>;
+  appId?: Maybe<IIntFilter>;
+  createdAt?: Maybe<IDateTimeFilter>;
+  updatedAt?: Maybe<IDateTimeFilter>;
+  AND?: Maybe<Array<ISubscribeTokenWhereInput>>;
+  OR?: Maybe<Array<ISubscribeTokenWhereInput>>;
+  NOT?: Maybe<Array<ISubscribeTokenWhereInput>>;
+  app?: Maybe<IAppWhereInput>;
+};
+
+export type IClientSecretFilter = {
+  every?: Maybe<IClientSecretWhereInput>;
+  some?: Maybe<IClientSecretWhereInput>;
+  none?: Maybe<IClientSecretWhereInput>;
+};
+
+export type IClientSecretWhereInput = {
+  id?: Maybe<IIntFilter>;
+  environment?: Maybe<IEnvironment>;
+  secret?: Maybe<IStringFilter>;
+  appId?: Maybe<IIntFilter>;
+  createdAt?: Maybe<IDateTimeFilter>;
+  updatedAt?: Maybe<IDateTimeFilter>;
+  AND?: Maybe<Array<IClientSecretWhereInput>>;
+  OR?: Maybe<Array<IClientSecretWhereInput>>;
+  NOT?: Maybe<Array<IClientSecretWhereInput>>;
+  app?: Maybe<IAppWhereInput>;
+};
+
+export enum IEnvironment {
+  DEVELOPMENT = 'DEVELOPMENT',
+  TEST = 'TEST',
+  PRODUCTION = 'PRODUCTION'
+}
+
+export type IAppMessageFilter = {
+  every?: Maybe<IAppMessageWhereInput>;
+  some?: Maybe<IAppMessageWhereInput>;
+  none?: Maybe<IAppMessageWhereInput>;
+};
+
+export type IAppMessageWhereInput = {
+  environment?: Maybe<IEnvironment>;
+};
+
+export type IUserAccountWhereInput = {
+  id?: Maybe<IIntFilter>;
+  nickname?: Maybe<INullableStringFilter>;
+  name?: Maybe<INullableStringFilter>;
+  email?: Maybe<INullableStringFilter>;
+  password?: Maybe<INullableStringFilter>;
+  role?: Maybe<IRole>;
+  botUsers?: Maybe<IBotUserFilter>;
+  apps?: Maybe<IAppFilter>;
+  appSubscriptions?: Maybe<IAppSubscriptionFilter>;
+  createdAt?: Maybe<IDateTimeFilter>;
+  updatedAt?: Maybe<IDateTimeFilter>;
+  AND?: Maybe<Array<IUserAccountWhereInput>>;
+  OR?: Maybe<Array<IUserAccountWhereInput>>;
+  NOT?: Maybe<Array<IUserAccountWhereInput>>;
+};
+
+export type IAppFilter = {
+  every?: Maybe<IAppWhereInput>;
+  some?: Maybe<IAppWhereInput>;
+  none?: Maybe<IAppWhereInput>;
+};
+
+export type IBotUserOrderByInput = {
+  id?: Maybe<ISortOrder>;
+  name?: Maybe<ISortOrder>;
+  botUser?: Maybe<ISortOrder>;
+  botId?: Maybe<ISortOrder>;
+  userAccountId?: Maybe<ISortOrder>;
+  createdAt?: Maybe<ISortOrder>;
+  updatedAt?: Maybe<ISortOrder>;
+};
+
+export enum ISortOrder {
+  ASC = 'asc',
+  DESC = 'desc'
+}
 
 export type IBotUser = {
   __typename?: 'BotUser';
@@ -262,10 +490,15 @@ export type IBotAppSubscriptionsArgs = {
   after?: Maybe<IAppSubscriptionWhereUniqueInput>;
 };
 
-export enum IBotType {
-  SLACK = 'SLACK',
-  TELEGRAM = 'TELEGRAM'
-}
+export type IBotUserWhereUniqueInput = {
+  id?: Maybe<Scalars['Int']>;
+  botUser_botId?: Maybe<IBotUserBotIdCompoundUniqueInput>;
+};
+
+export type IBotUserBotIdCompoundUniqueInput = {
+  botUser: Scalars['String'];
+  botId: Scalars['Int'];
+};
 
 export type IAppSubscriptionWhereUniqueInput = {
   id?: Maybe<Scalars['Int']>;
@@ -289,6 +522,8 @@ export type IAppSubscription = {
   id: Scalars['Int'];
   name: Scalars['String'];
   description: Scalars['String'];
+  muted: Scalars['Boolean'];
+  mutedUntil?: Maybe<Scalars['DateTime']>;
   appId: Scalars['Int'];
   app: IApp;
   subscriberId: Scalars['Int'];
@@ -300,7 +535,6 @@ export type IAppSubscription = {
   updatedAt: Scalars['DateTime'];
 };
 
-
 export type IUpdateRequiredPayload = {
   __typename?: 'UpdateRequiredPayload';
   required: Scalars['Boolean'];
@@ -308,15 +542,36 @@ export type IUpdateRequiredPayload = {
   fields: Array<Scalars['String']>;
 };
 
-export type ISubscribeTokenWhereUniqueInput = {
-  id?: Maybe<Scalars['Int']>;
-  token?: Maybe<Scalars['String']>;
-  description_appId?: Maybe<IDescriptionAppIdCompoundUniqueInput>;
+export type IAppOrderByInput = {
+  id?: Maybe<ISortOrder>;
+  name?: Maybe<ISortOrder>;
+  ownerId?: Maybe<ISortOrder>;
+  createdAt?: Maybe<ISortOrder>;
+  updatedAt?: Maybe<ISortOrder>;
 };
 
-export type IDescriptionAppIdCompoundUniqueInput = {
-  description: Scalars['String'];
-  appId: Scalars['Int'];
+export type IAppSubscriptionOrderByInput = {
+  id?: Maybe<ISortOrder>;
+  name?: Maybe<ISortOrder>;
+  customName?: Maybe<ISortOrder>;
+  description?: Maybe<ISortOrder>;
+  muted?: Maybe<ISortOrder>;
+  mutedUntil?: Maybe<ISortOrder>;
+  appId?: Maybe<ISortOrder>;
+  subscriberId?: Maybe<ISortOrder>;
+  botId?: Maybe<ISortOrder>;
+  channel?: Maybe<ISortOrder>;
+  createdAt?: Maybe<ISortOrder>;
+  updatedAt?: Maybe<ISortOrder>;
+};
+
+export type ISubscribeTokenOrderByInput = {
+  id?: Maybe<ISortOrder>;
+  description?: Maybe<ISortOrder>;
+  token?: Maybe<ISortOrder>;
+  appId?: Maybe<ISortOrder>;
+  createdAt?: Maybe<ISortOrder>;
+  updatedAt?: Maybe<ISortOrder>;
 };
 
 export type ISubscribeToken = {
@@ -330,22 +585,14 @@ export type ISubscribeToken = {
   updatedAt: Scalars['DateTime'];
 };
 
-export type IClientSecretWhereUniqueInput = {
-  id?: Maybe<Scalars['Int']>;
-  secret?: Maybe<Scalars['String']>;
-  environment_appId?: Maybe<IEnvironmentAppIdCompoundUniqueInput>;
+export type IClientSecretOrderByInput = {
+  id?: Maybe<ISortOrder>;
+  environment?: Maybe<ISortOrder>;
+  secret?: Maybe<ISortOrder>;
+  appId?: Maybe<ISortOrder>;
+  createdAt?: Maybe<ISortOrder>;
+  updatedAt?: Maybe<ISortOrder>;
 };
-
-export type IEnvironmentAppIdCompoundUniqueInput = {
-  environment: IEnvironment;
-  appId: Scalars['Int'];
-};
-
-export enum IEnvironment {
-  DEVELOPMENT = 'DEVELOPMENT',
-  TEST = 'TEST',
-  PRODUCTION = 'PRODUCTION'
-}
 
 export type IClientSecret = {
   __typename?: 'ClientSecret';
@@ -358,332 +605,49 @@ export type IClientSecret = {
   updatedAt: Scalars['DateTime'];
 };
 
-export type IAppWhereInput = {
-  id?: Maybe<IIntFilter>;
-  name?: Maybe<IStringFilter>;
-  ownerId?: Maybe<IIntFilter>;
-  subscribeTokens?: Maybe<ISubscribeTokenFilter>;
-  appSubscriptions?: Maybe<IAppSubscriptionFilter>;
-  clientSecrets?: Maybe<IClientSecretFilter>;
-  AppLog?: Maybe<IAppLogFilter>;
-  AppEvent?: Maybe<IAppEventFilter>;
-  appStatus?: Maybe<IAppStatusFilter>;
-  createdAt?: Maybe<IDateTimeFilter>;
-  updatedAt?: Maybe<IDateTimeFilter>;
-  AND?: Maybe<Array<IAppWhereInput>>;
-  OR?: Maybe<Array<IAppWhereInput>>;
-  NOT?: Maybe<Array<IAppWhereInput>>;
-  owner?: Maybe<IUserAccountWhereInput>;
+export type IAppMessage = {
+  id: Scalars['Int'];
+  environment: IEnvironment;
+  appId: Scalars['Int'];
+  app: IApp;
 };
 
-export type IIntFilter = {
-  equals?: Maybe<Scalars['Int']>;
-  not?: Maybe<Scalars['Int']>;
-  in?: Maybe<Array<Scalars['Int']>>;
-  notIn?: Maybe<Array<Scalars['Int']>>;
-  lt?: Maybe<Scalars['Int']>;
-  lte?: Maybe<Scalars['Int']>;
-  gt?: Maybe<Scalars['Int']>;
-  gte?: Maybe<Scalars['Int']>;
-};
-
-export type IStringFilter = {
-  equals?: Maybe<Scalars['String']>;
-  not?: Maybe<Scalars['String']>;
-  in?: Maybe<Array<Scalars['String']>>;
-  notIn?: Maybe<Array<Scalars['String']>>;
-  lt?: Maybe<Scalars['String']>;
-  lte?: Maybe<Scalars['String']>;
-  gt?: Maybe<Scalars['String']>;
-  gte?: Maybe<Scalars['String']>;
-  contains?: Maybe<Scalars['String']>;
-  startsWith?: Maybe<Scalars['String']>;
-  endsWith?: Maybe<Scalars['String']>;
-};
-
-export type ISubscribeTokenFilter = {
-  every?: Maybe<ISubscribeTokenWhereInput>;
-  some?: Maybe<ISubscribeTokenWhereInput>;
-  none?: Maybe<ISubscribeTokenWhereInput>;
-};
-
-export type ISubscribeTokenWhereInput = {
-  id?: Maybe<IIntFilter>;
-  description?: Maybe<IStringFilter>;
-  appId?: Maybe<IIntFilter>;
-  token?: Maybe<IStringFilter>;
-  createdAt?: Maybe<IDateTimeFilter>;
-  updatedAt?: Maybe<IDateTimeFilter>;
-  AND?: Maybe<Array<ISubscribeTokenWhereInput>>;
-  OR?: Maybe<Array<ISubscribeTokenWhereInput>>;
-  NOT?: Maybe<Array<ISubscribeTokenWhereInput>>;
-  app?: Maybe<IAppWhereInput>;
-};
-
-export type IDateTimeFilter = {
-  equals?: Maybe<Scalars['DateTime']>;
-  not?: Maybe<Scalars['DateTime']>;
-  in?: Maybe<Array<Scalars['DateTime']>>;
-  notIn?: Maybe<Array<Scalars['DateTime']>>;
-  lt?: Maybe<Scalars['DateTime']>;
-  lte?: Maybe<Scalars['DateTime']>;
-  gt?: Maybe<Scalars['DateTime']>;
-  gte?: Maybe<Scalars['DateTime']>;
-};
-
-export type IAppSubscriptionFilter = {
-  every?: Maybe<IAppSubscriptionWhereInput>;
-  some?: Maybe<IAppSubscriptionWhereInput>;
-  none?: Maybe<IAppSubscriptionWhereInput>;
-};
-
-export type IAppSubscriptionWhereInput = {
-  id?: Maybe<IIntFilter>;
-  name?: Maybe<IStringFilter>;
-  customName?: Maybe<INullableStringFilter>;
-  description?: Maybe<IStringFilter>;
-  appId?: Maybe<IIntFilter>;
-  subscriberId?: Maybe<IIntFilter>;
-  botId?: Maybe<IIntFilter>;
-  channel?: Maybe<IStringFilter>;
-  createdAt?: Maybe<IDateTimeFilter>;
-  updatedAt?: Maybe<IDateTimeFilter>;
-  AND?: Maybe<Array<IAppSubscriptionWhereInput>>;
-  OR?: Maybe<Array<IAppSubscriptionWhereInput>>;
-  NOT?: Maybe<Array<IAppSubscriptionWhereInput>>;
-  app?: Maybe<IAppWhereInput>;
-  subscriber?: Maybe<IUserAccountWhereInput>;
-  bot?: Maybe<IBotWhereInput>;
-};
-
-export type INullableStringFilter = {
-  equals?: Maybe<Scalars['String']>;
-  not?: Maybe<Scalars['String']>;
-  in?: Maybe<Array<Scalars['String']>>;
-  notIn?: Maybe<Array<Scalars['String']>>;
-  lt?: Maybe<Scalars['String']>;
-  lte?: Maybe<Scalars['String']>;
-  gt?: Maybe<Scalars['String']>;
-  gte?: Maybe<Scalars['String']>;
-  contains?: Maybe<Scalars['String']>;
-  startsWith?: Maybe<Scalars['String']>;
-  endsWith?: Maybe<Scalars['String']>;
-};
-
-export type IUserAccountWhereInput = {
-  id?: Maybe<IIntFilter>;
-  nickname?: Maybe<INullableStringFilter>;
-  name?: Maybe<INullableStringFilter>;
-  email?: Maybe<INullableStringFilter>;
-  password?: Maybe<INullableStringFilter>;
-  role?: Maybe<IRole>;
-  botUsers?: Maybe<IBotUserFilter>;
-  apps?: Maybe<IAppFilter>;
-  appSubscriptions?: Maybe<IAppSubscriptionFilter>;
-  createdAt?: Maybe<IDateTimeFilter>;
-  updatedAt?: Maybe<IDateTimeFilter>;
-  AND?: Maybe<Array<IUserAccountWhereInput>>;
-  OR?: Maybe<Array<IUserAccountWhereInput>>;
-  NOT?: Maybe<Array<IUserAccountWhereInput>>;
-};
-
-export type IBotUserFilter = {
-  every?: Maybe<IBotUserWhereInput>;
-  some?: Maybe<IBotUserWhereInput>;
-  none?: Maybe<IBotUserWhereInput>;
-};
-
-export type IBotUserWhereInput = {
-  id?: Maybe<IIntFilter>;
-  name?: Maybe<INullableStringFilter>;
-  botUser?: Maybe<IStringFilter>;
-  botId?: Maybe<IIntFilter>;
-  userAccountId?: Maybe<IIntFilter>;
-  createdAt?: Maybe<IDateTimeFilter>;
-  updatedAt?: Maybe<IDateTimeFilter>;
-  AND?: Maybe<Array<IBotUserWhereInput>>;
-  OR?: Maybe<Array<IBotUserWhereInput>>;
-  NOT?: Maybe<Array<IBotUserWhereInput>>;
-  bot?: Maybe<IBotWhereInput>;
-  userAccount?: Maybe<IUserAccountWhereInput>;
-};
-
-export type IBotWhereInput = {
-  id?: Maybe<IIntFilter>;
-  type?: Maybe<IBotType>;
-  botUsers?: Maybe<IBotUserFilter>;
-  appSubscriptions?: Maybe<IAppSubscriptionFilter>;
-  AND?: Maybe<Array<IBotWhereInput>>;
-  OR?: Maybe<Array<IBotWhereInput>>;
-  NOT?: Maybe<Array<IBotWhereInput>>;
-};
-
-export type IAppFilter = {
-  every?: Maybe<IAppWhereInput>;
-  some?: Maybe<IAppWhereInput>;
-  none?: Maybe<IAppWhereInput>;
-};
-
-export type IClientSecretFilter = {
-  every?: Maybe<IClientSecretWhereInput>;
-  some?: Maybe<IClientSecretWhereInput>;
-  none?: Maybe<IClientSecretWhereInput>;
-};
-
-export type IClientSecretWhereInput = {
-  id?: Maybe<IIntFilter>;
-  environment?: Maybe<IEnvironment>;
-  secret?: Maybe<IStringFilter>;
-  appId?: Maybe<IIntFilter>;
-  createdAt?: Maybe<IDateTimeFilter>;
-  updatedAt?: Maybe<IDateTimeFilter>;
-  AND?: Maybe<Array<IClientSecretWhereInput>>;
-  OR?: Maybe<Array<IClientSecretWhereInput>>;
-  NOT?: Maybe<Array<IClientSecretWhereInput>>;
-  app?: Maybe<IAppWhereInput>;
-};
-
-export type IAppLogFilter = {
-  every?: Maybe<IAppLogWhereInput>;
-  some?: Maybe<IAppLogWhereInput>;
-  none?: Maybe<IAppLogWhereInput>;
-};
-
-export type IAppLogWhereInput = {
-  id?: Maybe<IIntFilter>;
-  appId?: Maybe<IIntFilter>;
-  level?: Maybe<IAppLogLevel>;
-  message?: Maybe<IStringFilter>;
-  createdAt?: Maybe<IDateTimeFilter>;
-  updatedAt?: Maybe<IDateTimeFilter>;
-  AND?: Maybe<Array<IAppLogWhereInput>>;
-  OR?: Maybe<Array<IAppLogWhereInput>>;
-  NOT?: Maybe<Array<IAppLogWhereInput>>;
-  app?: Maybe<IAppWhereInput>;
-};
-
-export enum IAppLogLevel {
-  INFO = 'INFO',
-  WARN = 'WARN',
-  ERROR = 'ERROR',
-  FATAL = 'FATAL'
+export enum IAppMetricsPeriod {
+  DAY = 'day',
+  WEEK = 'week',
+  MONTH = 'month'
 }
 
-export type IAppEventFilter = {
-  every?: Maybe<IAppEventWhereInput>;
-  some?: Maybe<IAppEventWhereInput>;
-  none?: Maybe<IAppEventWhereInput>;
+export type IAppMetrics = {
+  __typename?: 'AppMetrics';
+  start: Scalars['DateTime'];
+  end: Scalars['DateTime'];
+  logs: Scalars['Int'];
+  events: Scalars['Int'];
+  statuses: Scalars['Int'];
+  limit: Scalars['Int'];
 };
 
-export type IAppEventWhereInput = {
-  id?: Maybe<IIntFilter>;
-  appId?: Maybe<IIntFilter>;
-  category?: Maybe<IAppEventCategory>;
-  title?: Maybe<IStringFilter>;
-  message?: Maybe<IStringFilter>;
-  createdAt?: Maybe<IDateTimeFilter>;
-  updatedAt?: Maybe<IDateTimeFilter>;
-  AND?: Maybe<Array<IAppEventWhereInput>>;
-  OR?: Maybe<Array<IAppEventWhereInput>>;
-  NOT?: Maybe<Array<IAppEventWhereInput>>;
-  app?: Maybe<IAppWhereInput>;
+export type IClientSecretWhereUniqueInput = {
+  id?: Maybe<Scalars['Int']>;
+  secret?: Maybe<Scalars['String']>;
+  environment_appId?: Maybe<IEnvironmentAppIdCompoundUniqueInput>;
 };
 
-export enum IAppEventCategory {
-  NONE = 'NONE',
-  POST = 'POST',
-  NEWS = 'NEWS',
-  PAYMENT = 'PAYMENT',
-  MAIL = 'MAIL',
-  TRAIN = 'TRAIN',
-  TRAVELLING = 'TRAVELLING',
-  CAR = 'CAR',
-  INDUSTRY = 'INDUSTRY',
-  MUSIC = 'MUSIC',
-  VIDEO = 'VIDEO',
-  MOVIE = 'MOVIE'
-}
-
-export type IAppStatusFilter = {
-  every?: Maybe<IAppStatusWhereInput>;
-  some?: Maybe<IAppStatusWhereInput>;
-  none?: Maybe<IAppStatusWhereInput>;
+export type IEnvironmentAppIdCompoundUniqueInput = {
+  environment: IEnvironment;
+  appId: Scalars['Int'];
 };
 
-export type IAppStatusWhereInput = {
-  id?: Maybe<IIntFilter>;
-  appId?: Maybe<IIntFilter>;
-  state?: Maybe<IAppState>;
-  message?: Maybe<IStringFilter>;
-  environment?: Maybe<IEnvironment>;
-  createdAt?: Maybe<IDateTimeFilter>;
-  updatedAt?: Maybe<IDateTimeFilter>;
-  AND?: Maybe<Array<IAppStatusWhereInput>>;
-  OR?: Maybe<Array<IAppStatusWhereInput>>;
-  NOT?: Maybe<Array<IAppStatusWhereInput>>;
-  app?: Maybe<IAppWhereInput>;
+export type ISubscribeTokenWhereUniqueInput = {
+  id?: Maybe<Scalars['Int']>;
+  token?: Maybe<Scalars['String']>;
+  description_appId?: Maybe<IDescriptionAppIdCompoundUniqueInput>;
 };
 
-export enum IAppState {
-  UP = 'UP',
-  SHUTDOWN = 'SHUTDOWN',
-  UNKNOWN = 'UNKNOWN',
-  CRITICAL = 'CRITICAL',
-  DOWN = 'DOWN'
-}
-
-export type IAppOrderByInput = {
-  id?: Maybe<ISortOrder>;
-  name?: Maybe<ISortOrder>;
-  ownerId?: Maybe<ISortOrder>;
-  createdAt?: Maybe<ISortOrder>;
-  updatedAt?: Maybe<ISortOrder>;
-};
-
-export enum ISortOrder {
-  ASC = 'asc',
-  DESC = 'desc'
-}
-
-export type IAppSubscriptionOrderByInput = {
-  id?: Maybe<ISortOrder>;
-  name?: Maybe<ISortOrder>;
-  customName?: Maybe<ISortOrder>;
-  description?: Maybe<ISortOrder>;
-  appId?: Maybe<ISortOrder>;
-  subscriberId?: Maybe<ISortOrder>;
-  botId?: Maybe<ISortOrder>;
-  channel?: Maybe<ISortOrder>;
-  createdAt?: Maybe<ISortOrder>;
-  updatedAt?: Maybe<ISortOrder>;
-};
-
-export type IBotUserOrderByInput = {
-  id?: Maybe<ISortOrder>;
-  name?: Maybe<ISortOrder>;
-  botUser?: Maybe<ISortOrder>;
-  botId?: Maybe<ISortOrder>;
-  userAccountId?: Maybe<ISortOrder>;
-  createdAt?: Maybe<ISortOrder>;
-  updatedAt?: Maybe<ISortOrder>;
-};
-
-export type IClientSecretOrderByInput = {
-  id?: Maybe<ISortOrder>;
-  environment?: Maybe<ISortOrder>;
-  secret?: Maybe<ISortOrder>;
-  appId?: Maybe<ISortOrder>;
-  createdAt?: Maybe<ISortOrder>;
-  updatedAt?: Maybe<ISortOrder>;
-};
-
-export type ISubscribeTokenOrderByInput = {
-  id?: Maybe<ISortOrder>;
-  description?: Maybe<ISortOrder>;
-  appId?: Maybe<ISortOrder>;
-  token?: Maybe<ISortOrder>;
-  createdAt?: Maybe<ISortOrder>;
-  updatedAt?: Maybe<ISortOrder>;
+export type IDescriptionAppIdCompoundUniqueInput = {
+  description: Scalars['String'];
+  appId: Scalars['Int'];
 };
 
 export type IUserAccountWhereUniqueInput = {
@@ -707,20 +671,22 @@ export type IMutation = {
   createApp: IApp;
   deleteApp: IApp;
   createAppSubscription: IAppSubscription;
+  muteAppSubscription: IAppSubscription;
+  unmuteAppSubscription: IAppSubscription;
   deleteAppSubscription: IAppSubscription;
   signUp: IUserAccountAndToken;
   signIn: IUserAccountAndToken;
   signInViaBot: IUserAccountAndToken;
   generateBotToken: IGenerateBotTokenPayload;
   updateBotUser?: Maybe<IBotUser>;
-  sendAppLogMessage: IClientResponse;
   sendAppEventMessage: IClientResponse;
+  sendAppLogMessage: IClientResponse;
   sendAppStatusMessage: IClientResponse;
   regenerateClientSecret: IClientSecret;
   createSubscribeToken: ISubscribeToken;
   deleteSubscribeToken: ISubscribeToken;
   updateUserAccount?: Maybe<IUserAccount>;
-  mergeUserAccount: IUserAccount;
+  deleteUserAccount: IUserAccount;
 };
 
 
@@ -730,7 +696,7 @@ export type IMutationCreateAppArgs = {
 
 
 export type IMutationDeleteAppArgs = {
-  where: IDeleteInput;
+  where: IDeleteByIdInput;
 };
 
 
@@ -739,8 +705,19 @@ export type IMutationCreateAppSubscriptionArgs = {
 };
 
 
+export type IMutationMuteAppSubscriptionArgs = {
+  where: IUpdateByIdInput;
+  data?: Maybe<IAppSubscriptionMuteInput>;
+};
+
+
+export type IMutationUnmuteAppSubscriptionArgs = {
+  where: IUpdateByIdInput;
+};
+
+
 export type IMutationDeleteAppSubscriptionArgs = {
-  where: IDeleteInput;
+  where: IDeleteByIdInput;
 };
 
 
@@ -770,13 +747,13 @@ export type IMutationUpdateBotUserArgs = {
 };
 
 
-export type IMutationSendAppLogMessageArgs = {
-  data: IAppLogMessageSendInput;
+export type IMutationSendAppEventMessageArgs = {
+  data: IAppEventMessageSendInput;
 };
 
 
-export type IMutationSendAppEventMessageArgs = {
-  data: IAppEventMessageSendInput;
+export type IMutationSendAppLogMessageArgs = {
+  data: IAppLogMessageSendInput;
 };
 
 
@@ -796,7 +773,7 @@ export type IMutationCreateSubscribeTokenArgs = {
 
 
 export type IMutationDeleteSubscribeTokenArgs = {
-  where: IDeleteInput;
+  where: IDeleteByIdInput;
 };
 
 
@@ -806,15 +783,15 @@ export type IMutationUpdateUserAccountArgs = {
 };
 
 
-export type IMutationMergeUserAccountArgs = {
-  data: IUserAccountMergeInput;
+export type IMutationDeleteUserAccountArgs = {
+  where: IDeleteByIdInput;
 };
 
 export type IAppCreateInput = {
   name: Scalars['String'];
 };
 
-export type IDeleteInput = {
+export type IDeleteByIdInput = {
   id: Scalars['Int'];
 };
 
@@ -823,6 +800,14 @@ export type IAppSubscriptionCreateInput = {
   channel: Scalars['String'];
   subscribeToken: Scalars['String'];
   userToken: Scalars['String'];
+};
+
+export type IUpdateByIdInput = {
+  id: Scalars['Int'];
+};
+
+export type IAppSubscriptionMuteInput = {
+  muteUntil?: Maybe<Scalars['DateTime']>;
 };
 
 export type ISignUpInput = {
@@ -860,11 +845,28 @@ export type IBotUserUpdateInput = {
   name?: Maybe<Scalars['String']>;
 };
 
-export type IAppLogMessageSendInput = {
-  level: IAppLogLevel;
+export type IAppEventMessageSendInput = {
+  title: Scalars['String'];
+  category?: Maybe<IAppEventCategory>;
   message: Scalars['String'];
   metadata?: Maybe<Scalars['Json']>;
+  timestamp: Scalars['DateTime'];
 };
+
+export enum IAppEventCategory {
+  NONE = 'NONE',
+  POST = 'POST',
+  NEWS = 'NEWS',
+  PAYMENT = 'PAYMENT',
+  MAIL = 'MAIL',
+  TRAIN = 'TRAIN',
+  TRAVELLING = 'TRAVELLING',
+  CAR = 'CAR',
+  INDUSTRY = 'INDUSTRY',
+  MUSIC = 'MUSIC',
+  VIDEO = 'VIDEO',
+  MOVIE = 'MOVIE'
+}
 
 
 export type IClientResponse = {
@@ -872,18 +874,34 @@ export type IClientResponse = {
   success: Scalars['Boolean'];
 };
 
-export type IAppEventMessageSendInput = {
-  title: Scalars['String'];
-  category?: Maybe<IAppEventCategory>;
+export type IAppLogMessageSendInput = {
+  level: IAppLogLevel;
   message: Scalars['String'];
   metadata?: Maybe<Scalars['Json']>;
+  timestamp: Scalars['DateTime'];
 };
+
+export enum IAppLogLevel {
+  INFO = 'INFO',
+  WARN = 'WARN',
+  ERROR = 'ERROR',
+  FATAL = 'FATAL'
+}
 
 export type IAppStatusMessageSendInput = {
   state: IAppState;
   message: Scalars['String'];
   metadata?: Maybe<Scalars['Json']>;
+  timestamp: Scalars['DateTime'];
 };
+
+export enum IAppState {
+  UP = 'UP',
+  SHUTDOWN = 'SHUTDOWN',
+  UNKNOWN = 'UNKNOWN',
+  CRITICAL = 'CRITICAL',
+  DOWN = 'DOWN'
+}
 
 export type IClientSecretRegenerateInput = {
   id: Scalars['Int'];
@@ -923,9 +941,7 @@ export type IAppCreateWithoutOwnerInput = {
   subscribeTokens?: Maybe<ISubscribeTokenCreateManyWithoutAppInput>;
   appSubscriptions?: Maybe<IAppSubscriptionCreateManyWithoutAppInput>;
   clientSecrets?: Maybe<IClientSecretCreateManyWithoutAppInput>;
-  AppLog?: Maybe<IAppLogCreateManyWithoutAppInput>;
-  AppEvent?: Maybe<IAppEventCreateManyWithoutAppInput>;
-  appStatus?: Maybe<IAppStatusCreateManyWithoutAppInput>;
+  messages?: Maybe<IAppMessageCreateManyWithoutAppInput>;
 };
 
 export type ISubscribeTokenCreateManyWithoutAppInput = {
@@ -949,6 +965,8 @@ export type IAppSubscriptionCreateWithoutAppInput = {
   name: Scalars['String'];
   customName?: Maybe<Scalars['String']>;
   description: Scalars['String'];
+  muted?: Maybe<Scalars['Boolean']>;
+  mutedUntil?: Maybe<Scalars['DateTime']>;
   channel: Scalars['String'];
   createdAt?: Maybe<Scalars['DateTime']>;
   updatedAt?: Maybe<Scalars['DateTime']>;
@@ -1005,6 +1023,8 @@ export type IAppSubscriptionCreateWithoutBotInput = {
   name: Scalars['String'];
   customName?: Maybe<Scalars['String']>;
   description: Scalars['String'];
+  muted?: Maybe<Scalars['Boolean']>;
+  mutedUntil?: Maybe<Scalars['DateTime']>;
   channel: Scalars['String'];
   createdAt?: Maybe<Scalars['DateTime']>;
   updatedAt?: Maybe<Scalars['DateTime']>;
@@ -1024,9 +1044,7 @@ export type IAppCreateWithoutAppSubscriptionsInput = {
   owner: IUserAccountCreateOneWithoutAppsInput;
   subscribeTokens?: Maybe<ISubscribeTokenCreateManyWithoutAppInput>;
   clientSecrets?: Maybe<IClientSecretCreateManyWithoutAppInput>;
-  AppLog?: Maybe<IAppLogCreateManyWithoutAppInput>;
-  AppEvent?: Maybe<IAppEventCreateManyWithoutAppInput>;
-  appStatus?: Maybe<IAppStatusCreateManyWithoutAppInput>;
+  messages?: Maybe<IAppMessageCreateManyWithoutAppInput>;
 };
 
 export type IUserAccountCreateOneWithoutAppsInput = {
@@ -1055,6 +1073,8 @@ export type IAppSubscriptionCreateWithoutSubscriberInput = {
   name: Scalars['String'];
   customName?: Maybe<Scalars['String']>;
   description: Scalars['String'];
+  muted?: Maybe<Scalars['Boolean']>;
+  mutedUntil?: Maybe<Scalars['DateTime']>;
   channel: Scalars['String'];
   createdAt?: Maybe<Scalars['DateTime']>;
   updatedAt?: Maybe<Scalars['DateTime']>;
@@ -1124,31 +1144,38 @@ export type IClientSecretCreateWithoutAppInput = {
   updatedAt?: Maybe<Scalars['DateTime']>;
 };
 
-export type IAppLogCreateManyWithoutAppInput = {
-  create?: Maybe<Array<IAppLogCreateWithoutAppInput>>;
-  connect?: Maybe<Array<IAppLogWhereUniqueInput>>;
+export type IAppMessageCreateManyWithoutAppInput = {
+  create?: Maybe<Array<IAppMessageCreateWithoutAppInput>>;
+  connect?: Maybe<Array<IAppMessageWhereUniqueInput>>;
 };
 
-export type IAppLogCreateWithoutAppInput = {
-  level: IAppLogLevel;
-  message: Scalars['String'];
+export type IAppMessageCreateWithoutAppInput = {
+  type: IAppMessageType;
+  environment: IEnvironment;
+  timestamp: Scalars['DateTime'];
   createdAt?: Maybe<Scalars['DateTime']>;
   updatedAt?: Maybe<Scalars['DateTime']>;
+  event?: Maybe<IAppEventCreateOneWithoutAppMessageInput>;
+  log?: Maybe<IAppLogCreateOneWithoutAppMessageInput>;
+  status?: Maybe<IAppStatusCreateOneWithoutAppMessageInput>;
 };
 
-export type IAppLogWhereUniqueInput = {
-  id?: Maybe<Scalars['Int']>;
+export enum IAppMessageType {
+  EVENT = 'EVENT',
+  LOG = 'LOG',
+  STATUS = 'STATUS'
+}
+
+export type IAppEventCreateOneWithoutAppMessageInput = {
+  create?: Maybe<IAppEventCreateWithoutAppMessageInput>;
+  connect?: Maybe<IAppEventWhereUniqueInput>;
 };
 
-export type IAppEventCreateManyWithoutAppInput = {
-  create?: Maybe<Array<IAppEventCreateWithoutAppInput>>;
-  connect?: Maybe<Array<IAppEventWhereUniqueInput>>;
-};
-
-export type IAppEventCreateWithoutAppInput = {
+export type IAppEventCreateWithoutAppMessageInput = {
   category?: Maybe<IAppEventCategory>;
   title: Scalars['String'];
   message: Scalars['String'];
+  metadata?: Maybe<Scalars['Json']>;
   createdAt?: Maybe<Scalars['DateTime']>;
   updatedAt?: Maybe<Scalars['DateTime']>;
 };
@@ -1157,22 +1184,50 @@ export type IAppEventWhereUniqueInput = {
   id?: Maybe<Scalars['Int']>;
 };
 
-export type IAppStatusCreateManyWithoutAppInput = {
-  create?: Maybe<Array<IAppStatusCreateWithoutAppInput>>;
-  connect?: Maybe<Array<IAppStatusWhereUniqueInput>>;
+export type IAppLogCreateOneWithoutAppMessageInput = {
+  create?: Maybe<IAppLogCreateWithoutAppMessageInput>;
+  connect?: Maybe<IAppLogWhereUniqueInput>;
 };
 
-export type IAppStatusCreateWithoutAppInput = {
+export type IAppLogCreateWithoutAppMessageInput = {
+  level: IAppLogLevel;
+  message: Scalars['String'];
+  metadata?: Maybe<Scalars['Json']>;
+  createdAt?: Maybe<Scalars['DateTime']>;
+  updatedAt?: Maybe<Scalars['DateTime']>;
+};
+
+export type IAppLogWhereUniqueInput = {
+  id?: Maybe<Scalars['Int']>;
+};
+
+export type IAppStatusCreateOneWithoutAppMessageInput = {
+  create?: Maybe<IAppStatusCreateWithoutAppMessageInput>;
+  connect?: Maybe<IAppStatusWhereUniqueInput>;
+};
+
+export type IAppStatusCreateWithoutAppMessageInput = {
   state: IAppState;
   message: Scalars['String'];
   metadata?: Maybe<Scalars['Json']>;
-  environment: IEnvironment;
   createdAt?: Maybe<Scalars['DateTime']>;
   updatedAt?: Maybe<Scalars['DateTime']>;
 };
 
 export type IAppStatusWhereUniqueInput = {
   id?: Maybe<Scalars['Int']>;
+};
+
+export type IAppMessageWhereUniqueInput = {
+  id?: Maybe<Scalars['Int']>;
+  appId_environment_type_timestamp?: Maybe<IAppIdEnvironmentTypeTimestampCompoundUniqueInput>;
+};
+
+export type IAppIdEnvironmentTypeTimestampCompoundUniqueInput = {
+  appId: Scalars['Int'];
+  environment: IEnvironment;
+  type: IAppMessageType;
+  timestamp: Scalars['DateTime'];
 };
 
 export type IAppUpdateWithWhereUniqueWithoutOwnerInput = {
@@ -1187,9 +1242,7 @@ export type IAppUpdateWithoutOwnerDataInput = {
   subscribeTokens?: Maybe<ISubscribeTokenUpdateManyWithoutAppInput>;
   appSubscriptions?: Maybe<IAppSubscriptionUpdateManyWithoutAppInput>;
   clientSecrets?: Maybe<IClientSecretUpdateManyWithoutAppInput>;
-  AppLog?: Maybe<IAppLogUpdateManyWithoutAppInput>;
-  AppEvent?: Maybe<IAppEventUpdateManyWithoutAppInput>;
-  appStatus?: Maybe<IAppStatusUpdateManyWithoutAppInput>;
+  messages?: Maybe<IAppMessageUpdateManyWithoutAppInput>;
 };
 
 export type ISubscribeTokenUpdateManyWithoutAppInput = {
@@ -1224,8 +1277,8 @@ export type ISubscribeTokenUpdateManyWithWhereNestedInput = {
 export type ISubscribeTokenScalarWhereInput = {
   id?: Maybe<IIntFilter>;
   description?: Maybe<IStringFilter>;
-  appId?: Maybe<IIntFilter>;
   token?: Maybe<IStringFilter>;
+  appId?: Maybe<IIntFilter>;
   createdAt?: Maybe<IDateTimeFilter>;
   updatedAt?: Maybe<IDateTimeFilter>;
   AND?: Maybe<Array<ISubscribeTokenScalarWhereInput>>;
@@ -1267,6 +1320,8 @@ export type IAppSubscriptionUpdateWithoutAppDataInput = {
   name?: Maybe<Scalars['String']>;
   customName?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
+  muted?: Maybe<Scalars['Boolean']>;
+  mutedUntil?: Maybe<Scalars['DateTime']>;
   channel?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['DateTime']>;
   updatedAt?: Maybe<Scalars['DateTime']>;
@@ -1351,6 +1406,8 @@ export type IAppSubscriptionUpdateWithoutBotDataInput = {
   name?: Maybe<Scalars['String']>;
   customName?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
+  muted?: Maybe<Scalars['Boolean']>;
+  mutedUntil?: Maybe<Scalars['DateTime']>;
   channel?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['DateTime']>;
   updatedAt?: Maybe<Scalars['DateTime']>;
@@ -1372,9 +1429,7 @@ export type IAppUpdateWithoutAppSubscriptionsDataInput = {
   owner?: Maybe<IUserAccountUpdateOneRequiredWithoutAppsInput>;
   subscribeTokens?: Maybe<ISubscribeTokenUpdateManyWithoutAppInput>;
   clientSecrets?: Maybe<IClientSecretUpdateManyWithoutAppInput>;
-  AppLog?: Maybe<IAppLogUpdateManyWithoutAppInput>;
-  AppEvent?: Maybe<IAppEventUpdateManyWithoutAppInput>;
-  appStatus?: Maybe<IAppStatusUpdateManyWithoutAppInput>;
+  messages?: Maybe<IAppMessageUpdateManyWithoutAppInput>;
 };
 
 export type IUserAccountUpdateOneRequiredWithoutAppsInput = {
@@ -1417,6 +1472,8 @@ export type IAppSubscriptionUpdateWithoutSubscriberDataInput = {
   name?: Maybe<Scalars['String']>;
   customName?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
+  muted?: Maybe<Scalars['Boolean']>;
+  mutedUntil?: Maybe<Scalars['DateTime']>;
   channel?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['DateTime']>;
   updatedAt?: Maybe<Scalars['DateTime']>;
@@ -1531,6 +1588,8 @@ export type IAppSubscriptionScalarWhereInput = {
   name?: Maybe<IStringFilter>;
   customName?: Maybe<INullableStringFilter>;
   description?: Maybe<IStringFilter>;
+  muted?: Maybe<IBooleanFilter>;
+  mutedUntil?: Maybe<INullableDateTimeFilter>;
   appId?: Maybe<IIntFilter>;
   subscriberId?: Maybe<IIntFilter>;
   botId?: Maybe<IIntFilter>;
@@ -1546,6 +1605,8 @@ export type IAppSubscriptionUpdateManyDataInput = {
   name?: Maybe<Scalars['String']>;
   customName?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
+  muted?: Maybe<Scalars['Boolean']>;
+  mutedUntil?: Maybe<Scalars['DateTime']>;
   channel?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['DateTime']>;
   updatedAt?: Maybe<Scalars['DateTime']>;
@@ -1616,174 +1677,131 @@ export type IClientSecretUpsertWithWhereUniqueWithoutAppInput = {
   create: IClientSecretCreateWithoutAppInput;
 };
 
-export type IAppLogUpdateManyWithoutAppInput = {
-  create?: Maybe<Array<IAppLogCreateWithoutAppInput>>;
-  connect?: Maybe<Array<IAppLogWhereUniqueInput>>;
-  set?: Maybe<Array<IAppLogWhereUniqueInput>>;
-  disconnect?: Maybe<Array<IAppLogWhereUniqueInput>>;
-  delete?: Maybe<Array<IAppLogWhereUniqueInput>>;
-  update?: Maybe<Array<IAppLogUpdateWithWhereUniqueWithoutAppInput>>;
-  updateMany?: Maybe<Array<IAppLogUpdateManyWithWhereNestedInput>>;
-  deleteMany?: Maybe<Array<IAppLogScalarWhereInput>>;
-  upsert?: Maybe<Array<IAppLogUpsertWithWhereUniqueWithoutAppInput>>;
+export type IAppMessageUpdateManyWithoutAppInput = {
+  create?: Maybe<Array<IAppMessageCreateWithoutAppInput>>;
+  connect?: Maybe<Array<IAppMessageWhereUniqueInput>>;
+  set?: Maybe<Array<IAppMessageWhereUniqueInput>>;
+  disconnect?: Maybe<Array<IAppMessageWhereUniqueInput>>;
+  delete?: Maybe<Array<IAppMessageWhereUniqueInput>>;
+  update?: Maybe<Array<IAppMessageUpdateWithWhereUniqueWithoutAppInput>>;
+  updateMany?: Maybe<Array<IAppMessageUpdateManyWithWhereNestedInput>>;
+  deleteMany?: Maybe<Array<IAppMessageScalarWhereInput>>;
+  upsert?: Maybe<Array<IAppMessageUpsertWithWhereUniqueWithoutAppInput>>;
 };
 
-export type IAppLogUpdateWithWhereUniqueWithoutAppInput = {
-  where: IAppLogWhereUniqueInput;
-  data: IAppLogUpdateWithoutAppDataInput;
+export type IAppMessageUpdateWithWhereUniqueWithoutAppInput = {
+  where: IAppMessageWhereUniqueInput;
+  data: IAppMessageUpdateWithoutAppDataInput;
 };
 
-export type IAppLogUpdateWithoutAppDataInput = {
-  level?: Maybe<IAppLogLevel>;
-  message?: Maybe<Scalars['String']>;
+export type IAppMessageUpdateWithoutAppDataInput = {
+  type?: Maybe<IAppMessageType>;
+  environment?: Maybe<IEnvironment>;
+  timestamp?: Maybe<Scalars['DateTime']>;
   createdAt?: Maybe<Scalars['DateTime']>;
   updatedAt?: Maybe<Scalars['DateTime']>;
+  event?: Maybe<IAppEventUpdateOneWithoutAppMessageInput>;
+  log?: Maybe<IAppLogUpdateOneWithoutAppMessageInput>;
+  status?: Maybe<IAppStatusUpdateOneWithoutAppMessageInput>;
 };
 
-export type IAppLogUpdateManyWithWhereNestedInput = {
-  where: IAppLogScalarWhereInput;
-  data: IAppLogUpdateManyDataInput;
+export type IAppEventUpdateOneWithoutAppMessageInput = {
+  create?: Maybe<IAppEventCreateWithoutAppMessageInput>;
+  connect?: Maybe<IAppEventWhereUniqueInput>;
+  disconnect?: Maybe<Scalars['Boolean']>;
+  delete?: Maybe<Scalars['Boolean']>;
+  update?: Maybe<IAppEventUpdateWithoutAppMessageDataInput>;
+  upsert?: Maybe<IAppEventUpsertWithoutAppMessageInput>;
 };
 
-export type IAppLogScalarWhereInput = {
-  id?: Maybe<IIntFilter>;
-  appId?: Maybe<IIntFilter>;
-  level?: Maybe<IAppLogLevel>;
-  message?: Maybe<IStringFilter>;
-  createdAt?: Maybe<IDateTimeFilter>;
-  updatedAt?: Maybe<IDateTimeFilter>;
-  AND?: Maybe<Array<IAppLogScalarWhereInput>>;
-  OR?: Maybe<Array<IAppLogScalarWhereInput>>;
-  NOT?: Maybe<Array<IAppLogScalarWhereInput>>;
-};
-
-export type IAppLogUpdateManyDataInput = {
-  level?: Maybe<IAppLogLevel>;
-  message?: Maybe<Scalars['String']>;
-  createdAt?: Maybe<Scalars['DateTime']>;
-  updatedAt?: Maybe<Scalars['DateTime']>;
-};
-
-export type IAppLogUpsertWithWhereUniqueWithoutAppInput = {
-  where: IAppLogWhereUniqueInput;
-  update: IAppLogUpdateWithoutAppDataInput;
-  create: IAppLogCreateWithoutAppInput;
-};
-
-export type IAppEventUpdateManyWithoutAppInput = {
-  create?: Maybe<Array<IAppEventCreateWithoutAppInput>>;
-  connect?: Maybe<Array<IAppEventWhereUniqueInput>>;
-  set?: Maybe<Array<IAppEventWhereUniqueInput>>;
-  disconnect?: Maybe<Array<IAppEventWhereUniqueInput>>;
-  delete?: Maybe<Array<IAppEventWhereUniqueInput>>;
-  update?: Maybe<Array<IAppEventUpdateWithWhereUniqueWithoutAppInput>>;
-  updateMany?: Maybe<Array<IAppEventUpdateManyWithWhereNestedInput>>;
-  deleteMany?: Maybe<Array<IAppEventScalarWhereInput>>;
-  upsert?: Maybe<Array<IAppEventUpsertWithWhereUniqueWithoutAppInput>>;
-};
-
-export type IAppEventUpdateWithWhereUniqueWithoutAppInput = {
-  where: IAppEventWhereUniqueInput;
-  data: IAppEventUpdateWithoutAppDataInput;
-};
-
-export type IAppEventUpdateWithoutAppDataInput = {
+export type IAppEventUpdateWithoutAppMessageDataInput = {
   category?: Maybe<IAppEventCategory>;
   title?: Maybe<Scalars['String']>;
   message?: Maybe<Scalars['String']>;
+  metadata?: Maybe<Scalars['Json']>;
   createdAt?: Maybe<Scalars['DateTime']>;
   updatedAt?: Maybe<Scalars['DateTime']>;
 };
 
-export type IAppEventUpdateManyWithWhereNestedInput = {
-  where: IAppEventScalarWhereInput;
-  data: IAppEventUpdateManyDataInput;
+export type IAppEventUpsertWithoutAppMessageInput = {
+  update: IAppEventUpdateWithoutAppMessageDataInput;
+  create: IAppEventCreateWithoutAppMessageInput;
 };
 
-export type IAppEventScalarWhereInput = {
-  id?: Maybe<IIntFilter>;
-  appId?: Maybe<IIntFilter>;
-  category?: Maybe<IAppEventCategory>;
-  title?: Maybe<IStringFilter>;
-  message?: Maybe<IStringFilter>;
-  createdAt?: Maybe<IDateTimeFilter>;
-  updatedAt?: Maybe<IDateTimeFilter>;
-  AND?: Maybe<Array<IAppEventScalarWhereInput>>;
-  OR?: Maybe<Array<IAppEventScalarWhereInput>>;
-  NOT?: Maybe<Array<IAppEventScalarWhereInput>>;
+export type IAppLogUpdateOneWithoutAppMessageInput = {
+  create?: Maybe<IAppLogCreateWithoutAppMessageInput>;
+  connect?: Maybe<IAppLogWhereUniqueInput>;
+  disconnect?: Maybe<Scalars['Boolean']>;
+  delete?: Maybe<Scalars['Boolean']>;
+  update?: Maybe<IAppLogUpdateWithoutAppMessageDataInput>;
+  upsert?: Maybe<IAppLogUpsertWithoutAppMessageInput>;
 };
 
-export type IAppEventUpdateManyDataInput = {
-  category?: Maybe<IAppEventCategory>;
-  title?: Maybe<Scalars['String']>;
+export type IAppLogUpdateWithoutAppMessageDataInput = {
+  level?: Maybe<IAppLogLevel>;
   message?: Maybe<Scalars['String']>;
+  metadata?: Maybe<Scalars['Json']>;
   createdAt?: Maybe<Scalars['DateTime']>;
   updatedAt?: Maybe<Scalars['DateTime']>;
 };
 
-export type IAppEventUpsertWithWhereUniqueWithoutAppInput = {
-  where: IAppEventWhereUniqueInput;
-  update: IAppEventUpdateWithoutAppDataInput;
-  create: IAppEventCreateWithoutAppInput;
+export type IAppLogUpsertWithoutAppMessageInput = {
+  update: IAppLogUpdateWithoutAppMessageDataInput;
+  create: IAppLogCreateWithoutAppMessageInput;
 };
 
-export type IAppStatusUpdateManyWithoutAppInput = {
-  create?: Maybe<Array<IAppStatusCreateWithoutAppInput>>;
-  connect?: Maybe<Array<IAppStatusWhereUniqueInput>>;
-  set?: Maybe<Array<IAppStatusWhereUniqueInput>>;
-  disconnect?: Maybe<Array<IAppStatusWhereUniqueInput>>;
-  delete?: Maybe<Array<IAppStatusWhereUniqueInput>>;
-  update?: Maybe<Array<IAppStatusUpdateWithWhereUniqueWithoutAppInput>>;
-  updateMany?: Maybe<Array<IAppStatusUpdateManyWithWhereNestedInput>>;
-  deleteMany?: Maybe<Array<IAppStatusScalarWhereInput>>;
-  upsert?: Maybe<Array<IAppStatusUpsertWithWhereUniqueWithoutAppInput>>;
+export type IAppStatusUpdateOneWithoutAppMessageInput = {
+  create?: Maybe<IAppStatusCreateWithoutAppMessageInput>;
+  connect?: Maybe<IAppStatusWhereUniqueInput>;
+  disconnect?: Maybe<Scalars['Boolean']>;
+  delete?: Maybe<Scalars['Boolean']>;
+  update?: Maybe<IAppStatusUpdateWithoutAppMessageDataInput>;
+  upsert?: Maybe<IAppStatusUpsertWithoutAppMessageInput>;
 };
 
-export type IAppStatusUpdateWithWhereUniqueWithoutAppInput = {
-  where: IAppStatusWhereUniqueInput;
-  data: IAppStatusUpdateWithoutAppDataInput;
-};
-
-export type IAppStatusUpdateWithoutAppDataInput = {
+export type IAppStatusUpdateWithoutAppMessageDataInput = {
   state?: Maybe<IAppState>;
   message?: Maybe<Scalars['String']>;
   metadata?: Maybe<Scalars['Json']>;
-  environment?: Maybe<IEnvironment>;
   createdAt?: Maybe<Scalars['DateTime']>;
   updatedAt?: Maybe<Scalars['DateTime']>;
 };
 
-export type IAppStatusUpdateManyWithWhereNestedInput = {
-  where: IAppStatusScalarWhereInput;
-  data: IAppStatusUpdateManyDataInput;
+export type IAppStatusUpsertWithoutAppMessageInput = {
+  update: IAppStatusUpdateWithoutAppMessageDataInput;
+  create: IAppStatusCreateWithoutAppMessageInput;
 };
 
-export type IAppStatusScalarWhereInput = {
+export type IAppMessageUpdateManyWithWhereNestedInput = {
+  where: IAppMessageScalarWhereInput;
+  data: IAppMessageUpdateManyDataInput;
+};
+
+export type IAppMessageScalarWhereInput = {
   id?: Maybe<IIntFilter>;
+  type?: Maybe<IAppMessageType>;
   appId?: Maybe<IIntFilter>;
-  state?: Maybe<IAppState>;
-  message?: Maybe<IStringFilter>;
   environment?: Maybe<IEnvironment>;
+  timestamp?: Maybe<IDateTimeFilter>;
   createdAt?: Maybe<IDateTimeFilter>;
   updatedAt?: Maybe<IDateTimeFilter>;
-  AND?: Maybe<Array<IAppStatusScalarWhereInput>>;
-  OR?: Maybe<Array<IAppStatusScalarWhereInput>>;
-  NOT?: Maybe<Array<IAppStatusScalarWhereInput>>;
+  AND?: Maybe<Array<IAppMessageScalarWhereInput>>;
+  OR?: Maybe<Array<IAppMessageScalarWhereInput>>;
+  NOT?: Maybe<Array<IAppMessageScalarWhereInput>>;
 };
 
-export type IAppStatusUpdateManyDataInput = {
-  state?: Maybe<IAppState>;
-  message?: Maybe<Scalars['String']>;
-  metadata?: Maybe<Scalars['Json']>;
+export type IAppMessageUpdateManyDataInput = {
+  type?: Maybe<IAppMessageType>;
   environment?: Maybe<IEnvironment>;
+  timestamp?: Maybe<Scalars['DateTime']>;
   createdAt?: Maybe<Scalars['DateTime']>;
   updatedAt?: Maybe<Scalars['DateTime']>;
 };
 
-export type IAppStatusUpsertWithWhereUniqueWithoutAppInput = {
-  where: IAppStatusWhereUniqueInput;
-  update: IAppStatusUpdateWithoutAppDataInput;
-  create: IAppStatusCreateWithoutAppInput;
+export type IAppMessageUpsertWithWhereUniqueWithoutAppInput = {
+  where: IAppMessageWhereUniqueInput;
+  update: IAppMessageUpdateWithoutAppDataInput;
+  create: IAppMessageCreateWithoutAppInput;
 };
 
 export type IAppUpsertWithoutAppSubscriptionsInput = {
@@ -1831,9 +1849,7 @@ export type IAppScalarWhereInput = {
   subscribeTokens?: Maybe<ISubscribeTokenFilter>;
   appSubscriptions?: Maybe<IAppSubscriptionFilter>;
   clientSecrets?: Maybe<IClientSecretFilter>;
-  AppLog?: Maybe<IAppLogFilter>;
-  AppEvent?: Maybe<IAppEventFilter>;
-  appStatus?: Maybe<IAppStatusFilter>;
+  messages?: Maybe<IAppMessageFilter>;
   createdAt?: Maybe<IDateTimeFilter>;
   updatedAt?: Maybe<IDateTimeFilter>;
   AND?: Maybe<Array<IAppScalarWhereInput>>;
@@ -1853,8 +1869,14 @@ export type IAppUpsertWithWhereUniqueWithoutOwnerInput = {
   create: IAppCreateWithoutOwnerInput;
 };
 
-export type IUserAccountMergeInput = {
-  token: Scalars['String'];
+export type ISubscription = {
+  __typename?: 'Subscription';
+  appMessage: IAppMessage;
+};
+
+
+export type ISubscriptionAppMessageArgs = {
+  app: Scalars['Int'];
 };
 
 export enum IBotJobType {
@@ -1882,6 +1904,7 @@ export type IAppEventMessageJob = IBotJob & {
   message: Scalars['String'];
   metadata?: Maybe<Scalars['Json']>;
   status: IAppState;
+  timestamp: Scalars['DateTime'];
 };
 
 export type IAppLogMessageJob = IBotJob & {
@@ -1896,6 +1919,7 @@ export type IAppLogMessageJob = IBotJob & {
   message: Scalars['String'];
   metadata?: Maybe<Scalars['Json']>;
   status: IAppState;
+  timestamp: Scalars['DateTime'];
 };
 
 export type IAppStatusMessageJob = IBotJob & {
@@ -1910,4 +1934,45 @@ export type IAppStatusMessageJob = IBotJob & {
   oldState: IAppState;
   message: Scalars['String'];
   metadata?: Maybe<Scalars['Json']>;
+  timestamp: Scalars['DateTime'];
+};
+
+export type IAppEvent = IAppMessage & {
+  __typename?: 'AppEvent';
+  id: Scalars['Int'];
+  environment: IEnvironment;
+  appId: Scalars['Int'];
+  app: IApp;
+  title: Scalars['String'];
+  category: IAppEventCategory;
+  message: Scalars['String'];
+  metadata?: Maybe<Scalars['Json']>;
+  createdAt: Scalars['DateTime'];
+  updatedAt: Scalars['DateTime'];
+};
+
+export type IAppLog = IAppMessage & {
+  __typename?: 'AppLog';
+  id: Scalars['Int'];
+  environment: IEnvironment;
+  appId: Scalars['Int'];
+  app: IApp;
+  level: IAppLogLevel;
+  message: Scalars['String'];
+  metadata?: Maybe<Scalars['Json']>;
+  createdAt: Scalars['DateTime'];
+  updatedAt: Scalars['DateTime'];
+};
+
+export type IAppStatus = IAppMessage & {
+  __typename?: 'AppStatus';
+  id: Scalars['Int'];
+  environment: IEnvironment;
+  appId: Scalars['Int'];
+  app: IApp;
+  state: IAppState;
+  message: Scalars['String'];
+  metadata?: Maybe<Scalars['Json']>;
+  createdAt: Scalars['DateTime'];
+  updatedAt: Scalars['DateTime'];
 };

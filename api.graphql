@@ -1,6 +1,7 @@
 schema {
   query: Query
   mutation: Mutation
+  subscription: Subscription
 }
 type Query {
   app(where: AppWhereUniqueInput!): App
@@ -30,13 +31,15 @@ type App {
   name: String!
   ownerId: Int!
   owner: UserAccount!
-  subscribeTokens(first: Int!, last: Int!, before: SubscribeTokenWhereUniqueInput, after: SubscribeTokenWhereUniqueInput): [SubscribeToken!]!
-  appSubscriptions(first: Int!, last: Int!, before: AppSubscriptionWhereUniqueInput, after: AppSubscriptionWhereUniqueInput): [AppSubscription!]!
-  clientSecrets(first: Int!, last: Int!, before: ClientSecretWhereUniqueInput, after: ClientSecretWhereUniqueInput): [ClientSecret!]!
-  createdAt: DateTime!
-  updatedAt: DateTime!
+  subscribeTokens(where: SubscribeTokenWhereInput, orderBy: SubscribeTokenOrderByInput): [SubscribeToken!]!
+  appSubscriptions(where: AppSubscriptionWhereInput, orderBy: AppSubscriptionOrderByInput): [AppSubscription!]!
+  clientSecrets(where: ClientSecretWhereInput, orderBy: ClientSecretOrderByInput): [ClientSecret!]!
+  messages(where: AppMessageWhereInput): [AppMessage!]!
   subscribeTokenCount: Int!
   appSubscriptionCount: Int!
+  metrics(period: AppMetricsPeriod! = month): AppMetrics!
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 type UserAccount {
   id: Int!
@@ -44,10 +47,10 @@ type UserAccount {
   name: String
   email: String
   role: Role!
-  botUsers(first: Int!, last: Int!, before: BotUserWhereUniqueInput, after: BotUserWhereUniqueInput): [BotUser!]!
-  apps(first: Int!, last: Int!, before: AppWhereUniqueInput, after: AppWhereUniqueInput): [App!]!
+  botUsers(where: BotUserWhereInput, orderBy: BotUserOrderByInput): [BotUser!]!
+  apps(where: AppWhereInput, orderBy: AppOrderByInput): [App!]!
   appCount: Int!
-  appSubscriptions(first: Int!, last: Int!, before: AppSubscriptionWhereUniqueInput, after: AppSubscriptionWhereUniqueInput): [AppSubscription!]!
+  appSubscriptions(where: AppSubscriptionWhereInput, orderBy: AppSubscriptionOrderByInput): [AppSubscription!]!
   requiresUpdate: UpdateRequiredPayload!
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -56,13 +59,220 @@ enum Role {
   ADMIN
   USER
 }
-input BotUserWhereUniqueInput {
-  id: Int
-  botUser_botId: BotUserBotIdCompoundUniqueInput
+input BotUserWhereInput {
+  id: IntFilter
+  name: NullableStringFilter
+  botUser: StringFilter
+  botId: IntFilter
+  userAccountId: IntFilter
+  createdAt: DateTimeFilter
+  updatedAt: DateTimeFilter
+  AND: [BotUserWhereInput!]
+  OR: [BotUserWhereInput!]
+  NOT: [BotUserWhereInput!]
+  bot: BotWhereInput
+  userAccount: UserAccountWhereInput
 }
-input BotUserBotIdCompoundUniqueInput {
-  botUser: String!
-  botId: Int!
+input IntFilter {
+  equals: Int
+  not: Int
+  in: [Int!]
+  notIn: [Int!]
+  lt: Int
+  lte: Int
+  gt: Int
+  gte: Int
+}
+input NullableStringFilter {
+  equals: String
+  not: String
+  in: [String!]
+  notIn: [String!]
+  lt: String
+  lte: String
+  gt: String
+  gte: String
+  contains: String
+  startsWith: String
+  endsWith: String
+}
+input StringFilter {
+  equals: String
+  not: String
+  in: [String!]
+  notIn: [String!]
+  lt: String
+  lte: String
+  gt: String
+  gte: String
+  contains: String
+  startsWith: String
+  endsWith: String
+}
+input DateTimeFilter {
+  equals: DateTime
+  not: DateTime
+  in: [DateTime!]
+  notIn: [DateTime!]
+  lt: DateTime
+  lte: DateTime
+  gt: DateTime
+  gte: DateTime
+}
+"""A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar."""
+scalar DateTime
+input BotWhereInput {
+  id: IntFilter
+  type: BotType
+  botUsers: BotUserFilter
+  appSubscriptions: AppSubscriptionFilter
+  AND: [BotWhereInput!]
+  OR: [BotWhereInput!]
+  NOT: [BotWhereInput!]
+}
+enum BotType {
+  SLACK
+  TELEGRAM
+}
+input BotUserFilter {
+  every: BotUserWhereInput
+  some: BotUserWhereInput
+  none: BotUserWhereInput
+}
+input AppSubscriptionFilter {
+  every: AppSubscriptionWhereInput
+  some: AppSubscriptionWhereInput
+  none: AppSubscriptionWhereInput
+}
+input AppSubscriptionWhereInput {
+  id: IntFilter
+  name: StringFilter
+  customName: NullableStringFilter
+  description: StringFilter
+  muted: BooleanFilter
+  mutedUntil: NullableDateTimeFilter
+  appId: IntFilter
+  subscriberId: IntFilter
+  botId: IntFilter
+  channel: StringFilter
+  createdAt: DateTimeFilter
+  updatedAt: DateTimeFilter
+  AND: [AppSubscriptionWhereInput!]
+  OR: [AppSubscriptionWhereInput!]
+  NOT: [AppSubscriptionWhereInput!]
+  app: AppWhereInput
+  subscriber: UserAccountWhereInput
+  bot: BotWhereInput
+}
+input BooleanFilter {
+  equals: Boolean
+  not: Boolean
+}
+input NullableDateTimeFilter {
+  equals: DateTime
+  not: DateTime
+  in: [DateTime!]
+  notIn: [DateTime!]
+  lt: DateTime
+  lte: DateTime
+  gt: DateTime
+  gte: DateTime
+}
+input AppWhereInput {
+  id: IntFilter
+  name: StringFilter
+  ownerId: IntFilter
+  subscribeTokens: SubscribeTokenFilter
+  appSubscriptions: AppSubscriptionFilter
+  clientSecrets: ClientSecretFilter
+  messages: AppMessageFilter
+  createdAt: DateTimeFilter
+  updatedAt: DateTimeFilter
+  AND: [AppWhereInput!]
+  OR: [AppWhereInput!]
+  NOT: [AppWhereInput!]
+  owner: UserAccountWhereInput
+}
+input SubscribeTokenFilter {
+  every: SubscribeTokenWhereInput
+  some: SubscribeTokenWhereInput
+  none: SubscribeTokenWhereInput
+}
+input SubscribeTokenWhereInput {
+  id: IntFilter
+  description: StringFilter
+  token: StringFilter
+  appId: IntFilter
+  createdAt: DateTimeFilter
+  updatedAt: DateTimeFilter
+  AND: [SubscribeTokenWhereInput!]
+  OR: [SubscribeTokenWhereInput!]
+  NOT: [SubscribeTokenWhereInput!]
+  app: AppWhereInput
+}
+input ClientSecretFilter {
+  every: ClientSecretWhereInput
+  some: ClientSecretWhereInput
+  none: ClientSecretWhereInput
+}
+input ClientSecretWhereInput {
+  id: IntFilter
+  environment: Environment
+  secret: StringFilter
+  appId: IntFilter
+  createdAt: DateTimeFilter
+  updatedAt: DateTimeFilter
+  AND: [ClientSecretWhereInput!]
+  OR: [ClientSecretWhereInput!]
+  NOT: [ClientSecretWhereInput!]
+  app: AppWhereInput
+}
+enum Environment {
+  DEVELOPMENT
+  TEST
+  PRODUCTION
+}
+input AppMessageFilter {
+  every: AppMessageWhereInput
+  some: AppMessageWhereInput
+  none: AppMessageWhereInput
+}
+input AppMessageWhereInput {
+  environment: Environment = PRODUCTION
+}
+input UserAccountWhereInput {
+  id: IntFilter
+  nickname: NullableStringFilter
+  name: NullableStringFilter
+  email: NullableStringFilter
+  password: NullableStringFilter
+  role: Role
+  botUsers: BotUserFilter
+  apps: AppFilter
+  appSubscriptions: AppSubscriptionFilter
+  createdAt: DateTimeFilter
+  updatedAt: DateTimeFilter
+  AND: [UserAccountWhereInput!]
+  OR: [UserAccountWhereInput!]
+  NOT: [UserAccountWhereInput!]
+}
+input AppFilter {
+  every: AppWhereInput
+  some: AppWhereInput
+  none: AppWhereInput
+}
+input BotUserOrderByInput {
+  id: SortOrder
+  name: SortOrder
+  botUser: SortOrder
+  botId: SortOrder
+  userAccountId: SortOrder
+  createdAt: SortOrder
+  updatedAt: SortOrder
+}
+enum SortOrder {
+  asc
+  desc
 }
 type BotUser {
   id: Int!
@@ -82,9 +292,13 @@ type Bot {
   botUsers(first: Int!, last: Int!, before: BotUserWhereUniqueInput, after: BotUserWhereUniqueInput): [BotUser!]!
   appSubscriptions(first: Int!, last: Int!, before: AppSubscriptionWhereUniqueInput, after: AppSubscriptionWhereUniqueInput): [AppSubscription!]!
 }
-enum BotType {
-  SLACK
-  TELEGRAM
+input BotUserWhereUniqueInput {
+  id: Int
+  botUser_botId: BotUserBotIdCompoundUniqueInput
+}
+input BotUserBotIdCompoundUniqueInput {
+  botUser: String!
+  botId: Int!
 }
 input AppSubscriptionWhereUniqueInput {
   id: Int
@@ -104,6 +318,8 @@ type AppSubscription {
   id: Int!
   name: String!
   description: String!
+  muted: Boolean!
+  mutedUntil: DateTime
   appId: Int!
   app: App!
   subscriberId: Int!
@@ -114,21 +330,39 @@ type AppSubscription {
   createdAt: DateTime!
   updatedAt: DateTime!
 }
-"""A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar."""
-scalar DateTime
 type UpdateRequiredPayload {
   required: Boolean!
   instant: Boolean!
   fields: [String!]!
 }
-input SubscribeTokenWhereUniqueInput {
-  id: Int
-  token: String
-  description_appId: DescriptionAppIdCompoundUniqueInput
+input AppOrderByInput {
+  id: SortOrder
+  name: SortOrder
+  ownerId: SortOrder
+  createdAt: SortOrder
+  updatedAt: SortOrder
 }
-input DescriptionAppIdCompoundUniqueInput {
-  description: String!
-  appId: Int!
+input AppSubscriptionOrderByInput {
+  id: SortOrder
+  name: SortOrder
+  customName: SortOrder
+  description: SortOrder
+  muted: SortOrder
+  mutedUntil: SortOrder
+  appId: SortOrder
+  subscriberId: SortOrder
+  botId: SortOrder
+  channel: SortOrder
+  createdAt: SortOrder
+  updatedAt: SortOrder
+}
+input SubscribeTokenOrderByInput {
+  id: SortOrder
+  description: SortOrder
+  token: SortOrder
+  appId: SortOrder
+  createdAt: SortOrder
+  updatedAt: SortOrder
 }
 type SubscribeToken {
   id: Int!
@@ -139,19 +373,13 @@ type SubscribeToken {
   createdAt: DateTime!
   updatedAt: DateTime!
 }
-input ClientSecretWhereUniqueInput {
-  id: Int
-  secret: String
-  environment_appId: EnvironmentAppIdCompoundUniqueInput
-}
-input EnvironmentAppIdCompoundUniqueInput {
-  environment: Environment!
-  appId: Int!
-}
-enum Environment {
-  DEVELOPMENT
-  TEST
-  PRODUCTION
+input ClientSecretOrderByInput {
+  id: SortOrder
+  environment: SortOrder
+  secret: SortOrder
+  appId: SortOrder
+  createdAt: SortOrder
+  updatedAt: SortOrder
 }
 type ClientSecret {
   id: Int!
@@ -162,302 +390,42 @@ type ClientSecret {
   createdAt: DateTime!
   updatedAt: DateTime!
 }
-input AppWhereInput {
-  id: IntFilter
-  name: StringFilter
-  ownerId: IntFilter
-  subscribeTokens: SubscribeTokenFilter
-  appSubscriptions: AppSubscriptionFilter
-  clientSecrets: ClientSecretFilter
-  AppLog: AppLogFilter
-  AppEvent: AppEventFilter
-  appStatus: AppStatusFilter
-  createdAt: DateTimeFilter
-  updatedAt: DateTimeFilter
-  AND: [AppWhereInput!]
-  OR: [AppWhereInput!]
-  NOT: [AppWhereInput!]
-  owner: UserAccountWhereInput
+interface AppMessage {
+  id: Int!
+  environment: Environment!
+  appId: Int!
+  app: App!
 }
-input IntFilter {
-  equals: Int
-  not: Int
-  in: [Int!]
-  notIn: [Int!]
-  lt: Int
-  lte: Int
-  gt: Int
-  gte: Int
+enum AppMetricsPeriod {
+  day
+  week
+  month
 }
-input StringFilter {
-  equals: String
-  not: String
-  in: [String!]
-  notIn: [String!]
-  lt: String
-  lte: String
-  gt: String
-  gte: String
-  contains: String
-  startsWith: String
-  endsWith: String
+type AppMetrics {
+  start: DateTime!
+  end: DateTime!
+  logs: Int!
+  events: Int!
+  statuses: Int!
+  limit: Int!
 }
-input SubscribeTokenFilter {
-  every: SubscribeTokenWhereInput
-  some: SubscribeTokenWhereInput
-  none: SubscribeTokenWhereInput
+input ClientSecretWhereUniqueInput {
+  id: Int
+  secret: String
+  environment_appId: EnvironmentAppIdCompoundUniqueInput
 }
-input SubscribeTokenWhereInput {
-  id: IntFilter
-  description: StringFilter
-  appId: IntFilter
-  token: StringFilter
-  createdAt: DateTimeFilter
-  updatedAt: DateTimeFilter
-  AND: [SubscribeTokenWhereInput!]
-  OR: [SubscribeTokenWhereInput!]
-  NOT: [SubscribeTokenWhereInput!]
-  app: AppWhereInput
+input EnvironmentAppIdCompoundUniqueInput {
+  environment: Environment!
+  appId: Int!
 }
-input DateTimeFilter {
-  equals: DateTime
-  not: DateTime
-  in: [DateTime!]
-  notIn: [DateTime!]
-  lt: DateTime
-  lte: DateTime
-  gt: DateTime
-  gte: DateTime
+input SubscribeTokenWhereUniqueInput {
+  id: Int
+  token: String
+  description_appId: DescriptionAppIdCompoundUniqueInput
 }
-input AppSubscriptionFilter {
-  every: AppSubscriptionWhereInput
-  some: AppSubscriptionWhereInput
-  none: AppSubscriptionWhereInput
-}
-input AppSubscriptionWhereInput {
-  id: IntFilter
-  name: StringFilter
-  customName: NullableStringFilter
-  description: StringFilter
-  appId: IntFilter
-  subscriberId: IntFilter
-  botId: IntFilter
-  channel: StringFilter
-  createdAt: DateTimeFilter
-  updatedAt: DateTimeFilter
-  AND: [AppSubscriptionWhereInput!]
-  OR: [AppSubscriptionWhereInput!]
-  NOT: [AppSubscriptionWhereInput!]
-  app: AppWhereInput
-  subscriber: UserAccountWhereInput
-  bot: BotWhereInput
-}
-input NullableStringFilter {
-  equals: String
-  not: String
-  in: [String!]
-  notIn: [String!]
-  lt: String
-  lte: String
-  gt: String
-  gte: String
-  contains: String
-  startsWith: String
-  endsWith: String
-}
-input UserAccountWhereInput {
-  id: IntFilter
-  nickname: NullableStringFilter
-  name: NullableStringFilter
-  email: NullableStringFilter
-  password: NullableStringFilter
-  role: Role
-  botUsers: BotUserFilter
-  apps: AppFilter
-  appSubscriptions: AppSubscriptionFilter
-  createdAt: DateTimeFilter
-  updatedAt: DateTimeFilter
-  AND: [UserAccountWhereInput!]
-  OR: [UserAccountWhereInput!]
-  NOT: [UserAccountWhereInput!]
-}
-input BotUserFilter {
-  every: BotUserWhereInput
-  some: BotUserWhereInput
-  none: BotUserWhereInput
-}
-input BotUserWhereInput {
-  id: IntFilter
-  name: NullableStringFilter
-  botUser: StringFilter
-  botId: IntFilter
-  userAccountId: IntFilter
-  createdAt: DateTimeFilter
-  updatedAt: DateTimeFilter
-  AND: [BotUserWhereInput!]
-  OR: [BotUserWhereInput!]
-  NOT: [BotUserWhereInput!]
-  bot: BotWhereInput
-  userAccount: UserAccountWhereInput
-}
-input BotWhereInput {
-  id: IntFilter
-  type: BotType
-  botUsers: BotUserFilter
-  appSubscriptions: AppSubscriptionFilter
-  AND: [BotWhereInput!]
-  OR: [BotWhereInput!]
-  NOT: [BotWhereInput!]
-}
-input AppFilter {
-  every: AppWhereInput
-  some: AppWhereInput
-  none: AppWhereInput
-}
-input ClientSecretFilter {
-  every: ClientSecretWhereInput
-  some: ClientSecretWhereInput
-  none: ClientSecretWhereInput
-}
-input ClientSecretWhereInput {
-  id: IntFilter
-  environment: Environment
-  secret: StringFilter
-  appId: IntFilter
-  createdAt: DateTimeFilter
-  updatedAt: DateTimeFilter
-  AND: [ClientSecretWhereInput!]
-  OR: [ClientSecretWhereInput!]
-  NOT: [ClientSecretWhereInput!]
-  app: AppWhereInput
-}
-input AppLogFilter {
-  every: AppLogWhereInput
-  some: AppLogWhereInput
-  none: AppLogWhereInput
-}
-input AppLogWhereInput {
-  id: IntFilter
-  appId: IntFilter
-  level: AppLogLevel
-  message: StringFilter
-  createdAt: DateTimeFilter
-  updatedAt: DateTimeFilter
-  AND: [AppLogWhereInput!]
-  OR: [AppLogWhereInput!]
-  NOT: [AppLogWhereInput!]
-  app: AppWhereInput
-}
-enum AppLogLevel {
-  INFO
-  WARN
-  ERROR
-  FATAL
-}
-input AppEventFilter {
-  every: AppEventWhereInput
-  some: AppEventWhereInput
-  none: AppEventWhereInput
-}
-input AppEventWhereInput {
-  id: IntFilter
-  appId: IntFilter
-  category: AppEventCategory
-  title: StringFilter
-  message: StringFilter
-  createdAt: DateTimeFilter
-  updatedAt: DateTimeFilter
-  AND: [AppEventWhereInput!]
-  OR: [AppEventWhereInput!]
-  NOT: [AppEventWhereInput!]
-  app: AppWhereInput
-}
-enum AppEventCategory {
-  NONE
-  POST
-  NEWS
-  PAYMENT
-  MAIL
-  TRAIN
-  TRAVELLING
-  CAR
-  INDUSTRY
-  MUSIC
-  VIDEO
-  MOVIE
-}
-input AppStatusFilter {
-  every: AppStatusWhereInput
-  some: AppStatusWhereInput
-  none: AppStatusWhereInput
-}
-input AppStatusWhereInput {
-  id: IntFilter
-  appId: IntFilter
-  state: AppState
-  message: StringFilter
-  environment: Environment
-  createdAt: DateTimeFilter
-  updatedAt: DateTimeFilter
-  AND: [AppStatusWhereInput!]
-  OR: [AppStatusWhereInput!]
-  NOT: [AppStatusWhereInput!]
-  app: AppWhereInput
-}
-enum AppState {
-  UP
-  SHUTDOWN
-  UNKNOWN
-  CRITICAL
-  DOWN
-}
-input AppOrderByInput {
-  id: SortOrder
-  name: SortOrder
-  ownerId: SortOrder
-  createdAt: SortOrder
-  updatedAt: SortOrder
-}
-enum SortOrder {
-  asc
-  desc
-}
-input AppSubscriptionOrderByInput {
-  id: SortOrder
-  name: SortOrder
-  customName: SortOrder
-  description: SortOrder
-  appId: SortOrder
-  subscriberId: SortOrder
-  botId: SortOrder
-  channel: SortOrder
-  createdAt: SortOrder
-  updatedAt: SortOrder
-}
-input BotUserOrderByInput {
-  id: SortOrder
-  name: SortOrder
-  botUser: SortOrder
-  botId: SortOrder
-  userAccountId: SortOrder
-  createdAt: SortOrder
-  updatedAt: SortOrder
-}
-input ClientSecretOrderByInput {
-  id: SortOrder
-  environment: SortOrder
-  secret: SortOrder
-  appId: SortOrder
-  createdAt: SortOrder
-  updatedAt: SortOrder
-}
-input SubscribeTokenOrderByInput {
-  id: SortOrder
-  description: SortOrder
-  appId: SortOrder
-  token: SortOrder
-  createdAt: SortOrder
-  updatedAt: SortOrder
+input DescriptionAppIdCompoundUniqueInput {
+  description: String!
+  appId: Int!
 }
 input UserAccountWhereUniqueInput {
   id: Int
@@ -475,27 +443,29 @@ input UserAccountOrderByInput {
 }
 type Mutation {
   createApp(data: AppCreateInput!): App!
-  deleteApp(where: DeleteInput!): App!
+  deleteApp(where: DeleteByIdInput!): App!
   createAppSubscription(data: AppSubscriptionCreateInput!): AppSubscription!
-  deleteAppSubscription(where: DeleteInput!): AppSubscription!
+  muteAppSubscription(where: UpdateByIdInput!, data: AppSubscriptionMuteInput): AppSubscription!
+  unmuteAppSubscription(where: UpdateByIdInput!): AppSubscription!
+  deleteAppSubscription(where: DeleteByIdInput!): AppSubscription!
   signUp(data: SignUpInput!): UserAccountAndToken!
   signIn(data: SignInInput!): UserAccountAndToken!
   signInViaBot(data: SignInViaBotInput!): UserAccountAndToken!
   generateBotToken(data: GenerateBotTokenInput!): GenerateBotTokenPayload!
   updateBotUser(data: BotUserUpdateInput!, where: BotUserWhereUniqueInput!): BotUser
-  sendAppLogMessage(data: AppLogMessageSendInput!): ClientResponse!
   sendAppEventMessage(data: AppEventMessageSendInput!): ClientResponse!
+  sendAppLogMessage(data: AppLogMessageSendInput!): ClientResponse!
   sendAppStatusMessage(data: AppStatusMessageSendInput!): ClientResponse!
   regenerateClientSecret(where: ClientSecretRegenerateInput!): ClientSecret!
   createSubscribeToken(data: SubscribeTokenCreateInput!): SubscribeToken!
-  deleteSubscribeToken(where: DeleteInput!): SubscribeToken!
+  deleteSubscribeToken(where: DeleteByIdInput!): SubscribeToken!
   updateUserAccount(data: UserAccountUpdateInput!, where: UserAccountWhereUniqueInput!): UserAccount
-  mergeUserAccount(data: UserAccountMergeInput!): UserAccount!
+  deleteUserAccount(where: DeleteByIdInput!): UserAccount!
 }
 input AppCreateInput {
   name: String!
 }
-input DeleteInput {
+input DeleteByIdInput {
   id: Int!
 }
 input AppSubscriptionCreateInput {
@@ -503,6 +473,12 @@ input AppSubscriptionCreateInput {
   channel: String!
   subscribeToken: String!
   userToken: String!
+}
+input UpdateByIdInput {
+  id: Int!
+}
+input AppSubscriptionMuteInput {
+  muteUntil: DateTime
 }
 input SignUpInput {
   nickname: String!
@@ -530,26 +506,56 @@ type GenerateBotTokenPayload {
 input BotUserUpdateInput {
   name: String
 }
-input AppLogMessageSendInput {
-  level: AppLogLevel!
+input AppEventMessageSendInput {
+  title: String!
+  category: AppEventCategory
   message: String!
   metadata: Json
+  timestamp: DateTime!
+}
+enum AppEventCategory {
+  NONE
+  POST
+  NEWS
+  PAYMENT
+  MAIL
+  TRAIN
+  TRAVELLING
+  CAR
+  INDUSTRY
+  MUSIC
+  VIDEO
+  MOVIE
 }
 """The `JSON` scalar type represents JSON objects as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf)."""
 scalar Json
 type ClientResponse {
   success: Boolean!
 }
-input AppEventMessageSendInput {
-  title: String!
-  category: AppEventCategory
+input AppLogMessageSendInput {
+  level: AppLogLevel!
   message: String!
   metadata: Json
+  timestamp: DateTime!
+}
+enum AppLogLevel {
+  INFO
+  WARN
+  ERROR
+  FATAL
 }
 input AppStatusMessageSendInput {
   state: AppState!
   message: String!
   metadata: Json
+  timestamp: DateTime!
+}
+enum AppState {
+  UP
+  SHUTDOWN
+  UNKNOWN
+  CRITICAL
+  DOWN
 }
 input ClientSecretRegenerateInput {
   id: Int!
@@ -585,9 +591,7 @@ input AppCreateWithoutOwnerInput {
   subscribeTokens: SubscribeTokenCreateManyWithoutAppInput
   appSubscriptions: AppSubscriptionCreateManyWithoutAppInput
   clientSecrets: ClientSecretCreateManyWithoutAppInput
-  AppLog: AppLogCreateManyWithoutAppInput
-  AppEvent: AppEventCreateManyWithoutAppInput
-  appStatus: AppStatusCreateManyWithoutAppInput
+  messages: AppMessageCreateManyWithoutAppInput
 }
 input SubscribeTokenCreateManyWithoutAppInput {
   create: [SubscribeTokenCreateWithoutAppInput!]
@@ -607,6 +611,8 @@ input AppSubscriptionCreateWithoutAppInput {
   name: String!
   customName: String
   description: String!
+  muted: Boolean
+  mutedUntil: DateTime
   channel: String!
   createdAt: DateTime
   updatedAt: DateTime
@@ -655,6 +661,8 @@ input AppSubscriptionCreateWithoutBotInput {
   name: String!
   customName: String
   description: String!
+  muted: Boolean
+  mutedUntil: DateTime
   channel: String!
   createdAt: DateTime
   updatedAt: DateTime
@@ -672,9 +680,7 @@ input AppCreateWithoutAppSubscriptionsInput {
   owner: UserAccountCreateOneWithoutAppsInput!
   subscribeTokens: SubscribeTokenCreateManyWithoutAppInput
   clientSecrets: ClientSecretCreateManyWithoutAppInput
-  AppLog: AppLogCreateManyWithoutAppInput
-  AppEvent: AppEventCreateManyWithoutAppInput
-  appStatus: AppStatusCreateManyWithoutAppInput
+  messages: AppMessageCreateManyWithoutAppInput
 }
 input UserAccountCreateOneWithoutAppsInput {
   create: UserAccountCreateWithoutAppsInput
@@ -699,6 +705,8 @@ input AppSubscriptionCreateWithoutSubscriberInput {
   name: String!
   customName: String
   description: String!
+  muted: Boolean
+  mutedUntil: DateTime
   channel: String!
   createdAt: DateTime
   updatedAt: DateTime
@@ -757,47 +765,77 @@ input ClientSecretCreateWithoutAppInput {
   createdAt: DateTime
   updatedAt: DateTime
 }
-input AppLogCreateManyWithoutAppInput {
-  create: [AppLogCreateWithoutAppInput!]
-  connect: [AppLogWhereUniqueInput!]
+input AppMessageCreateManyWithoutAppInput {
+  create: [AppMessageCreateWithoutAppInput!]
+  connect: [AppMessageWhereUniqueInput!]
 }
-input AppLogCreateWithoutAppInput {
-  level: AppLogLevel!
-  message: String!
+input AppMessageCreateWithoutAppInput {
+  type: AppMessageType!
+  environment: Environment!
+  timestamp: DateTime!
   createdAt: DateTime
   updatedAt: DateTime
+  event: AppEventCreateOneWithoutAppMessageInput
+  log: AppLogCreateOneWithoutAppMessageInput
+  status: AppStatusCreateOneWithoutAppMessageInput
 }
-input AppLogWhereUniqueInput {
-  id: Int
+enum AppMessageType {
+  EVENT
+  LOG
+  STATUS
 }
-input AppEventCreateManyWithoutAppInput {
-  create: [AppEventCreateWithoutAppInput!]
-  connect: [AppEventWhereUniqueInput!]
+input AppEventCreateOneWithoutAppMessageInput {
+  create: AppEventCreateWithoutAppMessageInput
+  connect: AppEventWhereUniqueInput
 }
-input AppEventCreateWithoutAppInput {
+input AppEventCreateWithoutAppMessageInput {
   category: AppEventCategory
   title: String!
   message: String!
+  metadata: Json
   createdAt: DateTime
   updatedAt: DateTime
 }
 input AppEventWhereUniqueInput {
   id: Int
 }
-input AppStatusCreateManyWithoutAppInput {
-  create: [AppStatusCreateWithoutAppInput!]
-  connect: [AppStatusWhereUniqueInput!]
+input AppLogCreateOneWithoutAppMessageInput {
+  create: AppLogCreateWithoutAppMessageInput
+  connect: AppLogWhereUniqueInput
 }
-input AppStatusCreateWithoutAppInput {
+input AppLogCreateWithoutAppMessageInput {
+  level: AppLogLevel!
+  message: String!
+  metadata: Json
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+input AppLogWhereUniqueInput {
+  id: Int
+}
+input AppStatusCreateOneWithoutAppMessageInput {
+  create: AppStatusCreateWithoutAppMessageInput
+  connect: AppStatusWhereUniqueInput
+}
+input AppStatusCreateWithoutAppMessageInput {
   state: AppState!
   message: String!
   metadata: Json
-  environment: Environment!
   createdAt: DateTime
   updatedAt: DateTime
 }
 input AppStatusWhereUniqueInput {
   id: Int
+}
+input AppMessageWhereUniqueInput {
+  id: Int
+  appId_environment_type_timestamp: AppIdEnvironmentTypeTimestampCompoundUniqueInput
+}
+input AppIdEnvironmentTypeTimestampCompoundUniqueInput {
+  appId: Int!
+  environment: Environment!
+  type: AppMessageType!
+  timestamp: DateTime!
 }
 input AppUpdateWithWhereUniqueWithoutOwnerInput {
   where: AppWhereUniqueInput!
@@ -810,9 +848,7 @@ input AppUpdateWithoutOwnerDataInput {
   subscribeTokens: SubscribeTokenUpdateManyWithoutAppInput
   appSubscriptions: AppSubscriptionUpdateManyWithoutAppInput
   clientSecrets: ClientSecretUpdateManyWithoutAppInput
-  AppLog: AppLogUpdateManyWithoutAppInput
-  AppEvent: AppEventUpdateManyWithoutAppInput
-  appStatus: AppStatusUpdateManyWithoutAppInput
+  messages: AppMessageUpdateManyWithoutAppInput
 }
 input SubscribeTokenUpdateManyWithoutAppInput {
   create: [SubscribeTokenCreateWithoutAppInput!]
@@ -842,8 +878,8 @@ input SubscribeTokenUpdateManyWithWhereNestedInput {
 input SubscribeTokenScalarWhereInput {
   id: IntFilter
   description: StringFilter
-  appId: IntFilter
   token: StringFilter
+  appId: IntFilter
   createdAt: DateTimeFilter
   updatedAt: DateTimeFilter
   AND: [SubscribeTokenScalarWhereInput!]
@@ -880,6 +916,8 @@ input AppSubscriptionUpdateWithoutAppDataInput {
   name: String
   customName: String
   description: String
+  muted: Boolean
+  mutedUntil: DateTime
   channel: String
   createdAt: DateTime
   updatedAt: DateTime
@@ -954,6 +992,8 @@ input AppSubscriptionUpdateWithoutBotDataInput {
   name: String
   customName: String
   description: String
+  muted: Boolean
+  mutedUntil: DateTime
   channel: String
   createdAt: DateTime
   updatedAt: DateTime
@@ -973,9 +1013,7 @@ input AppUpdateWithoutAppSubscriptionsDataInput {
   owner: UserAccountUpdateOneRequiredWithoutAppsInput
   subscribeTokens: SubscribeTokenUpdateManyWithoutAppInput
   clientSecrets: ClientSecretUpdateManyWithoutAppInput
-  AppLog: AppLogUpdateManyWithoutAppInput
-  AppEvent: AppEventUpdateManyWithoutAppInput
-  appStatus: AppStatusUpdateManyWithoutAppInput
+  messages: AppMessageUpdateManyWithoutAppInput
 }
 input UserAccountUpdateOneRequiredWithoutAppsInput {
   create: UserAccountCreateWithoutAppsInput
@@ -1013,6 +1051,8 @@ input AppSubscriptionUpdateWithoutSubscriberDataInput {
   name: String
   customName: String
   description: String
+  muted: Boolean
+  mutedUntil: DateTime
   channel: String
   createdAt: DateTime
   updatedAt: DateTime
@@ -1112,6 +1152,8 @@ input AppSubscriptionScalarWhereInput {
   name: StringFilter
   customName: NullableStringFilter
   description: StringFilter
+  muted: BooleanFilter
+  mutedUntil: NullableDateTimeFilter
   appId: IntFilter
   subscriberId: IntFilter
   botId: IntFilter
@@ -1126,6 +1168,8 @@ input AppSubscriptionUpdateManyDataInput {
   name: String
   customName: String
   description: String
+  muted: Boolean
+  mutedUntil: DateTime
   channel: String
   createdAt: DateTime
   updatedAt: DateTime
@@ -1186,154 +1230,116 @@ input ClientSecretUpsertWithWhereUniqueWithoutAppInput {
   update: ClientSecretUpdateWithoutAppDataInput!
   create: ClientSecretCreateWithoutAppInput!
 }
-input AppLogUpdateManyWithoutAppInput {
-  create: [AppLogCreateWithoutAppInput!]
-  connect: [AppLogWhereUniqueInput!]
-  set: [AppLogWhereUniqueInput!]
-  disconnect: [AppLogWhereUniqueInput!]
-  delete: [AppLogWhereUniqueInput!]
-  update: [AppLogUpdateWithWhereUniqueWithoutAppInput!]
-  updateMany: [AppLogUpdateManyWithWhereNestedInput!]
-  deleteMany: [AppLogScalarWhereInput!]
-  upsert: [AppLogUpsertWithWhereUniqueWithoutAppInput!]
+input AppMessageUpdateManyWithoutAppInput {
+  create: [AppMessageCreateWithoutAppInput!]
+  connect: [AppMessageWhereUniqueInput!]
+  set: [AppMessageWhereUniqueInput!]
+  disconnect: [AppMessageWhereUniqueInput!]
+  delete: [AppMessageWhereUniqueInput!]
+  update: [AppMessageUpdateWithWhereUniqueWithoutAppInput!]
+  updateMany: [AppMessageUpdateManyWithWhereNestedInput!]
+  deleteMany: [AppMessageScalarWhereInput!]
+  upsert: [AppMessageUpsertWithWhereUniqueWithoutAppInput!]
 }
-input AppLogUpdateWithWhereUniqueWithoutAppInput {
-  where: AppLogWhereUniqueInput!
-  data: AppLogUpdateWithoutAppDataInput!
+input AppMessageUpdateWithWhereUniqueWithoutAppInput {
+  where: AppMessageWhereUniqueInput!
+  data: AppMessageUpdateWithoutAppDataInput!
 }
-input AppLogUpdateWithoutAppDataInput {
-  level: AppLogLevel
-  message: String
+input AppMessageUpdateWithoutAppDataInput {
+  type: AppMessageType
+  environment: Environment
+  timestamp: DateTime
   createdAt: DateTime
   updatedAt: DateTime
+  event: AppEventUpdateOneWithoutAppMessageInput
+  log: AppLogUpdateOneWithoutAppMessageInput
+  status: AppStatusUpdateOneWithoutAppMessageInput
 }
-input AppLogUpdateManyWithWhereNestedInput {
-  where: AppLogScalarWhereInput!
-  data: AppLogUpdateManyDataInput!
+input AppEventUpdateOneWithoutAppMessageInput {
+  create: AppEventCreateWithoutAppMessageInput
+  connect: AppEventWhereUniqueInput
+  disconnect: Boolean
+  delete: Boolean
+  update: AppEventUpdateWithoutAppMessageDataInput
+  upsert: AppEventUpsertWithoutAppMessageInput
 }
-input AppLogScalarWhereInput {
-  id: IntFilter
-  appId: IntFilter
-  level: AppLogLevel
-  message: StringFilter
-  createdAt: DateTimeFilter
-  updatedAt: DateTimeFilter
-  AND: [AppLogScalarWhereInput!]
-  OR: [AppLogScalarWhereInput!]
-  NOT: [AppLogScalarWhereInput!]
-}
-input AppLogUpdateManyDataInput {
-  level: AppLogLevel
-  message: String
-  createdAt: DateTime
-  updatedAt: DateTime
-}
-input AppLogUpsertWithWhereUniqueWithoutAppInput {
-  where: AppLogWhereUniqueInput!
-  update: AppLogUpdateWithoutAppDataInput!
-  create: AppLogCreateWithoutAppInput!
-}
-input AppEventUpdateManyWithoutAppInput {
-  create: [AppEventCreateWithoutAppInput!]
-  connect: [AppEventWhereUniqueInput!]
-  set: [AppEventWhereUniqueInput!]
-  disconnect: [AppEventWhereUniqueInput!]
-  delete: [AppEventWhereUniqueInput!]
-  update: [AppEventUpdateWithWhereUniqueWithoutAppInput!]
-  updateMany: [AppEventUpdateManyWithWhereNestedInput!]
-  deleteMany: [AppEventScalarWhereInput!]
-  upsert: [AppEventUpsertWithWhereUniqueWithoutAppInput!]
-}
-input AppEventUpdateWithWhereUniqueWithoutAppInput {
-  where: AppEventWhereUniqueInput!
-  data: AppEventUpdateWithoutAppDataInput!
-}
-input AppEventUpdateWithoutAppDataInput {
+input AppEventUpdateWithoutAppMessageDataInput {
   category: AppEventCategory
   title: String
   message: String
+  metadata: Json
   createdAt: DateTime
   updatedAt: DateTime
 }
-input AppEventUpdateManyWithWhereNestedInput {
-  where: AppEventScalarWhereInput!
-  data: AppEventUpdateManyDataInput!
+input AppEventUpsertWithoutAppMessageInput {
+  update: AppEventUpdateWithoutAppMessageDataInput!
+  create: AppEventCreateWithoutAppMessageInput!
 }
-input AppEventScalarWhereInput {
-  id: IntFilter
-  appId: IntFilter
-  category: AppEventCategory
-  title: StringFilter
-  message: StringFilter
-  createdAt: DateTimeFilter
-  updatedAt: DateTimeFilter
-  AND: [AppEventScalarWhereInput!]
-  OR: [AppEventScalarWhereInput!]
-  NOT: [AppEventScalarWhereInput!]
+input AppLogUpdateOneWithoutAppMessageInput {
+  create: AppLogCreateWithoutAppMessageInput
+  connect: AppLogWhereUniqueInput
+  disconnect: Boolean
+  delete: Boolean
+  update: AppLogUpdateWithoutAppMessageDataInput
+  upsert: AppLogUpsertWithoutAppMessageInput
 }
-input AppEventUpdateManyDataInput {
-  category: AppEventCategory
-  title: String
+input AppLogUpdateWithoutAppMessageDataInput {
+  level: AppLogLevel
   message: String
+  metadata: Json
   createdAt: DateTime
   updatedAt: DateTime
 }
-input AppEventUpsertWithWhereUniqueWithoutAppInput {
-  where: AppEventWhereUniqueInput!
-  update: AppEventUpdateWithoutAppDataInput!
-  create: AppEventCreateWithoutAppInput!
+input AppLogUpsertWithoutAppMessageInput {
+  update: AppLogUpdateWithoutAppMessageDataInput!
+  create: AppLogCreateWithoutAppMessageInput!
 }
-input AppStatusUpdateManyWithoutAppInput {
-  create: [AppStatusCreateWithoutAppInput!]
-  connect: [AppStatusWhereUniqueInput!]
-  set: [AppStatusWhereUniqueInput!]
-  disconnect: [AppStatusWhereUniqueInput!]
-  delete: [AppStatusWhereUniqueInput!]
-  update: [AppStatusUpdateWithWhereUniqueWithoutAppInput!]
-  updateMany: [AppStatusUpdateManyWithWhereNestedInput!]
-  deleteMany: [AppStatusScalarWhereInput!]
-  upsert: [AppStatusUpsertWithWhereUniqueWithoutAppInput!]
+input AppStatusUpdateOneWithoutAppMessageInput {
+  create: AppStatusCreateWithoutAppMessageInput
+  connect: AppStatusWhereUniqueInput
+  disconnect: Boolean
+  delete: Boolean
+  update: AppStatusUpdateWithoutAppMessageDataInput
+  upsert: AppStatusUpsertWithoutAppMessageInput
 }
-input AppStatusUpdateWithWhereUniqueWithoutAppInput {
-  where: AppStatusWhereUniqueInput!
-  data: AppStatusUpdateWithoutAppDataInput!
-}
-input AppStatusUpdateWithoutAppDataInput {
+input AppStatusUpdateWithoutAppMessageDataInput {
   state: AppState
   message: String
   metadata: Json
-  environment: Environment
   createdAt: DateTime
   updatedAt: DateTime
 }
-input AppStatusUpdateManyWithWhereNestedInput {
-  where: AppStatusScalarWhereInput!
-  data: AppStatusUpdateManyDataInput!
+input AppStatusUpsertWithoutAppMessageInput {
+  update: AppStatusUpdateWithoutAppMessageDataInput!
+  create: AppStatusCreateWithoutAppMessageInput!
 }
-input AppStatusScalarWhereInput {
+input AppMessageUpdateManyWithWhereNestedInput {
+  where: AppMessageScalarWhereInput!
+  data: AppMessageUpdateManyDataInput!
+}
+input AppMessageScalarWhereInput {
   id: IntFilter
+  type: AppMessageType
   appId: IntFilter
-  state: AppState
-  message: StringFilter
   environment: Environment
+  timestamp: DateTimeFilter
   createdAt: DateTimeFilter
   updatedAt: DateTimeFilter
-  AND: [AppStatusScalarWhereInput!]
-  OR: [AppStatusScalarWhereInput!]
-  NOT: [AppStatusScalarWhereInput!]
+  AND: [AppMessageScalarWhereInput!]
+  OR: [AppMessageScalarWhereInput!]
+  NOT: [AppMessageScalarWhereInput!]
 }
-input AppStatusUpdateManyDataInput {
-  state: AppState
-  message: String
-  metadata: Json
+input AppMessageUpdateManyDataInput {
+  type: AppMessageType
   environment: Environment
+  timestamp: DateTime
   createdAt: DateTime
   updatedAt: DateTime
 }
-input AppStatusUpsertWithWhereUniqueWithoutAppInput {
-  where: AppStatusWhereUniqueInput!
-  update: AppStatusUpdateWithoutAppDataInput!
-  create: AppStatusCreateWithoutAppInput!
+input AppMessageUpsertWithWhereUniqueWithoutAppInput {
+  where: AppMessageWhereUniqueInput!
+  update: AppMessageUpdateWithoutAppDataInput!
+  create: AppMessageCreateWithoutAppInput!
 }
 input AppUpsertWithoutAppSubscriptionsInput {
   update: AppUpdateWithoutAppSubscriptionsDataInput!
@@ -1373,9 +1379,7 @@ input AppScalarWhereInput {
   subscribeTokens: SubscribeTokenFilter
   appSubscriptions: AppSubscriptionFilter
   clientSecrets: ClientSecretFilter
-  AppLog: AppLogFilter
-  AppEvent: AppEventFilter
-  appStatus: AppStatusFilter
+  messages: AppMessageFilter
   createdAt: DateTimeFilter
   updatedAt: DateTimeFilter
   AND: [AppScalarWhereInput!]
@@ -1392,8 +1396,8 @@ input AppUpsertWithWhereUniqueWithoutOwnerInput {
   update: AppUpdateWithoutOwnerDataInput!
   create: AppCreateWithoutOwnerInput!
 }
-input UserAccountMergeInput {
-  token: String!
+type Subscription {
+  appMessage(app: Int!): AppMessage!
 }
 enum BotJobType {
   EVENT
@@ -1417,6 +1421,7 @@ type AppEventMessageJob implements BotJob {
   message: String!
   metadata: Json
   status: AppState!
+  timestamp: DateTime!
 }
 type AppLogMessageJob implements BotJob {
   type: BotJobType!
@@ -1429,6 +1434,7 @@ type AppLogMessageJob implements BotJob {
   message: String!
   metadata: Json
   status: AppState!
+  timestamp: DateTime!
 }
 type AppStatusMessageJob implements BotJob {
   type: BotJobType!
@@ -1441,4 +1447,39 @@ type AppStatusMessageJob implements BotJob {
   oldState: AppState!
   message: String!
   metadata: Json
+  timestamp: DateTime!
+}
+type AppEvent implements AppMessage {
+  id: Int!
+  environment: Environment!
+  appId: Int!
+  app: App!
+  title: String!
+  category: AppEventCategory!
+  message: String!
+  metadata: Json
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+type AppLog implements AppMessage {
+  id: Int!
+  environment: Environment!
+  appId: Int!
+  app: App!
+  level: AppLogLevel!
+  message: String!
+  metadata: Json
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+type AppStatus implements AppMessage {
+  id: Int!
+  environment: Environment!
+  appId: Int!
+  app: App!
+  state: AppState!
+  message: String!
+  metadata: Json
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
