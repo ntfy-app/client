@@ -1,20 +1,15 @@
 import debug from 'debug'
 import Axios, { AxiosInstance } from 'axios'
-import {
-  IAppLogMessageSendInput,
-  IAppEventMessageSendInput,
-  IAppStatusMessageSendInput,
-  IClientResponse,
-} from './types'
+import { IEventLogSendInput, ILogSendInput, IStatusLogSendInput, IClientResponse } from './types'
 
 const dlog = debug('@ntfy-app/client')
 
 export * from './types'
 
 export type IMetadata = { [keyof: string]: any }
-export type IEventMessage = IAppEventMessageSendInput
-export type ILogMessage = IAppLogMessageSendInput
-export type IStatusMessage = IAppStatusMessageSendInput
+export type IEventLog = IEventLogSendInput
+export type ILog = ILogSendInput
+export type IStatusLog = IStatusLogSendInput
 
 const gql = String.raw
 
@@ -57,7 +52,7 @@ export class ApiClient {
     dlog('initialized api client')
   }
 
-  async sendEvent(eventMessage: IEventMessage): Promise<IClientResponse> {
+  async sendEvent(eventMessage: IEventLog): Promise<IClientResponse> {
     dlog('executing sendEventMessage mutation')
 
     return this.client
@@ -66,7 +61,7 @@ export class ApiClient {
       .catch(error => error)
   }
 
-  async sendLog(logMessage: ILogMessage): Promise<IClientResponse> {
+  async sendLog(logMessage: ILog): Promise<IClientResponse> {
     dlog('executing sendLogMessage mutation')
 
     return this.client
@@ -75,7 +70,7 @@ export class ApiClient {
       .catch(error => error)
   }
 
-  async sendStatus(statusMessage: IStatusMessage): Promise<IClientResponse> {
+  async sendStatus(statusMessage: IStatusLog): Promise<IClientResponse> {
     dlog('executing sendStatusMessage mutation')
 
     return this.client

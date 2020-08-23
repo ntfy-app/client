@@ -1,18 +1,10 @@
 import debug from 'debug'
-import {
-  IAppEventCategory,
-  IAppLogLevel,
-  IAppState,
-  IEventMessage,
-  ILogMessage,
-  IStatusMessage,
-  IMetadata,
-} from '../api'
+import { IAppLogEventExtCategory, IAppLogLevel, IAppState, IEventLog, ILog, IStatusLog, IMetadata } from '../api'
 import { Metadata, EventMessage, LogLevel, LogMessage, AppState, EventCategory, StatusMessage } from './types'
 
 const dlog = debug('@ntfy-app/client')
 
-export const transformEventMessage = ({ title, message, category, metadata }: EventMessage): IEventMessage => {
+export const transformEventMessage = ({ title, message, category, metadata }: EventMessage): IEventLog => {
   return {
     title,
     message,
@@ -22,7 +14,7 @@ export const transformEventMessage = ({ title, message, category, metadata }: Ev
   }
 }
 
-export const transformLogMessage = ({ level, message, metadata }: LogMessage): ILogMessage => {
+export const transformLogMessage = ({ level, message, metadata }: LogMessage): ILog => {
   return {
     level: checkLogLevel(level),
     message,
@@ -31,7 +23,7 @@ export const transformLogMessage = ({ level, message, metadata }: LogMessage): I
   }
 }
 
-export const transformStatusMessage = ({ state, message, metadata }: StatusMessage): IStatusMessage => {
+export const transformStatusMessage = ({ state, message, metadata }: StatusMessage): IStatusLog => {
   return {
     state: checkIAppState(state),
     message,
@@ -40,17 +32,17 @@ export const transformStatusMessage = ({ state, message, metadata }: StatusMessa
   }
 }
 
-const checkEventCategory = (category?: EventCategory): IAppEventCategory | undefined => {
+const checkEventCategory = (category?: EventCategory): IAppLogEventExtCategory | undefined => {
   if (!category) {
     return undefined
   }
-  if (!Object.keys(IAppEventCategory).includes(category)) {
-    console.error(`No such Event Category: ${category}. Fallback is ${IAppEventCategory.NONE}`)
+  if (!Object.keys(IAppLogEventExtCategory).includes(category)) {
+    console.error(`No such Event Category: ${category}. Fallback is ${IAppLogEventExtCategory.NONE}`)
 
-    return IAppEventCategory.NONE
+    return IAppLogEventExtCategory.NONE
   }
 
-  return IAppEventCategory[category]
+  return IAppLogEventExtCategory[category]
 }
 
 const checkIAppState = (state: AppState): IAppState => {

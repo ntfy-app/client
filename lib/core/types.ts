@@ -1,8 +1,8 @@
-import { IAppEventCategory, IAppLogLevel, IAppState } from '../api'
+import { IAppLogEventExtCategory, IAppLogLevel, IAppState } from '../api'
 
 export type Metadata = { [key: string]: any } | null | undefined
 
-export type EventCategory = keyof typeof IAppEventCategory
+export type EventCategory = keyof typeof IAppLogEventExtCategory
 export interface EventMessage {
   title: string
   category?: EventCategory
