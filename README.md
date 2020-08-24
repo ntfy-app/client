@@ -1,6 +1,6 @@
 <p align="center">
   <br/>
-  <a href="https://ntfy.red"><img src="https://i.imgur.com/xQXhurc.png" height="200px"></a>
+  <a href="https://ntfy.red"><img src="https://i.imgur.com/ntQyTvB.png" height="200px"></a>
 </p>
 
 # Notify App Client SDK
